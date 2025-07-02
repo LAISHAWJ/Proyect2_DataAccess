@@ -1,8 +1,8 @@
 namespace NorthwindApp_DA
 {
-    public partial class Form1 : Form
+    public partial class MenuFrm : Form
     {
-        public Form1()
+        public MenuFrm()
         {
             InitializeComponent();
         }

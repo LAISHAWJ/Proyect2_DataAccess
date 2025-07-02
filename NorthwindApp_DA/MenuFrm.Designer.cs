@@ -1,6 +1,6 @@
 ﻿namespace NorthwindApp_DA
 {
-    partial class Form1
+    partial class MenuFrm
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MenuFrm));
             panel2 = new Panel();
             pictureBox1 = new PictureBox();
             menuStrip1 = new MenuStrip();
