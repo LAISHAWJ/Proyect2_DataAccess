@@ -6,7 +6,6 @@ namespace NorthwindApp_DA
         [STAThread]
         static void Main()
         {
-
             ApplicationConfiguration.Initialize();
             Application.Run(new MenuFrm());
         }

@@ -35,8 +35,8 @@
             BtCategory = new FontAwesome.Sharp.IconMenuItem();
             BtProducts = new FontAwesome.Sharp.IconMenuItem();
             BtSupplier = new FontAwesome.Sharp.IconMenuItem();
-            BtExit = new FontAwesome.Sharp.IconMenuItem();
             iconMenuItem1 = new FontAwesome.Sharp.IconMenuItem();
+            BtExit = new FontAwesome.Sharp.IconMenuItem();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             menuStrip1.SuspendLayout();
@@ -120,21 +120,6 @@
             BtSupplier.Text = "SUPLIDORES";
             BtSupplier.TextImageRelation = TextImageRelation.ImageAboveText;
             // 
-            // BtExit
-            // 
-            BtExit.CheckOnClick = true;
-            BtExit.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            BtExit.ForeColor = SystemColors.ButtonHighlight;
-            BtExit.IconChar = FontAwesome.Sharp.IconChar.Close;
-            BtExit.IconColor = Color.Red;
-            BtExit.IconFont = FontAwesome.Sharp.IconFont.Solid;
-            BtExit.IconSize = 60;
-            BtExit.ImageScaling = ToolStripItemImageScaling.None;
-            BtExit.Name = "BtExit";
-            BtExit.Size = new Size(78, 92);
-            BtExit.Text = "SALIR";
-            BtExit.TextImageRelation = TextImageRelation.ImageAboveText;
-            // 
             // iconMenuItem1
             // 
             iconMenuItem1.CheckOnClick = true;
@@ -150,7 +135,22 @@
             iconMenuItem1.Text = "ORDENES";
             iconMenuItem1.TextImageRelation = TextImageRelation.ImageAboveText;
             // 
-            // Form1
+            // BtExit
+            // 
+            BtExit.CheckOnClick = true;
+            BtExit.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            BtExit.ForeColor = SystemColors.ButtonHighlight;
+            BtExit.IconChar = FontAwesome.Sharp.IconChar.Close;
+            BtExit.IconColor = Color.Red;
+            BtExit.IconFont = FontAwesome.Sharp.IconFont.Solid;
+            BtExit.IconSize = 60;
+            BtExit.ImageScaling = ToolStripItemImageScaling.None;
+            BtExit.Name = "BtExit";
+            BtExit.Size = new Size(78, 92);
+            BtExit.Text = "SALIR";
+            BtExit.TextImageRelation = TextImageRelation.ImageAboveText;
+            // 
+            // MenuFrm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -158,7 +158,7 @@
             ClientSize = new Size(968, 610);
             Controls.Add(panel2);
             Controls.Add(menuStrip1);
-            Name = "Form1";
+            Name = "MenuFrm";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             panel2.ResumeLayout(false);
