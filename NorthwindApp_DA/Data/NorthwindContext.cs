@@ -3,8 +3,9 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using NorthwindApp_DA.Models;
 
-namespace NorthwindApp_DA.Models;
+namespace NorthwindApp_DA.Data;
 
 public partial class NorthwindContext : DbContext
 {
