@@ -63,40 +63,6 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
             }
         }
 
-        private void BtSave_Click(object sender, EventArgs e)
-        {
-
-            _categoryEdit.CategoryName = TxtNameCat.Text;
-            _categoryEdit.Description = TxtDescripCat.Text;
-
-            if (PbxCat.Image != null)
-            {
-                using var ms = new MemoryStream();
-                PbxCat.Image.Save(ms, PbxCat.Image.RawFormat);
-                _categoryEdit.Picture = ms.ToArray();
-            }
-
-            var resultado = _validator.Validate(_categoryEdit);
-            if (!resultado.IsValid)
-            {
-                var errores = string.Join("\n", resultado.Errors.Select(e => e.ErrorMessage));
-                MessageBox.Show(errores, "Errores de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            if (_isEditMode)
-            {
-                _categoryRepos.UpdateCategory(_categoryEdit);
-                MessageBox.Show("Categoría actualizada.");
-            }
-            else
-            {
-                _categoryRepos.AddCategory(_categoryEdit);
-                MessageBox.Show("Categoría agregada.");
-            }
-
-            this.Close();
-        }
 
         private Image ConvertirBytesAImagen(byte[] bytes)
         {
@@ -130,6 +96,60 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
 
         private void BtCancel_Click(object sender, EventArgs e)
         {
+            this.Close();
+        }
+
+
+        private void MostrarErroresPorCampo(IEnumerable<FluentValidation.Results.ValidationFailure> errores)
+        {
+            foreach (var error in errores)
+            {
+                switch (error.PropertyName)
+                {
+                    case nameof(Category.CategoryName):
+                        MessageBox.Show(error.ErrorMessage, "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        TxtNameCat.Focus();
+                        return;
+
+                    case nameof(Category.Description):
+                        MessageBox.Show(error.ErrorMessage, "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        TxtDescripCat.Focus();
+                        return;
+
+                }
+            }
+        }
+
+        private void BtSave_Click(object sender, EventArgs e)
+        {
+            _categoryEdit.CategoryName = TxtNameCat.Text;
+            _categoryEdit.Description = TxtDescripCat.Text;
+
+            if (PbxCat.Image != null)
+            {
+                using var ms = new MemoryStream();
+                PbxCat.Image.Save(ms, PbxCat.Image.RawFormat);
+                _categoryEdit.Picture = ms.ToArray();
+            }
+
+            var resultado = _validator.Validate(_categoryEdit);
+            if (!resultado.IsValid)
+            {
+                MostrarErroresPorCampo(resultado.Errors);
+                return;
+            }
+
+            if (_isEditMode)
+            {
+                _categoryRepos.UpdateCategory(_categoryEdit);
+                MessageBox.Show("Categoría actualizada.");
+            }
+            else
+            {
+                _categoryRepos.AddCategory(_categoryEdit);
+                MessageBox.Show("Categoría agregada.");
+            }
+
             this.Close();
         }
     }

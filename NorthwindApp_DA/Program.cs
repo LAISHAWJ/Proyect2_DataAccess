@@ -36,12 +36,20 @@ namespace NorthwindApp_DA
 
                 //services.AddScoped<ILogger>(provider => Log.Logger);
                 services.AddTransient<MenuFrm>();
+                 
+                //ENTIDAD CATEGORIA.
                 services.AddTransient<CategoryFrm>();
                 services.AddTransient<CategoryCrearFrm>();
                 services.AddTransient<CategoryValid>();
                 services.AddTransient<CategoryRepos>();
+                
+                //ENTIDAD SUPLIDOR.
+                services.AddTransient<SupplierFrm>();
+                services.AddTransient<SuppliercrearFrm>();
+                services.AddTransient<SupplierValid>();
+                services.AddTransient<SupplierRepos>();
 
-                ServiceProvider = services.BuildServiceProvider();
+            ServiceProvider = services.BuildServiceProvider();
                 var context = ServiceProvider.GetService<NorthwindContext>();
 
                 ApplicationConfiguration.Initialize();

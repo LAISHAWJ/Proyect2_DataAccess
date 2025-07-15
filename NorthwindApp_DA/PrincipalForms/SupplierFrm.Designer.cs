@@ -29,20 +29,20 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            panel2 = new Panel();
-            label1 = new Label();
             panel3 = new Panel();
             menuStrip1 = new MenuStrip();
             BtAdd = new FontAwesome.Sharp.IconMenuItem();
             BtUpdate = new FontAwesome.Sharp.IconMenuItem();
             BtDelete = new FontAwesome.Sharp.IconMenuItem();
             BtClose = new FontAwesome.Sharp.IconMenuItem();
-            dataGridView1 = new DataGridView();
+            label1 = new Label();
+            panel2 = new Panel();
+            SuppDgv = new DataGridView();
             panel1.SuspendLayout();
-            panel2.SuspendLayout();
             panel3.SuspendLayout();
             menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)SuppDgv).BeginInit();
             SuspendLayout();
             // 
             // panel1
@@ -55,28 +55,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(942, 445);
             panel1.TabIndex = 0;
-            // 
-            // panel2
-            // 
-            panel2.AutoSize = true;
-            panel2.Controls.Add(dataGridView1);
-            panel2.Location = new Point(-2, 165);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(939, 445);
-            panel2.TabIndex = 1;
-            // 
-            // label1
-            // 
-            label1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            label1.AutoSize = true;
-            label1.Font = new Font("Yu Gothic UI", 28.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.ForeColor = SystemColors.ControlLightLight;
-            label1.Location = new Point(627, 10);
-            label1.Name = "label1";
-            label1.Size = new Size(299, 62);
-            label1.TabIndex = 1;
-            label1.Text = "SUPLIDORES";
-            label1.TextAlign = ContentAlignment.TopRight;
             // 
             // panel3
             // 
@@ -106,6 +84,7 @@
             BtAdd.Name = "BtAdd";
             BtAdd.Size = new Size(118, 32);
             BtAdd.Text = "Agregar";
+            BtAdd.Click += BtAdd_Click;
             // 
             // BtUpdate
             // 
@@ -117,6 +96,7 @@
             BtUpdate.Name = "BtUpdate";
             BtUpdate.Size = new Size(133, 32);
             BtUpdate.Text = "Actualizar";
+            BtUpdate.Click += BtUpdate_Click;
             // 
             // BtDelete
             // 
@@ -128,6 +108,7 @@
             BtDelete.Name = "BtDelete";
             BtDelete.Size = new Size(118, 32);
             BtDelete.Text = "Eliminar";
+            BtDelete.Click += BtDelete_Click;
             // 
             // BtClose
             // 
@@ -139,16 +120,39 @@
             BtClose.Name = "BtClose";
             BtClose.Size = new Size(100, 32);
             BtClose.Text = "Cerrar";
+            BtClose.Click += BtClose_Click;
             // 
-            // dataGridView1
+            // label1
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 0);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(939, 445);
-            dataGridView1.TabIndex = 0;
+            label1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            label1.AutoSize = true;
+            label1.Font = new Font("Yu Gothic UI", 28.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.ForeColor = SystemColors.ControlLightLight;
+            label1.Location = new Point(627, 10);
+            label1.Name = "label1";
+            label1.Size = new Size(299, 62);
+            label1.TabIndex = 1;
+            label1.Text = "SUPLIDORES";
+            label1.TextAlign = ContentAlignment.TopRight;
+            // 
+            // panel2
+            // 
+            panel2.AutoSize = true;
+            panel2.Controls.Add(SuppDgv);
+            panel2.Location = new Point(-2, 165);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(939, 445);
+            panel2.TabIndex = 1;
+            // 
+            // SuppDgv
+            // 
+            SuppDgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            SuppDgv.Dock = DockStyle.Fill;
+            SuppDgv.Location = new Point(0, 0);
+            SuppDgv.Name = "SuppDgv";
+            SuppDgv.RowHeadersWidth = 51;
+            SuppDgv.Size = new Size(939, 445);
+            SuppDgv.TabIndex = 0;
             // 
             // SupplierFrm
             // 
@@ -161,14 +165,15 @@
             Name = "SupplierFrm";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
+            Load += SupplierFrm_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            panel2.ResumeLayout(false);
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)SuppDgv).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -184,6 +189,6 @@
         private FontAwesome.Sharp.IconMenuItem BtUpdate;
         private FontAwesome.Sharp.IconMenuItem BtDelete;
         private FontAwesome.Sharp.IconMenuItem BtClose;
-        private DataGridView dataGridView1;
+        private DataGridView SuppDgv;
     }
 }
