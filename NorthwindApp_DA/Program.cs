@@ -1,61 +1,54 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
+using NorthwindApp_DA.CrearEditRegisFrm;
+using NorthwindApp_DA.Data;
+using NorthwindApp_DA.Models;
+using NorthwindApp_DA.Repository;
+using NorthwindApp_DA.Validators;
 using System;
+using System.Configuration;
 
 namespace NorthwindApp_DA
 {
     internal static class Program
     {
-        public static IConfiguration Configuration { get; private set; }
+        public static IServiceProvider ServiceProvider { get; private set; }
         [STAThread]
         static void Main()
         {
-            
+            /*Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File("Logs/app.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();*/
+                //Log.Information("Iniciando la aplicación Northwind CRUD");
 
-            var configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-            Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(configuration)
-                .CreateLogger();
-
-           
-
-
-
-
-            try
-            {
-                Log.Information("Iniciando la aplicación Northwind CRUD");
+                var configuration = new ConfigurationBuilder()
+               .AddJsonFile("appsettings.json")
+               .Build();
 
                 var services = new ServiceCollection();
                 services.AddSingleton<IConfiguration>(configuration);
                 services.AddDbContext<NorthwindContext>(options =>
-                    options.UseSqlServer(configuration.GetConnectionString("NorthwindDb")));
-
-                using (var serviceProvider = services.BuildServiceProvider())
                 {
-                    var context = serviceProvider.GetService<NorthwindContext>();
-                    context.Database.Migrate();
-                }
+                    options.UseSqlServer(configuration.GetConnectionString("NorthwindDb"));
+                });
 
-                Application.Run(new MenuFrm(serviceProvider));
-            }
+                //services.AddScoped<ILogger>(provider => Log.Logger);
+                services.AddTransient<MenuFrm>();
+                services.AddTransient<CategoryFrm>();
+                services.AddTransient<CategoryCrearFrm>();
+                services.AddTransient<CategoryValid>();
+                services.AddTransient<CategoryRepos>();
 
-            catch (Exception ex)
-            {
-                Log.Error(ex, "La aplicación falló al iniciarse");
-                MessageBox.Show("Error al iniciar la aplicación: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                ServiceProvider = services.BuildServiceProvider();
+                var context = ServiceProvider.GetService<NorthwindContext>();
 
-            finally
-            {
-                Log.CloseAndFlush();
-            }
-                
+                ApplicationConfiguration.Initialize();
+
+                var menufrm = ServiceProvider.GetService<MenuFrm>();
+                Application.Run(menufrm);
+            
         }
     }
 }

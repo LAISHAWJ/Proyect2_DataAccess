@@ -29,20 +29,20 @@
         private void InitializeComponent()
         {
             panel1 = new Panel();
-            panel2 = new Panel();
-            dataGridView1 = new DataGridView();
-            label1 = new Label();
             panel3 = new Panel();
             menuStrip1 = new MenuStrip();
-            BtClose = new FontAwesome.Sharp.IconMenuItem();
-            BtDelete = new FontAwesome.Sharp.IconMenuItem();
+            BtAddCat = new FontAwesome.Sharp.IconMenuItem();
             BtUpdate = new FontAwesome.Sharp.IconMenuItem();
-            iconMenuItem3 = new FontAwesome.Sharp.IconMenuItem();
+            BtDelete = new FontAwesome.Sharp.IconMenuItem();
+            BtClose = new FontAwesome.Sharp.IconMenuItem();
+            label1 = new Label();
+            panel2 = new Panel();
+            CategoryDtGvw = new DataGridView();
             panel1.SuspendLayout();
-            panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             panel3.SuspendLayout();
             menuStrip1.SuspendLayout();
+            panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)CategoryDtGvw).BeginInit();
             SuspendLayout();
             // 
             // panel1
@@ -56,27 +56,72 @@
             panel1.Size = new Size(941, 139);
             panel1.TabIndex = 0;
             // 
-            // panel2
+            // panel3
             // 
-            panel2.AutoSize = true;
-            panel2.Controls.Add(dataGridView1);
-            panel2.Location = new Point(0, 137);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(938, 483);
-            panel2.TabIndex = 1;
+            panel3.AutoSize = true;
+            panel3.Controls.Add(menuStrip1);
+            panel3.Location = new Point(0, 85);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(938, 46);
+            panel3.TabIndex = 1;
             // 
-            // dataGridView1
+            // menuStrip1
             // 
-            dataGridView1.AllowUserToAddRows = false;
-            dataGridView1.AllowUserToDeleteRows = false;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 0);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.ReadOnly = true;
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(938, 483);
-            dataGridView1.TabIndex = 0;
+            menuStrip1.ImageScalingSize = new Size(20, 20);
+            menuStrip1.Items.AddRange(new ToolStripItem[] { BtAddCat, BtUpdate, BtDelete, BtClose });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(938, 36);
+            menuStrip1.TabIndex = 0;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // BtAddCat
+            // 
+            BtAddCat.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            BtAddCat.IconChar = FontAwesome.Sharp.IconChar.Add;
+            BtAddCat.IconColor = Color.Black;
+            BtAddCat.IconFont = FontAwesome.Sharp.IconFont.Solid;
+            BtAddCat.IconSize = 20;
+            BtAddCat.Name = "BtAddCat";
+            BtAddCat.Size = new Size(118, 32);
+            BtAddCat.Text = "Agregar";
+            BtAddCat.Click += BtAddCat_Click;
+            // 
+            // BtUpdate
+            // 
+            BtUpdate.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            BtUpdate.IconChar = FontAwesome.Sharp.IconChar.Upload;
+            BtUpdate.IconColor = Color.Black;
+            BtUpdate.IconFont = FontAwesome.Sharp.IconFont.Solid;
+            BtUpdate.IconSize = 20;
+            BtUpdate.Name = "BtUpdate";
+            BtUpdate.Size = new Size(133, 32);
+            BtUpdate.Text = "Actualizar";
+            BtUpdate.Click += BtUpdate_Click;
+            // 
+            // BtDelete
+            // 
+            BtDelete.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            BtDelete.IconChar = FontAwesome.Sharp.IconChar.DeleteLeft;
+            BtDelete.IconColor = Color.Black;
+            BtDelete.IconFont = FontAwesome.Sharp.IconFont.Solid;
+            BtDelete.IconSize = 20;
+            BtDelete.Name = "BtDelete";
+            BtDelete.Size = new Size(118, 32);
+            BtDelete.Text = "Eliminar";
+            BtDelete.Click += BtDelete_Click;
+            // 
+            // BtClose
+            // 
+            BtClose.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            BtClose.IconChar = FontAwesome.Sharp.IconChar.Close;
+            BtClose.IconColor = Color.Black;
+            BtClose.IconFont = FontAwesome.Sharp.IconFont.Solid;
+            BtClose.IconSize = 20;
+            BtClose.Name = "BtClose";
+            BtClose.Size = new Size(100, 32);
+            BtClose.Text = "Cerrar";
+            BtClose.Click += BtClose_Click;
             // 
             // label1
             // 
@@ -90,70 +135,28 @@
             label1.TabIndex = 0;
             label1.Text = "CATEGORIAS";
             label1.TextAlign = ContentAlignment.TopRight;
-            label1.Click += this.label1_Click;
             // 
-            // panel3
+            // panel2
             // 
-            panel3.AutoSize = true;
-            panel3.Controls.Add(menuStrip1);
-            panel3.Location = new Point(0, 85);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(938, 46);
-            panel3.TabIndex = 1;
+            panel2.AutoSize = true;
+            panel2.Controls.Add(CategoryDtGvw);
+            panel2.Location = new Point(0, 137);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(938, 483);
+            panel2.TabIndex = 1;
             // 
-            // menuStrip1
+            // CategoryDtGvw
             // 
-            menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { iconMenuItem3, BtUpdate, BtDelete, BtClose });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(938, 36);
-            menuStrip1.TabIndex = 0;
-            menuStrip1.Text = "menuStrip1";
-            // 
-            // BtClose
-            // 
-            BtClose.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            BtClose.IconChar = FontAwesome.Sharp.IconChar.Close;
-            BtClose.IconColor = Color.Black;
-            BtClose.IconFont = FontAwesome.Sharp.IconFont.Solid;
-            BtClose.IconSize = 20;
-            BtClose.Name = "BtClose";
-            BtClose.Size = new Size(100, 32);
-            BtClose.Text = "Cerrar";
-            // 
-            // BtDelete
-            // 
-            BtDelete.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            BtDelete.IconChar = FontAwesome.Sharp.IconChar.DeleteLeft;
-            BtDelete.IconColor = Color.Black;
-            BtDelete.IconFont = FontAwesome.Sharp.IconFont.Solid;
-            BtDelete.IconSize = 20;
-            BtDelete.Name = "BtDelete";
-            BtDelete.Size = new Size(118, 32);
-            BtDelete.Text = "Eliminar";
-            // 
-            // BtUpdate
-            // 
-            BtUpdate.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            BtUpdate.IconChar = FontAwesome.Sharp.IconChar.Upload;
-            BtUpdate.IconColor = Color.Black;
-            BtUpdate.IconFont = FontAwesome.Sharp.IconFont.Solid;
-            BtUpdate.IconSize = 20;
-            BtUpdate.Name = "BtUpdate";
-            BtUpdate.Size = new Size(133, 32);
-            BtUpdate.Text = "Actualizar";
-            // 
-            // iconMenuItem3
-            // 
-            iconMenuItem3.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            iconMenuItem3.IconChar = FontAwesome.Sharp.IconChar.Add;
-            iconMenuItem3.IconColor = Color.Black;
-            iconMenuItem3.IconFont = FontAwesome.Sharp.IconFont.Solid;
-            iconMenuItem3.IconSize = 20;
-            iconMenuItem3.Name = "iconMenuItem3";
-            iconMenuItem3.Size = new Size(118, 32);
-            iconMenuItem3.Text = "Agregar";
+            CategoryDtGvw.AllowUserToAddRows = false;
+            CategoryDtGvw.AllowUserToDeleteRows = false;
+            CategoryDtGvw.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            CategoryDtGvw.Dock = DockStyle.Fill;
+            CategoryDtGvw.Location = new Point(0, 0);
+            CategoryDtGvw.Name = "CategoryDtGvw";
+            CategoryDtGvw.ReadOnly = true;
+            CategoryDtGvw.RowHeadersWidth = 51;
+            CategoryDtGvw.Size = new Size(938, 483);
+            CategoryDtGvw.TabIndex = 0;
             // 
             // CategoryFrm
             // 
@@ -166,14 +169,15 @@
             Name = "CategoryFrm";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
+            Load += CategoryFrm_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
-            panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
+            panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)CategoryDtGvw).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -182,12 +186,12 @@
 
         private Panel panel1;
         private Panel panel2;
-        private DataGridView dataGridView1;
+        private DataGridView CategoryDtGvw;
         private Label label1;
         private Panel panel3;
         private MenuStrip menuStrip1;
         private FontAwesome.Sharp.IconMenuItem BtClose;
-        private FontAwesome.Sharp.IconMenuItem iconMenuItem3;
+        private FontAwesome.Sharp.IconMenuItem BtAddCat;
         private FontAwesome.Sharp.IconMenuItem BtUpdate;
         private FontAwesome.Sharp.IconMenuItem BtDelete;
     }

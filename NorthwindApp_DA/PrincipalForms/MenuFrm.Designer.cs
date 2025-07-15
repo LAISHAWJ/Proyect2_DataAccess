@@ -88,6 +88,7 @@
             BtCategory.Size = new Size(131, 92);
             BtCategory.Text = "CATEGORIA";
             BtCategory.TextImageRelation = TextImageRelation.ImageAboveText;
+            BtCategory.Click += BtCategory_Click;
             // 
             // BtProducts
             // 
@@ -104,6 +105,7 @@
             BtProducts.Size = new Size(142, 92);
             BtProducts.Text = "PRODUCTOS";
             BtProducts.TextImageRelation = TextImageRelation.ImageAboveText;
+            BtProducts.Click += BtProducts_Click;
             // 
             // BtSupplier
             // 
@@ -119,6 +121,7 @@
             BtSupplier.Size = new Size(141, 92);
             BtSupplier.Text = "SUPLIDORES";
             BtSupplier.TextImageRelation = TextImageRelation.ImageAboveText;
+            BtSupplier.Click += BtSupplier_Click;
             // 
             // iconMenuItem1
             // 
@@ -149,6 +152,7 @@
             BtExit.Size = new Size(78, 92);
             BtExit.Text = "SALIR";
             BtExit.TextImageRelation = TextImageRelation.ImageAboveText;
+            BtExit.Click += BtExit_Click;
             // 
             // MenuFrm
             // 
