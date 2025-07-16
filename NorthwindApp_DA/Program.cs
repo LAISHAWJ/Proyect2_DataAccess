@@ -3,12 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NorthwindApp_DA.CrearEditRegisFrm;
 using NorthwindApp_DA.Data;
-using NorthwindApp_DA.Models;
 using NorthwindApp_DA.PrincipalForms;
 using NorthwindApp_DA.Repository;
 using NorthwindApp_DA.Validators;
-using System;
-using System.Configuration;
 
 namespace NorthwindApp_DA
 {
@@ -18,52 +15,52 @@ namespace NorthwindApp_DA
         [STAThread]
         static void Main()
         {
-                var configuration = new ConfigurationBuilder()
-               .AddJsonFile("appsettings.json")
-               .Build();
+            var configuration = new ConfigurationBuilder()
+           .AddJsonFile("appsettings.json")
+           .Build();
 
-                var services = new ServiceCollection();
-                services.AddSingleton<IConfiguration>(configuration);
-                services.AddDbContext<NorthwindContext>(options =>
-                {
-                    options.UseSqlServer(configuration.GetConnectionString("NorthwindDb"));
-                });
+            var services = new ServiceCollection();
+            services.AddSingleton<IConfiguration>(configuration);
+            services.AddDbContext<NorthwindContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("NorthwindDb"));
+            });
 
-                services.AddTransient<MenuFrm>();
-                 
-                //ENTIDAD CATEGORIA.
-                services.AddTransient<CategoryFrm>();
-                services.AddTransient<CategoryCrearFrm>();
-                services.AddTransient<CategoryValid>();
-                services.AddTransient<CategoryRepos>();
-                
-                //ENTIDAD SUPLIDOR.
-                services.AddTransient<SupplierFrm>();
-                services.AddTransient<SuppliercrearFrm>();
-                services.AddTransient<SupplierValid>();
-                services.AddTransient<SupplierRepos>();
+            services.AddTransient<MenuFrm>();
 
-                //ENTIDAD PRODUCTO.
-                services.AddTransient<ProductsFrm>();
-                services.AddTransient<ProductcrearFrm>();
-                services.AddTransient<ProductValid>();
-                services.AddTransient<ProductRepos>();
+            //ENTIDAD CATEGORIA.
+            services.AddTransient<CategoryFrm>();
+            services.AddTransient<CategoryCrearFrm>();
+            services.AddTransient<CategoryValid>();
+            services.AddTransient<CategoryRepos>();
+
+            //ENTIDAD SUPLIDOR.
+            services.AddTransient<SupplierFrm>();
+            services.AddTransient<SuppliercrearFrm>();
+            services.AddTransient<SupplierValid>();
+            services.AddTransient<SupplierRepos>();
+
+            //ENTIDAD PRODUCTO.
+            services.AddTransient<ProductsFrm>();
+            services.AddTransient<ProductcrearFrm>();
+            services.AddTransient<ProductValid>();
+            services.AddTransient<ProductRepos>();
 
 
-                //ENTIDAD PEDIDO.
-                services.AddTransient<OrderFrm>();
-                services.AddTransient<OrderDetailsFrm>();
+            //ENTIDAD PEDIDO.
+            services.AddTransient<OrderFrm>();
+            services.AddTransient<OrderDetailsFrm>();
 
-                services.AddTransient<OrderCrearFrm>();
+            services.AddTransient<OrderCrearFrm>();
 
             ServiceProvider = services.BuildServiceProvider();
-                var context = ServiceProvider.GetService<NorthwindContext>();
+            var context = ServiceProvider.GetService<NorthwindContext>();
 
-                ApplicationConfiguration.Initialize();
+            ApplicationConfiguration.Initialize();
 
-                var menufrm = ServiceProvider.GetService<MenuFrm>();
-                Application.Run(menufrm);
-            
+            var menufrm = ServiceProvider.GetService<MenuFrm>();
+            Application.Run(menufrm);
+
         }
     }
 }

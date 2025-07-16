@@ -28,13 +28,10 @@ public partial class NorthwindContext : DbContext
 
     public virtual DbSet<Product> Products { get; set; }
 
-    public virtual DbSet<Region> Regions { get; set; }
-
     public virtual DbSet<Shipper> Shippers { get; set; }
 
     public virtual DbSet<Supplier> Suppliers { get; set; }
 
-    public virtual DbSet<Territory> Territories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -146,26 +143,6 @@ public partial class NorthwindContext : DbContext
                 .HasForeignKey(d => d.ReportsTo)
                 .HasConstraintName("FK_Employees_Employees");
 
-            entity.HasMany(d => d.Territories).WithMany(p => p.Employees)
-                .UsingEntity<Dictionary<string, object>>(
-                    "EmployeeTerritory",
-                    r => r.HasOne<Territory>().WithMany()
-                        .HasForeignKey("TerritoryId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_EmployeeTerritories_Territories"),
-                    l => l.HasOne<Employee>().WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("FK_EmployeeTerritories_Employees"),
-                    j =>
-                    {
-                        j.HasKey("EmployeeId", "TerritoryId").IsClustered(false);
-                        j.ToTable("EmployeeTerritories");
-                        j.IndexerProperty<int>("EmployeeId").HasColumnName("EmployeeID");
-                        j.IndexerProperty<string>("TerritoryId")
-                            .HasMaxLength(20)
-                            .HasColumnName("TerritoryID");
-                    });
         });
 
         modelBuilder.Entity<Order>(entity =>
@@ -283,21 +260,6 @@ public partial class NorthwindContext : DbContext
                 .HasConstraintName("FK_Products_Suppliers");
         });
 
-        modelBuilder.Entity<Region>(entity =>
-        {
-            entity.HasKey(e => e.RegionId).IsClustered(false);
-
-            entity.ToTable("Region");
-
-            entity.Property(e => e.RegionId)
-                .ValueGeneratedNever()
-                .HasColumnName("RegionID");
-            entity.Property(e => e.RegionDescription)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsFixedLength();
-        });
-
         modelBuilder.Entity<Shipper>(entity =>
         {
             entity.Property(e => e.ShipperId).HasColumnName("ShipperID");
@@ -329,24 +291,6 @@ public partial class NorthwindContext : DbContext
             entity.Property(e => e.Region).HasMaxLength(15);
         });
 
-        modelBuilder.Entity<Territory>(entity =>
-        {
-            entity.HasKey(e => e.TerritoryId).IsClustered(false);
-
-            entity.Property(e => e.TerritoryId)
-                .HasMaxLength(20)
-                .HasColumnName("TerritoryID");
-            entity.Property(e => e.RegionId).HasColumnName("RegionID");
-            entity.Property(e => e.TerritoryDescription)
-                .IsRequired()
-                .HasMaxLength(50)
-                .IsFixedLength();
-
-            entity.HasOne(d => d.Region).WithMany(p => p.Territories)
-                .HasForeignKey(d => d.RegionId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Territories_Region");
-        });
 
         OnModelCreatingPartial(modelBuilder);
     }

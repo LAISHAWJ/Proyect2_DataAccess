@@ -1,11 +1,6 @@
-﻿using NorthwindApp_DA.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using NorthwindApp_DA.Data;
 using NorthwindApp_DA.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NorthwindApp_DA.Repository
 {
@@ -22,10 +17,10 @@ namespace NorthwindApp_DA.Repository
         //OBTENER TODOS
         public List<Product> GetAllProducts()
         {
-             return _context.Products
-            .Include(p => p.Category)
-            .Include(p => p.Supplier)
-            .ToList();
+            return _context.Products
+           .Include(p => p.Category)
+           .Include(p => p.Supplier)
+           .ToList();
         }
         public Product? GetProductById(int id)
         {

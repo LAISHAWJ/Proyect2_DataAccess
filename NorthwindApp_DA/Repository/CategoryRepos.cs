@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NorthwindApp_DA.Data;
 using NorthwindApp_DA.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NorthwindApp_DA.Repository
 {

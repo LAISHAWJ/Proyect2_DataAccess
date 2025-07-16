@@ -1,15 +1,6 @@
 ﻿using NorthwindApp_DA.Models;
 using NorthwindApp_DA.Repository;
 using NorthwindApp_DA.Validators;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace NorthwindApp_DA.CrearEditRegisFrm
 {

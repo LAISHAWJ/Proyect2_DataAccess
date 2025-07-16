@@ -2,15 +2,7 @@
 using NorthwindApp_DA.CrearEditRegisFrm;
 using NorthwindApp_DA.Models;
 using NorthwindApp_DA.Repository;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace NorthwindApp_DA
 {
@@ -26,7 +18,7 @@ namespace NorthwindApp_DA
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
             CargarProductos();
-            
+
         }
 
         private void ProductsFrm_Load(object sender, EventArgs e)
@@ -76,7 +68,7 @@ namespace NorthwindApp_DA
             StatusCbx.SelectedIndex = 1; // Por defecto: "Activos"
 
             // Categorías
-            var categorias = _productRepos.GetAllCategories(); 
+            var categorias = _productRepos.GetAllCategories();
             CmbxCat.Items.Clear();
             CmbxCat.Items.Add("Todas");
             foreach (var cat in categorias)
@@ -84,7 +76,7 @@ namespace NorthwindApp_DA
             CmbxCat.SelectedIndex = 0;
 
             // Suplidores
-            var suplidores = _productRepos.GetAllSuppliers(); 
+            var suplidores = _productRepos.GetAllSuppliers();
             CmbxSup.Items.Clear();
             CmbxSup.Items.Add("Todos");
             foreach (var sup in suplidores)
