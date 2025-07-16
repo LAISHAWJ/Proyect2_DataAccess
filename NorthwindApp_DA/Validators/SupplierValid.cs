@@ -29,21 +29,22 @@ namespace NorthwindApp_DA.Validators
                 .MaximumLength(60).WithMessage("Máximo 60 caracteres para la dirección.");
 
             RuleFor(s => s.City)
-                .MaximumLength(20).WithMessage("Máximo 20 caracteres para la ciudad.");
+                .MaximumLength(30).WithMessage("Máximo 30 caracteres para la ciudad.");
 
             RuleFor(s => s.Region)
-                .MaximumLength(20).WithMessage("Máximo 20 caracteres para la región.");
+                .MaximumLength(30).WithMessage("Máximo 30 caracteres para la región.");
 
             RuleFor(s => s.PostalCode)
                 .MaximumLength(10).WithMessage("Máximo 10 caracteres para el código postal.");
 
             RuleFor(s => s.Country)
-                .MaximumLength(30).WithMessage("Máximo 30 caracteres para el país.");
+                .MaximumLength(50).WithMessage("Máximo 50 caracteres para el país.");
 
             RuleFor(s => s.Phone)
                 .NotEmpty().WithMessage("El teléfono es obligatorio.")
-                .Matches(@"^\+?\d-.(){10,15}$").WithMessage("El teléfono debe tener un formato válido (10-15 dígitos).")
-                .MaximumLength(25).WithMessage("Máximo 25 caracteres para el teléfono.");
+                .Matches(@"^(\+?\d{1,3}[- ]?)?(\d{3}[- ]?\d{3}[- ]?\d{4})$")
+                .WithMessage("El teléfono debe tener un formato válido")
+                .MaximumLength(24).WithMessage("Máximo 24 caracteres para el teléfono.");
 
             RuleFor(s => s.Fax)
                 .MaximumLength(24).WithMessage("Máximo 24 caracteres para el fax.");

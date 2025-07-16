@@ -49,6 +49,19 @@ namespace NorthwindApp_DA
                 services.AddTransient<SupplierValid>();
                 services.AddTransient<SupplierRepos>();
 
+                //ENTIDAD PRODUCTO.
+                services.AddTransient<ProductsFrm>();
+                services.AddTransient<ProductcrearFrm>();
+                services.AddTransient<ProductValid>();
+                services.AddTransient<ProductRepos>();
+
+
+
+
+
+
+
+
             ServiceProvider = services.BuildServiceProvider();
                 var context = ServiceProvider.GetService<NorthwindContext>();
 
