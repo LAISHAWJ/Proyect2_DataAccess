@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NorthwindApp_DA.CrearEditRegisFrm;
 using NorthwindApp_DA.Data;
 using NorthwindApp_DA.Models;
+using NorthwindApp_DA.PrincipalForms;
 using NorthwindApp_DA.Repository;
 using NorthwindApp_DA.Validators;
 using System;
@@ -54,6 +55,11 @@ namespace NorthwindApp_DA
                 services.AddTransient<ProductcrearFrm>();
                 services.AddTransient<ProductValid>();
                 services.AddTransient<ProductRepos>();
+
+
+                //ENTIDAD PEDIDO.
+                services.AddTransient<OrderFrm>();
+                services.AddTransient<OrderDetailsFrm>();
 
 
 

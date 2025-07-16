@@ -8,24 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NorthwindApp_DA
+namespace NorthwindApp_DA.CrearEditRegisFrm
 {
-    public partial class OrderFrm : Form
+    public partial class OrderCrearFrm : Form
     {
-        public OrderFrm()
+        public OrderCrearFrm()
         {
             InitializeComponent();
         }
 
-        private void OrderFrm_Load(object sender, EventArgs e)
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
-        }
-
-        private void BtCancel_Click(object sender, EventArgs e)
-        {
-
-            this.Close();
         }
     }
 }

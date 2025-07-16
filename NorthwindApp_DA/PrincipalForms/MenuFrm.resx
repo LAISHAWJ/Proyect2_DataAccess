@@ -121,7 +121,7 @@
   <data name="pictureBox1.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAA8oAAAIFCAIAAACFxJO2AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vQAADr0BR/uQrQAALFFJREFUeF7t3Xm8XHV98PELdUFRa7WPfdTH1tZW7aNP+9DV2mqrtU/rDQRobkIg
+        vAAADrwBlbxySQAALFFJREFUeF7t3Xm8XHV98PELdUFRa7WPfdTH1tZW7aNP+9DV2mqrtU/rDQRobkIg
         RBaJEAQawACySjCEuNYiCCgiCYgiNwvZyE4WCIQAWchGIAuQlewJubm5uXeeVxky99zfmZlMhh9k5uT9
         fn3/Yeack3Pu5Y9PJmd+pyEHAABE0hC+AAAAVEteAwBANPIaAACikdcAABCNvAYAgGjkNQAARCOvAQAg
         GnkNAADRyGsAAIhGXgMAQDTyGgAAopHXAAAQjbwGAIBo5DUAAEQjrwEAIBp5DQAA0chrAACIRl4DAEA0
@@ -325,8 +325,14 @@
   <metadata name="BtSupplier.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>153, 17</value>
   </metadata>
-  <metadata name="iconMenuItem1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="BtAllOrder.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>153, 17</value>
+  </metadata>
+  <metadata name="BtCrearOrder.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>387, 17</value>
+  </metadata>
+  <metadata name="BtViewOrder.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>247, 17</value>
   </metadata>
   <metadata name="BtExit.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>153, 17</value>

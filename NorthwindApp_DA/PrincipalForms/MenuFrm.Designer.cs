@@ -35,7 +35,9 @@
             BtCategory = new FontAwesome.Sharp.IconMenuItem();
             BtProducts = new FontAwesome.Sharp.IconMenuItem();
             BtSupplier = new FontAwesome.Sharp.IconMenuItem();
-            iconMenuItem1 = new FontAwesome.Sharp.IconMenuItem();
+            BtAllOrder = new FontAwesome.Sharp.IconMenuItem();
+            BtCrearOrder = new FontAwesome.Sharp.IconMenuItem();
+            BtViewOrder = new FontAwesome.Sharp.IconMenuItem();
             BtExit = new FontAwesome.Sharp.IconMenuItem();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -67,7 +69,7 @@
             // 
             menuStrip1.BackColor = Color.FromArgb(0, 74, 173);
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { BtCategory, BtProducts, BtSupplier, iconMenuItem1, BtExit });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { BtCategory, BtProducts, BtSupplier, BtAllOrder, BtExit });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(968, 96);
@@ -123,20 +125,41 @@
             BtSupplier.TextImageRelation = TextImageRelation.ImageAboveText;
             BtSupplier.Click += BtSupplier_Click;
             // 
-            // iconMenuItem1
+            // BtAllOrder
             // 
-            iconMenuItem1.CheckOnClick = true;
-            iconMenuItem1.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            iconMenuItem1.ForeColor = SystemColors.ButtonHighlight;
-            iconMenuItem1.IconChar = FontAwesome.Sharp.IconChar.BoxesPacking;
-            iconMenuItem1.IconColor = SystemColors.ButtonHighlight;
-            iconMenuItem1.IconFont = FontAwesome.Sharp.IconFont.Solid;
-            iconMenuItem1.IconSize = 60;
-            iconMenuItem1.ImageScaling = ToolStripItemImageScaling.None;
-            iconMenuItem1.Name = "iconMenuItem1";
-            iconMenuItem1.Size = new Size(113, 92);
-            iconMenuItem1.Text = "ORDENES";
-            iconMenuItem1.TextImageRelation = TextImageRelation.ImageAboveText;
+            BtAllOrder.CheckOnClick = true;
+            BtAllOrder.DropDownItems.AddRange(new ToolStripItem[] { BtCrearOrder, BtViewOrder });
+            BtAllOrder.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            BtAllOrder.ForeColor = SystemColors.ButtonHighlight;
+            BtAllOrder.IconChar = FontAwesome.Sharp.IconChar.BoxesPacking;
+            BtAllOrder.IconColor = SystemColors.ButtonHighlight;
+            BtAllOrder.IconFont = FontAwesome.Sharp.IconFont.Solid;
+            BtAllOrder.IconSize = 60;
+            BtAllOrder.ImageScaling = ToolStripItemImageScaling.None;
+            BtAllOrder.Name = "BtAllOrder";
+            BtAllOrder.Size = new Size(113, 92);
+            BtAllOrder.Text = "ORDENES";
+            BtAllOrder.TextImageRelation = TextImageRelation.ImageAboveText;
+            // 
+            // BtCrearOrder
+            // 
+            BtCrearOrder.IconChar = FontAwesome.Sharp.IconChar.Edit;
+            BtCrearOrder.IconColor = Color.Black;
+            BtCrearOrder.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            BtCrearOrder.Name = "BtCrearOrder";
+            BtCrearOrder.Size = new Size(261, 32);
+            BtCrearOrder.Text = "Crear orden";
+            BtCrearOrder.Click += BtCrearOrder_Click;
+            // 
+            // BtViewOrder
+            // 
+            BtViewOrder.IconChar = FontAwesome.Sharp.IconChar.ListSquares;
+            BtViewOrder.IconColor = Color.Black;
+            BtViewOrder.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            BtViewOrder.Name = "BtViewOrder";
+            BtViewOrder.Size = new Size(261, 32);
+            BtViewOrder.Text = "Ver orden detalle ";
+            BtViewOrder.Click += BtViewOrder_Click;
             // 
             // BtExit
             // 
@@ -181,6 +204,8 @@
         private FontAwesome.Sharp.IconMenuItem BtSupplier;
         private FontAwesome.Sharp.IconMenuItem BtExit;
         private PictureBox pictureBox1;
-        private FontAwesome.Sharp.IconMenuItem iconMenuItem1;
+        private FontAwesome.Sharp.IconMenuItem BtAllOrder;
+        private FontAwesome.Sharp.IconMenuItem BtViewOrder;
+        private FontAwesome.Sharp.IconMenuItem BtCrearOrder;
     }
 }
