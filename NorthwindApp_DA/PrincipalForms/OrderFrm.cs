@@ -12,9 +12,13 @@ namespace NorthwindApp_DA
 {
     public partial class OrderFrm : Form
     {
-        public OrderFrm()
+        private readonly IServiceProvider _services;
+        private readonly MenuFrm _menuFrm;
+        public OrderFrm(IServiceProvider services, MenuFrm menuFrm)
         {
             InitializeComponent();
+            _services = services;
+            _menuFrm = menuFrm;
         }
 
         private void OrderFrm_Load(object sender, EventArgs e)
@@ -24,7 +28,7 @@ namespace NorthwindApp_DA
 
         private void BtCancel_Click(object sender, EventArgs e)
         {
-
+            _menuFrm.Show();
             this.Close();
         }
     }

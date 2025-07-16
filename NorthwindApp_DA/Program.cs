@@ -18,12 +18,6 @@ namespace NorthwindApp_DA
         [STAThread]
         static void Main()
         {
-            /*Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.File("Logs/app.txt", rollingInterval: RollingInterval.Day)
-                .CreateLogger();*/
-                //Log.Information("Iniciando la aplicación Northwind CRUD");
-
                 var configuration = new ConfigurationBuilder()
                .AddJsonFile("appsettings.json")
                .Build();
@@ -35,7 +29,6 @@ namespace NorthwindApp_DA
                     options.UseSqlServer(configuration.GetConnectionString("NorthwindDb"));
                 });
 
-                //services.AddScoped<ILogger>(provider => Log.Logger);
                 services.AddTransient<MenuFrm>();
                  
                 //ENTIDAD CATEGORIA.
@@ -62,13 +55,6 @@ namespace NorthwindApp_DA
                 services.AddTransient<OrderDetailsFrm>();
 
                 services.AddTransient<OrderCrearFrm>();
-
-
-
-
-
-
-
 
             ServiceProvider = services.BuildServiceProvider();
                 var context = ServiceProvider.GetService<NorthwindContext>();

@@ -26,5 +26,10 @@ namespace NorthwindApp_DA.PrincipalForms
             _menuFrm.Show();
             this.Close();
         }
+
+        private void OrderDetailsFrm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
