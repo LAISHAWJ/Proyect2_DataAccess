@@ -92,7 +92,7 @@
             panel1.Controls.Add(label1);
             panel1.Location = new Point(-2, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1062, 95);
+            panel1.Size = new Size(1062, 80);
             panel1.TabIndex = 0;
             // 
             // label1
@@ -101,7 +101,7 @@
             label1.AutoSize = true;
             label1.Font = new Font("Yu Gothic UI", 28.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.ForeColor = SystemColors.ControlLightLight;
-            label1.Location = new Point(10, 17);
+            label1.Location = new Point(10, 8);
             label1.Name = "label1";
             label1.Size = new Size(236, 62);
             label1.TabIndex = 3;
@@ -132,9 +132,9 @@
             groupBox1.Controls.Add(ClienteCbx);
             groupBox1.Controls.Add(label3);
             groupBox1.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            groupBox1.Location = new Point(22, 106);
+            groupBox1.Location = new Point(22, 90);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(945, 291);
+            groupBox1.Size = new Size(945, 286);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "INGRESAR";
@@ -143,7 +143,7 @@
             // 
             label17.AutoSize = true;
             label17.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label17.Location = new Point(29, 241);
+            label17.Location = new Point(29, 233);
             label17.Name = "label17";
             label17.Size = new Size(108, 25);
             label17.TabIndex = 19;
@@ -152,7 +152,7 @@
             // dateTimePicker3
             // 
             dateTimePicker3.CalendarFont = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dateTimePicker3.Location = new Point(147, 237);
+            dateTimePicker3.Location = new Point(147, 229);
             dateTimePicker3.Name = "dateTimePicker3";
             dateTimePicker3.Size = new Size(281, 34);
             dateTimePicker3.TabIndex = 18;
@@ -161,7 +161,7 @@
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label15.Location = new Point(29, 194);
+            label15.Location = new Point(29, 186);
             label15.Name = "label15";
             label15.Size = new Size(143, 25);
             label15.TabIndex = 17;
@@ -170,7 +170,7 @@
             // dateTimePicker2
             // 
             dateTimePicker2.CalendarFont = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dateTimePicker2.Location = new Point(173, 190);
+            dateTimePicker2.Location = new Point(173, 182);
             dateTimePicker2.Name = "dateTimePicker2";
             dateTimePicker2.Size = new Size(255, 34);
             dateTimePicker2.TabIndex = 16;
@@ -179,7 +179,7 @@
             // 
             label14.AutoSize = true;
             label14.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label14.Location = new Point(29, 145);
+            label14.Location = new Point(29, 137);
             label14.Name = "label14";
             label14.Size = new Size(112, 25);
             label14.TabIndex = 15;
@@ -188,14 +188,14 @@
             // dateTimePicker1
             // 
             dateTimePicker1.CalendarFont = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dateTimePicker1.Location = new Point(147, 141);
+            dateTimePicker1.Location = new Point(147, 133);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(281, 34);
             dateTimePicker1.TabIndex = 14;
             // 
             // TxtShipCountry
             // 
-            TxtShipCountry.Location = new Point(667, 237);
+            TxtShipCountry.Location = new Point(667, 232);
             TxtShipCountry.Name = "TxtShipCountry";
             TxtShipCountry.Size = new Size(240, 34);
             TxtShipCountry.TabIndex = 13;
@@ -204,7 +204,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.Location = new Point(533, 243);
+            label8.Location = new Point(533, 238);
             label8.Name = "label8";
             label8.Size = new Size(122, 25);
             label8.TabIndex = 12;
@@ -212,7 +212,7 @@
             // 
             // TxtCodePostalOrder
             // 
-            TxtCodePostalOrder.Location = new Point(667, 193);
+            TxtCodePostalOrder.Location = new Point(667, 188);
             TxtCodePostalOrder.Name = "TxtCodePostalOrder";
             TxtCodePostalOrder.Size = new Size(240, 34);
             TxtCodePostalOrder.TabIndex = 11;
@@ -221,7 +221,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label7.Location = new Point(533, 199);
+            label7.Location = new Point(533, 194);
             label7.Name = "label7";
             label7.Size = new Size(128, 25);
             label7.TabIndex = 10;
@@ -229,7 +229,7 @@
             // 
             // TxtRegionOrder
             // 
-            TxtRegionOrder.Location = new Point(609, 146);
+            TxtRegionOrder.Location = new Point(609, 141);
             TxtRegionOrder.Name = "TxtRegionOrder";
             TxtRegionOrder.Size = new Size(298, 34);
             TxtRegionOrder.TabIndex = 9;
@@ -238,7 +238,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label6.Location = new Point(533, 152);
+            label6.Location = new Point(533, 147);
             label6.Name = "label6";
             label6.Size = new Size(71, 25);
             label6.TabIndex = 8;
@@ -246,7 +246,7 @@
             // 
             // TxtCityOrder
             // 
-            TxtCityOrder.Location = new Point(609, 96);
+            TxtCityOrder.Location = new Point(609, 91);
             TxtCityOrder.Name = "TxtCityOrder";
             TxtCityOrder.Size = new Size(298, 34);
             TxtCityOrder.TabIndex = 7;
@@ -255,7 +255,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.Location = new Point(533, 102);
+            label5.Location = new Point(533, 97);
             label5.Name = "label5";
             label5.Size = new Size(70, 25);
             label5.TabIndex = 6;
@@ -263,7 +263,7 @@
             // 
             // TxtDirecOrder
             // 
-            TxtDirecOrder.Location = new Point(632, 44);
+            TxtDirecOrder.Location = new Point(632, 39);
             TxtDirecOrder.Name = "TxtDirecOrder";
             TxtDirecOrder.Size = new Size(275, 34);
             TxtDirecOrder.TabIndex = 5;
@@ -272,7 +272,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(532, 49);
+            label4.Location = new Point(532, 44);
             label4.Name = "label4";
             label4.Size = new Size(90, 25);
             label4.TabIndex = 4;
@@ -282,7 +282,7 @@
             // 
             EmpleadoCbx.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             EmpleadoCbx.FormattingEnabled = true;
-            EmpleadoCbx.Location = new Point(130, 96);
+            EmpleadoCbx.Location = new Point(130, 88);
             EmpleadoCbx.Name = "EmpleadoCbx";
             EmpleadoCbx.Size = new Size(298, 33);
             EmpleadoCbx.TabIndex = 3;
@@ -291,7 +291,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(29, 100);
+            label2.Location = new Point(29, 92);
             label2.Name = "label2";
             label2.Size = new Size(94, 25);
             label2.TabIndex = 2;
@@ -301,7 +301,7 @@
             // 
             ClienteCbx.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             ClienteCbx.FormattingEnabled = true;
-            ClienteCbx.Location = new Point(130, 48);
+            ClienteCbx.Location = new Point(130, 40);
             ClienteCbx.Name = "ClienteCbx";
             ClienteCbx.Size = new Size(298, 33);
             ClienteCbx.TabIndex = 1;
@@ -310,7 +310,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(53, 52);
+            label3.Location = new Point(53, 44);
             label3.Name = "label3";
             label3.Size = new Size(71, 25);
             label3.TabIndex = 0;
@@ -319,7 +319,7 @@
             // panel2
             // 
             panel2.Controls.Add(dataGridView1);
-            panel2.Location = new Point(22, 484);
+            panel2.Location = new Point(22, 435);
             panel2.Name = "panel2";
             panel2.Size = new Size(945, 320);
             panel2.TabIndex = 2;
@@ -338,7 +338,7 @@
             // 
             panel3.BackColor = Color.FromArgb(192, 192, 255);
             panel3.Controls.Add(menuStrip1);
-            panel3.Location = new Point(481, 426);
+            panel3.Location = new Point(481, 387);
             panel3.Name = "panel3";
             panel3.Size = new Size(486, 36);
             panel3.TabIndex = 3;
@@ -390,7 +390,7 @@
             panel4.Controls.Add(BtSearch);
             panel4.Controls.Add(FilterCbx);
             panel4.Controls.Add(label9);
-            panel4.Location = new Point(22, 426);
+            panel4.Location = new Point(22, 387);
             panel4.Name = "panel4";
             panel4.Size = new Size(442, 36);
             panel4.TabIndex = 4;
@@ -441,7 +441,7 @@
             groupBox2.Controls.Add(ShipNameCbx);
             groupBox2.Controls.Add(label16);
             groupBox2.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            groupBox2.Location = new Point(22, 806);
+            groupBox2.Location = new Point(22, 755);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(945, 179);
             groupBox2.TabIndex = 5;
@@ -540,7 +540,7 @@
             // 
             BtCancel.Cursor = Cursors.Hand;
             BtCancel.Font = new Font("Yu Gothic UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            BtCancel.Location = new Point(873, 1004);
+            BtCancel.Location = new Point(873, 944);
             BtCancel.Name = "BtCancel";
             BtCancel.Size = new Size(94, 39);
             BtCancel.TabIndex = 36;
@@ -552,7 +552,7 @@
             // 
             BtSave.Cursor = Cursors.Hand;
             BtSave.Font = new Font("Yu Gothic UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            BtSave.Location = new Point(773, 1004);
+            BtSave.Location = new Point(773, 944);
             BtSave.Name = "BtSave";
             BtSave.Size = new Size(94, 39);
             BtSave.TabIndex = 35;
@@ -561,11 +561,11 @@
             // 
             // OrderFrm
             // 
-            AutoScaleDimensions = new SizeF(120F, 120F);
-            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             AutoSize = true;
-            ClientSize = new Size(991, 1055);
+            ClientSize = new Size(978, 1016);
             Controls.Add(BtCancel);
             Controls.Add(BtSave);
             Controls.Add(groupBox2);

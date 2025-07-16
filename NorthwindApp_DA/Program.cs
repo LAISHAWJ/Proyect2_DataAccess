@@ -61,6 +61,8 @@ namespace NorthwindApp_DA
                 services.AddTransient<OrderFrm>();
                 services.AddTransient<OrderDetailsFrm>();
 
+                services.AddTransient<OrderCrearFrm>();
+
 
 
 
