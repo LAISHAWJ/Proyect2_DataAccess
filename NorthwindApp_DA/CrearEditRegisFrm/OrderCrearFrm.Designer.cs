@@ -39,6 +39,7 @@
             TxtCantidad = new TextBox();
             TxtDescuento = new TextBox();
             BtCrear = new Button();
+            BtCerrar = new Button();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             panel3.SuspendLayout();
@@ -148,12 +149,25 @@
             // BtCrear
             // 
             BtCrear.Font = new Font("Yu Gothic UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            BtCrear.Location = new Point(695, 553);
+            BtCrear.Location = new Point(603, 560);
             BtCrear.Name = "BtCrear";
             BtCrear.Size = new Size(98, 37);
             BtCrear.TabIndex = 7;
             BtCrear.Text = "Crear";
             BtCrear.UseVisualStyleBackColor = true;
+            BtCrear.Click += BtCrear_Click;
+            // 
+            // BtCerrar
+            // 
+            BtCerrar.Font = new Font("Yu Gothic UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            BtCerrar.ForeColor = Color.Red;
+            BtCerrar.Location = new Point(707, 560);
+            BtCerrar.Name = "BtCerrar";
+            BtCerrar.Size = new Size(98, 37);
+            BtCerrar.TabIndex = 8;
+            BtCerrar.Text = "Cerrar";
+            BtCerrar.UseVisualStyleBackColor = true;
+            BtCerrar.Click += button1_Click;
             // 
             // OrderCrearFrm
             // 
@@ -161,6 +175,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             ClientSize = new Size(814, 609);
+            Controls.Add(BtCerrar);
             Controls.Add(BtCrear);
             Controls.Add(TxtDescuento);
             Controls.Add(TxtCantidad);
@@ -195,5 +210,6 @@
         private TextBox TxtCantidad;
         private TextBox TxtDescuento;
         private Button BtCrear;
+        private Button BtCerrar;
     }
 }

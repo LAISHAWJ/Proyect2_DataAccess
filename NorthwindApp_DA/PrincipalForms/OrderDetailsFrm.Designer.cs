@@ -102,6 +102,7 @@
             BtSearch.Size = new Size(42, 41);
             BtSearch.TabIndex = 9;
             BtSearch.UseVisualStyleBackColor = false;
+            BtSearch.Click += BtSearch_Click_1;
             // 
             // TxtFiltroOrderD
             // 

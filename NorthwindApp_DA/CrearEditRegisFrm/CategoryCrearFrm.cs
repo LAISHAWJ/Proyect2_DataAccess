@@ -9,7 +9,7 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
         private readonly CategoryRepos _categoryRepos;
         private readonly CategoryValid _validator;
         private Category _categoryEdit;
-        private bool _isEditMode = false; // Indica si estamos en modo edición
+        private bool _isEditMode = false; // Indica el modo edición
         public CategoryCrearFrm(CategoryRepos categoryRepos, CategoryValid validator)
         {
             InitializeComponent();
@@ -119,7 +119,7 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
             if (PbxCat.Image != null)
             {
                 using var ms = new MemoryStream();
-                PbxCat.Image.Save(ms, PbxCat.Image.RawFormat);
+                PbxCat.Image.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                 _categoryEdit.Picture = ms.ToArray();
             }
 

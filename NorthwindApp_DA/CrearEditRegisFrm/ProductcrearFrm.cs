@@ -31,6 +31,7 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
             CategCmbx.DisplayMember = "CategoryName";
             CategCmbx.ValueMember = "CategoryId";
             CategCmbx.DataSource = categorias;
+            CategCmbx.SelectedIndex = -1;
         }
 
         private void CargarSuplidores()
@@ -39,6 +40,7 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
             SuppCmbx.DisplayMember = "CompanyName";
             SuppCmbx.ValueMember = "SupplierId";
             SuppCmbx.DataSource = suplidores;
+            SuppCmbx.SelectedIndex = -1;
         }
 
 
@@ -60,6 +62,19 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
 
         private void BtSave_Click(object sender, EventArgs e)
         {
+            if (CategCmbx.SelectedValue == null || !(CategCmbx.SelectedValue is int))
+            {
+                MessageBox.Show("Seleccione una categoría válida.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (SuppCmbx.SelectedValue == null || !(SuppCmbx.SelectedValue is int))
+            {
+                MessageBox.Show("Seleccione un suplidor válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+
             var product = _isEditMode ? _productEdit : new Product();
 
             product.ProductName = TxtNameProduct.Text.Trim();
@@ -70,8 +85,8 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
             product.UnitsOnOrder = short.TryParse(TxtUnitsOnOrder.Text, out short ordenado) ? ordenado : (short?)null;
             product.ReorderLevel = short.TryParse(TxtReorderLevel.Text, out short reorden) ? reorden : (short?)null;
 
-            product.CategoryId = (int?)CategCmbx.SelectedValue;
-            product.SupplierId = (int?)SuppCmbx.SelectedValue;
+            product.CategoryId = (int)CategCmbx.SelectedValue;
+            product.SupplierId = (int)SuppCmbx.SelectedValue;
             product.Discontinued = DiscontCbx.Checked;
 
             var resultado = _validator.Validate(product);

@@ -28,16 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OrderFrm));
             panel1 = new Panel();
             label1 = new Label();
             groupBox1 = new GroupBox();
             label17 = new Label();
-            dateTimePicker3 = new DateTimePicker();
+            DtShippedDate = new DateTimePicker();
             label15 = new Label();
-            dateTimePicker2 = new DateTimePicker();
+            DtRequiredDate = new DateTimePicker();
             label14 = new Label();
-            dateTimePicker1 = new DateTimePicker();
+            DtOrderDate = new DateTimePicker();
             TxtShipCountry = new TextBox();
             label8 = new Label();
             TxtCodePostalOrder = new TextBox();
@@ -53,16 +52,11 @@
             ClienteCbx = new ComboBox();
             label3 = new Label();
             panel2 = new Panel();
-            dataGridView1 = new DataGridView();
+            OrderDgv = new DataGridView();
             panel3 = new Panel();
             menuStrip1 = new MenuStrip();
             BtCrearOrderDetail = new FontAwesome.Sharp.IconMenuItem();
-            BtUpdateorder = new FontAwesome.Sharp.IconMenuItem();
             BtDeleteOrder = new FontAwesome.Sharp.IconMenuItem();
-            panel4 = new Panel();
-            BtSearch = new Button();
-            FilterCbx = new ComboBox();
-            label9 = new Label();
             groupBox2 = new GroupBox();
             TxtTotal = new TextBox();
             label11 = new Label();
@@ -79,10 +73,9 @@
             panel1.SuspendLayout();
             groupBox1.SuspendLayout();
             panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)OrderDgv).BeginInit();
             panel3.SuspendLayout();
             menuStrip1.SuspendLayout();
-            panel4.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
             // 
@@ -92,7 +85,7 @@
             panel1.Controls.Add(label1);
             panel1.Location = new Point(-2, 0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(1062, 80);
+            panel1.Size = new Size(1120, 80);
             panel1.TabIndex = 0;
             // 
             // label1
@@ -112,11 +105,11 @@
             // 
             groupBox1.BackColor = SystemColors.Control;
             groupBox1.Controls.Add(label17);
-            groupBox1.Controls.Add(dateTimePicker3);
+            groupBox1.Controls.Add(DtShippedDate);
             groupBox1.Controls.Add(label15);
-            groupBox1.Controls.Add(dateTimePicker2);
+            groupBox1.Controls.Add(DtRequiredDate);
             groupBox1.Controls.Add(label14);
-            groupBox1.Controls.Add(dateTimePicker1);
+            groupBox1.Controls.Add(DtOrderDate);
             groupBox1.Controls.Add(TxtShipCountry);
             groupBox1.Controls.Add(label8);
             groupBox1.Controls.Add(TxtCodePostalOrder);
@@ -132,9 +125,9 @@
             groupBox1.Controls.Add(ClienteCbx);
             groupBox1.Controls.Add(label3);
             groupBox1.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            groupBox1.Location = new Point(22, 90);
+            groupBox1.Location = new Point(23, 90);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(945, 286);
+            groupBox1.Size = new Size(1037, 286);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "INGRESAR";
@@ -143,59 +136,59 @@
             // 
             label17.AutoSize = true;
             label17.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label17.Location = new Point(29, 233);
+            label17.Location = new Point(55, 233);
             label17.Name = "label17";
             label17.Size = new Size(108, 25);
             label17.TabIndex = 19;
             label17.Text = "Fecha envío";
             // 
-            // dateTimePicker3
+            // DtShippedDate
             // 
-            dateTimePicker3.CalendarFont = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dateTimePicker3.Location = new Point(147, 229);
-            dateTimePicker3.Name = "dateTimePicker3";
-            dateTimePicker3.Size = new Size(281, 34);
-            dateTimePicker3.TabIndex = 18;
+            DtShippedDate.CalendarFont = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            DtShippedDate.Location = new Point(173, 229);
+            DtShippedDate.Name = "DtShippedDate";
+            DtShippedDate.Size = new Size(281, 34);
+            DtShippedDate.TabIndex = 18;
             // 
             // label15
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label15.Location = new Point(29, 186);
+            label15.Location = new Point(55, 186);
             label15.Name = "label15";
             label15.Size = new Size(143, 25);
             label15.TabIndex = 17;
             label15.Text = "Fecha requerida";
             // 
-            // dateTimePicker2
+            // DtRequiredDate
             // 
-            dateTimePicker2.CalendarFont = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dateTimePicker2.Location = new Point(173, 182);
-            dateTimePicker2.Name = "dateTimePicker2";
-            dateTimePicker2.Size = new Size(255, 34);
-            dateTimePicker2.TabIndex = 16;
+            DtRequiredDate.CalendarFont = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            DtRequiredDate.Location = new Point(199, 182);
+            DtRequiredDate.Name = "DtRequiredDate";
+            DtRequiredDate.Size = new Size(255, 34);
+            DtRequiredDate.TabIndex = 16;
             // 
             // label14
             // 
             label14.AutoSize = true;
             label14.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label14.Location = new Point(29, 137);
+            label14.Location = new Point(55, 137);
             label14.Name = "label14";
             label14.Size = new Size(112, 25);
             label14.TabIndex = 15;
             label14.Text = "Fecha orden";
             // 
-            // dateTimePicker1
+            // DtOrderDate
             // 
-            dateTimePicker1.CalendarFont = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dateTimePicker1.Location = new Point(147, 133);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(281, 34);
-            dateTimePicker1.TabIndex = 14;
+            DtOrderDate.CalendarFont = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            DtOrderDate.Location = new Point(173, 133);
+            DtOrderDate.Name = "DtOrderDate";
+            DtOrderDate.Size = new Size(281, 34);
+            DtOrderDate.TabIndex = 14;
             // 
             // TxtShipCountry
             // 
-            TxtShipCountry.Location = new Point(667, 232);
+            TxtShipCountry.Location = new Point(724, 232);
             TxtShipCountry.Name = "TxtShipCountry";
             TxtShipCountry.Size = new Size(240, 34);
             TxtShipCountry.TabIndex = 13;
@@ -204,7 +197,7 @@
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.Location = new Point(533, 238);
+            label8.Location = new Point(590, 238);
             label8.Name = "label8";
             label8.Size = new Size(122, 25);
             label8.TabIndex = 12;
@@ -212,7 +205,7 @@
             // 
             // TxtCodePostalOrder
             // 
-            TxtCodePostalOrder.Location = new Point(667, 188);
+            TxtCodePostalOrder.Location = new Point(724, 188);
             TxtCodePostalOrder.Name = "TxtCodePostalOrder";
             TxtCodePostalOrder.Size = new Size(240, 34);
             TxtCodePostalOrder.TabIndex = 11;
@@ -221,7 +214,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label7.Location = new Point(533, 194);
+            label7.Location = new Point(590, 194);
             label7.Name = "label7";
             label7.Size = new Size(128, 25);
             label7.TabIndex = 10;
@@ -229,7 +222,7 @@
             // 
             // TxtRegionOrder
             // 
-            TxtRegionOrder.Location = new Point(609, 141);
+            TxtRegionOrder.Location = new Point(666, 141);
             TxtRegionOrder.Name = "TxtRegionOrder";
             TxtRegionOrder.Size = new Size(298, 34);
             TxtRegionOrder.TabIndex = 9;
@@ -238,7 +231,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label6.Location = new Point(533, 147);
+            label6.Location = new Point(590, 147);
             label6.Name = "label6";
             label6.Size = new Size(71, 25);
             label6.TabIndex = 8;
@@ -246,7 +239,7 @@
             // 
             // TxtCityOrder
             // 
-            TxtCityOrder.Location = new Point(609, 91);
+            TxtCityOrder.Location = new Point(666, 91);
             TxtCityOrder.Name = "TxtCityOrder";
             TxtCityOrder.Size = new Size(298, 34);
             TxtCityOrder.TabIndex = 7;
@@ -255,7 +248,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.Location = new Point(533, 97);
+            label5.Location = new Point(590, 97);
             label5.Name = "label5";
             label5.Size = new Size(70, 25);
             label5.TabIndex = 6;
@@ -263,7 +256,7 @@
             // 
             // TxtDirecOrder
             // 
-            TxtDirecOrder.Location = new Point(632, 39);
+            TxtDirecOrder.Location = new Point(689, 39);
             TxtDirecOrder.Name = "TxtDirecOrder";
             TxtDirecOrder.Size = new Size(275, 34);
             TxtDirecOrder.TabIndex = 5;
@@ -272,7 +265,7 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label4.Location = new Point(532, 44);
+            label4.Location = new Point(589, 44);
             label4.Name = "label4";
             label4.Size = new Size(90, 25);
             label4.TabIndex = 4;
@@ -282,7 +275,7 @@
             // 
             EmpleadoCbx.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             EmpleadoCbx.FormattingEnabled = true;
-            EmpleadoCbx.Location = new Point(130, 88);
+            EmpleadoCbx.Location = new Point(156, 88);
             EmpleadoCbx.Name = "EmpleadoCbx";
             EmpleadoCbx.Size = new Size(298, 33);
             EmpleadoCbx.TabIndex = 3;
@@ -291,7 +284,7 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(29, 92);
+            label2.Location = new Point(55, 92);
             label2.Name = "label2";
             label2.Size = new Size(94, 25);
             label2.TabIndex = 2;
@@ -301,7 +294,7 @@
             // 
             ClienteCbx.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             ClienteCbx.FormattingEnabled = true;
-            ClienteCbx.Location = new Point(130, 40);
+            ClienteCbx.Location = new Point(156, 40);
             ClienteCbx.Name = "ClienteCbx";
             ClienteCbx.Size = new Size(298, 33);
             ClienteCbx.TabIndex = 1;
@@ -310,7 +303,7 @@
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label3.Location = new Point(53, 44);
+            label3.Location = new Point(79, 44);
             label3.Name = "label3";
             label3.Size = new Size(71, 25);
             label3.TabIndex = 0;
@@ -318,39 +311,39 @@
             // 
             // panel2
             // 
-            panel2.Controls.Add(dataGridView1);
+            panel2.Controls.Add(OrderDgv);
             panel2.Location = new Point(22, 435);
             panel2.Name = "panel2";
-            panel2.Size = new Size(945, 320);
+            panel2.Size = new Size(1038, 320);
             panel2.TabIndex = 2;
             // 
-            // dataGridView1
+            // OrderDgv
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Dock = DockStyle.Fill;
-            dataGridView1.Location = new Point(0, 0);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(945, 320);
-            dataGridView1.TabIndex = 0;
+            OrderDgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            OrderDgv.Dock = DockStyle.Fill;
+            OrderDgv.Location = new Point(0, 0);
+            OrderDgv.Name = "OrderDgv";
+            OrderDgv.RowHeadersWidth = 51;
+            OrderDgv.Size = new Size(1038, 320);
+            OrderDgv.TabIndex = 0;
             // 
             // panel3
             // 
             panel3.BackColor = Color.FromArgb(192, 192, 255);
             panel3.Controls.Add(menuStrip1);
-            panel3.Location = new Point(481, 387);
+            panel3.Location = new Point(23, 386);
             panel3.Name = "panel3";
-            panel3.Size = new Size(486, 36);
+            panel3.Size = new Size(1037, 36);
             panel3.TabIndex = 3;
             // 
             // menuStrip1
             // 
             menuStrip1.BackColor = Color.Lavender;
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { BtCrearOrderDetail, BtUpdateorder, BtDeleteOrder });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { BtCrearOrderDetail, BtDeleteOrder });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(486, 36);
+            menuStrip1.Size = new Size(1037, 36);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -363,16 +356,7 @@
             BtCrearOrderDetail.Name = "BtCrearOrderDetail";
             BtCrearOrderDetail.Size = new Size(164, 32);
             BtCrearOrderDetail.Text = "Nueva orden";
-            // 
-            // BtUpdateorder
-            // 
-            BtUpdateorder.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            BtUpdateorder.IconChar = FontAwesome.Sharp.IconChar.Pencil;
-            BtUpdateorder.IconColor = Color.Black;
-            BtUpdateorder.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            BtUpdateorder.Name = "BtUpdateorder";
-            BtUpdateorder.Size = new Size(157, 32);
-            BtUpdateorder.Text = "Editar orden";
+            BtCrearOrderDetail.Click += BtCrearOrderDetail_Click;
             // 
             // BtDeleteOrder
             // 
@@ -383,49 +367,7 @@
             BtDeleteOrder.Name = "BtDeleteOrder";
             BtDeleteOrder.Size = new Size(118, 32);
             BtDeleteOrder.Text = "Eliminar";
-            // 
-            // panel4
-            // 
-            panel4.BackColor = Color.Lavender;
-            panel4.Controls.Add(BtSearch);
-            panel4.Controls.Add(FilterCbx);
-            panel4.Controls.Add(label9);
-            panel4.Location = new Point(22, 387);
-            panel4.Name = "panel4";
-            panel4.Size = new Size(442, 36);
-            panel4.TabIndex = 4;
-            // 
-            // BtSearch
-            // 
-            BtSearch.BackColor = Color.Lavender;
-            BtSearch.Cursor = Cursors.Hand;
-            BtSearch.FlatStyle = FlatStyle.Flat;
-            BtSearch.ForeColor = Color.Lavender;
-            BtSearch.Image = (Image)resources.GetObject("BtSearch.Image");
-            BtSearch.Location = new Point(328, -1);
-            BtSearch.Name = "BtSearch";
-            BtSearch.Size = new Size(42, 36);
-            BtSearch.TabIndex = 8;
-            BtSearch.UseVisualStyleBackColor = false;
-            // 
-            // FilterCbx
-            // 
-            FilterCbx.Font = new Font("Yu Gothic UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            FilterCbx.FormattingEnabled = true;
-            FilterCbx.Location = new Point(102, 4);
-            FilterCbx.Name = "FilterCbx";
-            FilterCbx.Size = new Size(208, 28);
-            FilterCbx.TabIndex = 14;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Font = new Font("Yu Gothic UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label9.Location = new Point(13, 8);
-            label9.Name = "label9";
-            label9.Size = new Size(82, 20);
-            label9.TabIndex = 0;
-            label9.Text = "Buscar por";
+            BtDeleteOrder.Click += BtDeleteOrder_Click;
             // 
             // groupBox2
             // 
@@ -441,9 +383,9 @@
             groupBox2.Controls.Add(ShipNameCbx);
             groupBox2.Controls.Add(label16);
             groupBox2.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            groupBox2.Location = new Point(22, 755);
+            groupBox2.Location = new Point(20, 754);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(945, 179);
+            groupBox2.Size = new Size(1040, 179);
             groupBox2.TabIndex = 5;
             groupBox2.TabStop = false;
             // 
@@ -489,6 +431,7 @@
             TxtFreight.Name = "TxtFreight";
             TxtFreight.Size = new Size(172, 34);
             TxtFreight.TabIndex = 9;
+            TxtFreight.TextChanged += TxtFreight_TextChanged;
             // 
             // label12
             // 
@@ -540,7 +483,7 @@
             // 
             BtCancel.Cursor = Cursors.Hand;
             BtCancel.Font = new Font("Yu Gothic UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            BtCancel.Location = new Point(873, 944);
+            BtCancel.Location = new Point(966, 947);
             BtCancel.Name = "BtCancel";
             BtCancel.Size = new Size(94, 39);
             BtCancel.TabIndex = 36;
@@ -552,24 +495,23 @@
             // 
             BtSave.Cursor = Cursors.Hand;
             BtSave.Font = new Font("Yu Gothic UI", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            BtSave.Location = new Point(773, 944);
+            BtSave.Location = new Point(866, 947);
             BtSave.Name = "BtSave";
             BtSave.Size = new Size(94, 39);
             BtSave.TabIndex = 35;
             BtSave.Text = "Guardar";
             BtSave.UseVisualStyleBackColor = true;
+            BtSave.Click += BtSave_Click;
             // 
             // OrderFrm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            AutoScroll = true;
             AutoSize = true;
-            ClientSize = new Size(978, 1016);
+            ClientSize = new Size(1115, 998);
             Controls.Add(BtCancel);
             Controls.Add(BtSave);
             Controls.Add(groupBox2);
-            Controls.Add(panel4);
             Controls.Add(panel3);
             Controls.Add(panel2);
             Controls.Add(groupBox1);
@@ -584,13 +526,11 @@
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)OrderDgv).EndInit();
             panel3.ResumeLayout(false);
             panel3.PerformLayout();
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
-            panel4.ResumeLayout(false);
-            panel4.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
             ResumeLayout(false);
@@ -616,16 +556,11 @@
         private TextBox TxtShipCountry;
         private Label label8;
         private Panel panel2;
-        private DataGridView dataGridView1;
+        private DataGridView OrderDgv;
         private Panel panel3;
         private MenuStrip menuStrip1;
-        private FontAwesome.Sharp.IconMenuItem BtUpdateorder;
         private FontAwesome.Sharp.IconMenuItem BtCrearOrderDetail;
         private FontAwesome.Sharp.IconMenuItem BtDeleteOrder;
-        private Panel panel4;
-        private Label label9;
-        private ComboBox FilterCbx;
-        private Button BtSearch;
         private GroupBox groupBox2;
         private ComboBox ShipViaCbx;
         private Label label10;
@@ -639,11 +574,11 @@
         private Label label11;
         private Button BtCancel;
         private Button BtSave;
-        private DateTimePicker dateTimePicker1;
+        private DateTimePicker DtOrderDate;
         private Label label14;
         private Label label17;
-        private DateTimePicker dateTimePicker3;
+        private DateTimePicker DtShippedDate;
         private Label label15;
-        private DateTimePicker dateTimePicker2;
+        private DateTimePicker DtRequiredDate;
     }
 }

@@ -129,7 +129,7 @@ namespace NorthwindApp_DA
 
                 try
                 {
-                    _productRepos.UpdateProduct(producto); // Reutilizas el método existente
+                    _productRepos.UpdateProduct(producto); 
                     CargarProductos();
                     MessageBox.Show("Producto marcado como descontinuado.");
                 }

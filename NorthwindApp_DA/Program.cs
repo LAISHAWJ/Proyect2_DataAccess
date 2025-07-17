@@ -47,11 +47,13 @@ namespace NorthwindApp_DA
             services.AddTransient<ProductRepos>();
 
 
-            //ENTIDAD PEDIDO.
+            //ENTIDAD ORDER.
             services.AddTransient<OrderFrm>();
             services.AddTransient<OrderDetailsFrm>();
-
+            services.AddTransient<OrderValid>();
+            services.AddTransient<OrderRepos>();
             services.AddTransient<OrderCrearFrm>();
+            services.AddTransient<OrderDetailsRepos>();
 
             ServiceProvider = services.BuildServiceProvider();
             var context = ServiceProvider.GetService<NorthwindContext>();
