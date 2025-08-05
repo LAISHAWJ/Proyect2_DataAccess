@@ -56,6 +56,7 @@
             panel3 = new Panel();
             menuStrip1 = new MenuStrip();
             BtCrearOrderDetail = new FontAwesome.Sharp.IconMenuItem();
+            BtEditOrderDetail = new FontAwesome.Sharp.IconMenuItem();
             BtDeleteOrder = new FontAwesome.Sharp.IconMenuItem();
             groupBox2 = new GroupBox();
             TxtTotal = new TextBox();
@@ -340,7 +341,7 @@
             // 
             menuStrip1.BackColor = Color.Lavender;
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { BtCrearOrderDetail, BtDeleteOrder });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { BtCrearOrderDetail, BtEditOrderDetail, BtDeleteOrder });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(1037, 36);
@@ -357,6 +358,17 @@
             BtCrearOrderDetail.Size = new Size(164, 32);
             BtCrearOrderDetail.Text = "Nueva orden";
             BtCrearOrderDetail.Click += BtCrearOrderDetail_Click;
+            // 
+            // BtEditOrderDetail
+            // 
+            BtEditOrderDetail.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            BtEditOrderDetail.IconChar = FontAwesome.Sharp.IconChar.Pen;
+            BtEditOrderDetail.IconColor = Color.Black;
+            BtEditOrderDetail.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            BtEditOrderDetail.Name = "BtEditOrderDetail";
+            BtEditOrderDetail.Size = new Size(97, 32);
+            BtEditOrderDetail.Text = "Editar";
+            BtEditOrderDetail.Click += BtEditOrderDetail_Click;
             // 
             // BtDeleteOrder
             // 
@@ -391,7 +403,7 @@
             // 
             // TxtTotal
             // 
-            TxtTotal.Location = new Point(754, 129);
+            TxtTotal.Location = new Point(846, 130);
             TxtTotal.Name = "TxtTotal";
             TxtTotal.Size = new Size(172, 34);
             TxtTotal.TabIndex = 15;
@@ -400,7 +412,7 @@
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label11.Location = new Point(672, 134);
+            label11.Location = new Point(764, 135);
             label11.Name = "label11";
             label11.Size = new Size(56, 25);
             label11.TabIndex = 14;
@@ -427,17 +439,16 @@
             // 
             // TxtFreight
             // 
-            TxtFreight.Location = new Point(753, 79);
+            TxtFreight.Location = new Point(845, 80);
             TxtFreight.Name = "TxtFreight";
             TxtFreight.Size = new Size(172, 34);
             TxtFreight.TabIndex = 9;
-            TxtFreight.TextChanged += TxtFreight_TextChanged;
             // 
             // label12
             // 
             label12.AutoSize = true;
             label12.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label12.Location = new Point(671, 84);
+            label12.Location = new Point(763, 85);
             label12.Name = "label12";
             label12.Size = new Size(73, 25);
             label12.TabIndex = 8;
@@ -445,7 +456,7 @@
             // 
             // TxtSubtotal
             // 
-            TxtSubtotal.Location = new Point(753, 29);
+            TxtSubtotal.Location = new Point(845, 30);
             TxtSubtotal.Name = "TxtSubtotal";
             TxtSubtotal.Size = new Size(172, 34);
             TxtSubtotal.TabIndex = 7;
@@ -454,7 +465,7 @@
             // 
             label13.AutoSize = true;
             label13.Font = new Font("Yu Gothic UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label13.Location = new Point(655, 34);
+            label13.Location = new Point(747, 35);
             label13.Name = "label13";
             label13.Size = new Size(87, 25);
             label13.TabIndex = 6;
@@ -580,5 +591,6 @@
         private DateTimePicker DtShippedDate;
         private Label label15;
         private DateTimePicker DtRequiredDate;
+        private FontAwesome.Sharp.IconMenuItem BtEditOrderDetail;
     }
 }

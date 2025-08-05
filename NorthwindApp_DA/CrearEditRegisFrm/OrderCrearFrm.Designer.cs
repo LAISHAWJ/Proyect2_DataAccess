@@ -55,7 +55,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(814, 86);
             panel1.TabIndex = 0;
-            panel1.Paint += panel1_Paint;
             // 
             // label1
             // 
@@ -167,7 +166,7 @@
             BtCerrar.TabIndex = 8;
             BtCerrar.Text = "Cerrar";
             BtCerrar.UseVisualStyleBackColor = true;
-            BtCerrar.Click += button1_Click;
+            BtCerrar.Click += BtCerrar_Click;
             // 
             // OrderCrearFrm
             // 

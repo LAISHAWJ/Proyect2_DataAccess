@@ -147,7 +147,7 @@
             BtCrearOrder.IconColor = Color.Black;
             BtCrearOrder.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtCrearOrder.Name = "BtCrearOrder";
-            BtCrearOrder.Size = new Size(261, 32);
+            BtCrearOrder.Size = new Size(284, 32);
             BtCrearOrder.Text = "Crear orden";
             BtCrearOrder.Click += BtCrearOrder_Click;
             // 
@@ -157,8 +157,8 @@
             BtViewOrder.IconColor = Color.Black;
             BtViewOrder.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtViewOrder.Name = "BtViewOrder";
-            BtViewOrder.Size = new Size(261, 32);
-            BtViewOrder.Text = "Ver orden detalle ";
+            BtViewOrder.Size = new Size(284, 32);
+            BtViewOrder.Text = "Ver orden registrada";
             BtViewOrder.Click += BtViewOrder_Click;
             // 
             // BtExit

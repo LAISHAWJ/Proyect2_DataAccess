@@ -5,15 +5,15 @@ using NorthwindApp_DA.Data;
 using NorthwindApp_DA.Models;
 using NorthwindApp_DA.Repository;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace NorthwindApp_DA
 {
     public partial class OrderFrm : Form
     {
-
         private List<Order> _ordenesEnSesion;
-
         private readonly IServiceProvider _serviceProvider = Program.ServiceProvider;
         private readonly NorthwindContext _context;
         private readonly OrderRepos _orderRepos;
@@ -22,7 +22,7 @@ namespace NorthwindApp_DA
         public OrderFrm(NorthwindContext context, MenuFrm menuFrm)
         {
             InitializeComponent();
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
             _orderRepos = new OrderRepos(_context);
             _menuFrm = menuFrm;
             _ordenesEnSesion = new List<Order>();
@@ -34,9 +34,7 @@ namespace NorthwindApp_DA
             CalcularTotales();
             CargarCombos();
             _ordenesEnSesion = new List<Order>();
-
         }
-
 
         private void CargarOrdenesEnSesion()
         {
@@ -64,21 +62,22 @@ namespace NorthwindApp_DA
             CalcularTotales();
         }
 
-
         private void CalcularTotales()
         {
             if (_ordenesEnSesion.Count == 0)
+            {
+                TxtSubtotal.Text = "";
+                TxtFreight.Text = "";
+                TxtTotal.Text = "";
                 return;
+            }
 
-            
             decimal subtotal = _ordenesEnSesion
                 .SelectMany(o => o.OrderDetails)
                 .Sum(d => d.UnitPrice * d.Quantity * (1 - (decimal)d.Discount));
 
-            
             decimal freight = subtotal * 0.18m;
 
-           
             foreach (var orden in _ordenesEnSesion)
             {
                 orden.Freight = freight;
@@ -90,8 +89,6 @@ namespace NorthwindApp_DA
             TxtFreight.Text = freight.ToString("C");
             TxtTotal.Text = total.ToString("C");
         }
-
-
 
         private void CargarCombos()
         {
@@ -111,10 +108,10 @@ namespace NorthwindApp_DA
             ShipViaCbx.ValueMember = "ShipperId";
 
             var destinatarios = _orderRepos.GetAllOrders()
-                                    .Select(o => o.ShipName)
-                                    .Where(s => !string.IsNullOrEmpty(s))
-                                    .Distinct()
-                                    .ToList();
+            .Select(o => o.ShipName)
+            .Where(s => !string.IsNullOrEmpty(s))
+            .Distinct()
+            .ToList();
             ShipNameCbx.DataSource = destinatarios;
         }
 
@@ -122,12 +119,12 @@ namespace NorthwindApp_DA
         {
             var nuevaOrden = new Order
             {
-                CustomerId = ClienteCbx.SelectedValue.ToString(),
-                EmployeeId = (int)EmpleadoCbx.SelectedValue,
+                CustomerId = ClienteCbx.SelectedValue?.ToString(),
+                EmployeeId = EmpleadoCbx.SelectedValue != null ? (int)EmpleadoCbx.SelectedValue : null,
                 OrderDate = DtOrderDate.Value,
                 RequiredDate = DtRequiredDate.Value,
                 ShippedDate = DtShippedDate.Value,
-                ShipVia = (int)ShipViaCbx.SelectedValue,
+                ShipVia = ShipViaCbx.SelectedValue != null ? (int)ShipViaCbx.SelectedValue : null,
                 Freight = decimal.TryParse(TxtFreight.Text, out var freight) ? freight : 0,
                 ShipName = ShipNameCbx.Text,
                 ShipAddress = TxtDirecOrder.Text,
@@ -144,7 +141,6 @@ namespace NorthwindApp_DA
             return nuevaOrden;
         }
 
-
         private void BtCancel_Click(object sender, EventArgs e)
         {
             _menuFrm.Show();
@@ -158,25 +154,22 @@ namespace NorthwindApp_DA
                 _ordenesEnSesion = new List<Order>();
             }
 
-            
             Order ordenActual;
 
             if (_ordenesEnSesion.Count == 0)
             {
-                ordenActual = CrearNuevaOrden(); 
+                ordenActual = CrearNuevaOrden();
                 _ordenesEnSesion.Add(ordenActual);
             }
             else
             {
-                
-                ordenActual = _ordenesEnSesion[0]; 
+                ordenActual = _ordenesEnSesion[0];
             }
 
             using (var crearOrderFrm = new OrderCrearFrm(_context, ordenActual.OrderId))
             {
                 if (crearOrderFrm.ShowDialog() == DialogResult.OK)
                 {
-                    
                     var ordenRecargada = _context.Orders
                         .Include(o => o.OrderDetails)
                         .ThenInclude(od => od.Product)
@@ -188,7 +181,6 @@ namespace NorthwindApp_DA
 
                     if (ordenRecargada != null)
                     {
-                        
                         int index = _ordenesEnSesion.FindIndex(o => o.OrderId == ordenRecargada.OrderId);
                         if (index >= 0)
                         {
@@ -214,7 +206,6 @@ namespace NorthwindApp_DA
                 return;
             }
 
-
             var ordenAValidar = new Order
             {
                 CustomerId = ClienteCbx.SelectedValue?.ToString(),
@@ -231,11 +222,9 @@ namespace NorthwindApp_DA
 
             if (!resultado.IsValid)
             {
-
                 foreach (var error in resultado.Errors)
                 {
                     MessageBox.Show(error.ErrorMessage, "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
 
                     if (error.PropertyName == "CustomerId") ClienteCbx.Focus();
                     else if (error.PropertyName == "EmployeeId") EmpleadoCbx.Focus();
@@ -248,7 +237,6 @@ namespace NorthwindApp_DA
                     return;
                 }
             }
-
 
             if (string.IsNullOrWhiteSpace(TxtCityOrder.Text))
             {
@@ -266,12 +254,25 @@ namespace NorthwindApp_DA
 
             try
             {
+                var ordenActual = _ordenesEnSesion[0];
+                ordenActual.CustomerId = ClienteCbx.SelectedValue?.ToString();
+                ordenActual.EmployeeId = EmpleadoCbx.SelectedValue != null ? (int?)EmpleadoCbx.SelectedValue : null;
+                ordenActual.OrderDate = DtOrderDate.Value;
+                ordenActual.RequiredDate = DtRequiredDate.Value;
+                ordenActual.ShippedDate = DtShippedDate.Value;
+                ordenActual.ShipVia = ShipViaCbx.SelectedValue != null ? (int?)ShipViaCbx.SelectedValue : null;
+                ordenActual.Freight = decimal.TryParse(TxtFreight.Text, out var freight) ? freight : ordenActual.Freight ?? 0m;
+                ordenActual.ShipName = ShipNameCbx.Text;
+                ordenActual.ShipAddress = TxtDirecOrder.Text;
+                ordenActual.ShipCity = TxtCityOrder.Text;
+                ordenActual.ShipRegion = TxtRegionOrder.Text;
+                ordenActual.ShipPostalCode = TxtCodePostalOrder.Text;
+                ordenActual.ShipCountry = TxtShipCountry.Text;
+
                 _context.SaveChanges();
                 MessageBox.Show("Orden guardada exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 CargarOrdenesEnSesion();
                 LimpiarFormulario();
-
-                // Reiniciar la lista para una nueva orden
                 _ordenesEnSesion = new List<Order>();
             }
             catch (Exception ex)
@@ -297,7 +298,6 @@ namespace NorthwindApp_DA
             {
                 var orderId = (int)row.Cells["OrderId"].Value;
 
-
                 var ordenDb = _context.Orders
                     .Include(o => o.OrderDetails)
                     .FirstOrDefault(o => o.OrderId == orderId);
@@ -307,7 +307,6 @@ namespace NorthwindApp_DA
                     _context.OrderDetails.RemoveRange(ordenDb.OrderDetails);
                     _context.Orders.Remove(ordenDb);
                 }
-
 
                 var ordenSesion = _ordenesEnSesion.FirstOrDefault(o => o.OrderId == orderId);
                 if (ordenSesion != null)
@@ -322,41 +321,109 @@ namespace NorthwindApp_DA
             LimpiarFormulario();
 
             MessageBox.Show("Orden(es) eliminada(s) correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            
         }
 
+        private void BtEditOrderDetail_Click(object sender, EventArgs e)
+        {
+            if (_ordenesEnSesion == null || !_ordenesEnSesion.Any())
+            {
+                MessageBox.Show("No hay ninguna orden para editar. Por favor, cree una orden primero.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var ordenActual = _ordenesEnSesion[0]; // Assuming only one order in session
+
+            // Populate form fields with the current order's data
+            ClienteCbx.SelectedValue = ordenActual.CustomerId;
+            EmpleadoCbx.SelectedValue = ordenActual.EmployeeId;
+            DtOrderDate.Value = ordenActual.OrderDate ?? DateTime.Now;
+            DtRequiredDate.Value = ordenActual.RequiredDate ?? DateTime.Now;
+            DtShippedDate.Value = ordenActual.ShippedDate ?? DateTime.Now;
+            ShipViaCbx.SelectedValue = ordenActual.ShipVia;
+            ShipNameCbx.Text = ordenActual.ShipName;
+            TxtDirecOrder.Text = ordenActual.ShipAddress;
+            TxtCityOrder.Text = ordenActual.ShipCity;
+            TxtRegionOrder.Text = ordenActual.ShipRegion;
+            TxtCodePostalOrder.Text = ordenActual.ShipPostalCode;
+            TxtShipCountry.Text = ordenActual.ShipCountry;
+
+            // Allow editing of OrderDetails via OrderCrearFrm
+            if (OrderDgv.SelectedRows.Count > 0)
+            {
+                var selectedRow = OrderDgv.SelectedRows[0];
+                var productName = (string)selectedRow.Cells["Producto"].Value;
+                var orderDetail = ordenActual.OrderDetails.FirstOrDefault(od => od.Product.ProductName == productName);
+
+                if (orderDetail != null)
+                {
+                    using (var crearOrderFrm = new OrderCrearFrm(_context, ordenActual.OrderId, orderDetail))
+                    {
+                        if (crearOrderFrm.ShowDialog() == DialogResult.OK)
+                        {
+                            var ordenRecargada = _context.Orders
+                                .Include(o => o.OrderDetails)
+                                .ThenInclude(od => od.Product)
+                                .ThenInclude(p => p.Category)
+                                .Include(o => o.OrderDetails)
+                                .ThenInclude(od => od.Product)
+                                .ThenInclude(p => p.Supplier)
+                                .FirstOrDefault(o => o.OrderId == ordenActual.OrderId);
+
+                            if (ordenRecargada != null)
+                            {
+                                int index = _ordenesEnSesion.FindIndex(o => o.OrderId == ordenRecargada.OrderId);
+                                if (index >= 0)
+                                {
+                                    _ordenesEnSesion[index] = ordenRecargada;
+                                }
+                                else
+                                {
+                                    _ordenesEnSesion.Add(ordenRecargada);
+                                }
+                            }
+
+                            CargarOrdenesEnSesion();
+                            CalcularTotales();
+                        }
+                    }
+                }
+            }
+
+            // Update order metadata in session
+            ordenActual.CustomerId = ClienteCbx.SelectedValue?.ToString();
+            ordenActual.EmployeeId = EmpleadoCbx.SelectedValue != null ? (int?)EmpleadoCbx.SelectedValue : null;
+            ordenActual.OrderDate = DtOrderDate.Value;
+            ordenActual.RequiredDate = DtRequiredDate.Value;
+            ordenActual.ShippedDate = DtShippedDate.Value;
+            ordenActual.ShipVia = ShipViaCbx.SelectedValue != null ? (int?)ShipViaCbx.SelectedValue : null;
+            ordenActual.Freight = decimal.TryParse(TxtFreight.Text, out var freight) ? freight : ordenActual.Freight ?? 0m;
+            ordenActual.ShipName = ShipNameCbx.Text;
+            ordenActual.ShipAddress = TxtDirecOrder.Text;
+            ordenActual.ShipCity = TxtCityOrder.Text;
+            ordenActual.ShipRegion = TxtRegionOrder.Text;
+            ordenActual.ShipPostalCode = TxtCodePostalOrder.Text;
+            ordenActual.ShipCountry = TxtShipCountry.Text;
+
+            CargarOrdenesEnSesion();
+            CalcularTotales();
+        }
 
         private void LimpiarFormulario()
         {
-            // Limpiar los combos
             ClienteCbx.SelectedIndex = -1;
             EmpleadoCbx.SelectedIndex = -1;
             ShipNameCbx.SelectedIndex = -1;
             ShipViaCbx.SelectedIndex = -1;
-
-            // Limpiar fecha
             DtOrderDate.Value = DateTime.Now;
-
-            // Limpiar campos de totales
             TxtSubtotal.Text = "";
             TxtFreight.Text = "";
             TxtTotal.Text = "";
-
-            // Limpiar el DataGridView
             OrderDgv.DataSource = null;
-
-            //Limpiar demas texbox
             TxtDirecOrder.Text = string.Empty;
             TxtCityOrder.Text = string.Empty;
             TxtRegionOrder.Text = string.Empty;
             TxtCodePostalOrder.Text = string.Empty;
             TxtShipCountry.Text = string.Empty;
-
-        }
-
-        private void TxtFreight_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

@@ -2,7 +2,10 @@
 using NorthwindApp_DA.CrearEditRegisFrm;
 using NorthwindApp_DA.Models;
 using NorthwindApp_DA.Repository;
+using System;
 using System.Data;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace NorthwindApp_DA
 {
@@ -18,7 +21,6 @@ namespace NorthwindApp_DA
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
             CargarProductos();
-
         }
 
         private void ProductsFrm_Load(object sender, EventArgs e)
@@ -48,19 +50,33 @@ namespace NorthwindApp_DA
             // Filtro por suplidor
             if (!string.IsNullOrEmpty(suplidorSeleccionado) && suplidorSeleccionado != "Todos")
                 productos = productos.Where(p => p.Supplier != null && p.Supplier.CompanyName == suplidorSeleccionado).ToList();
+           
+            var productosMostrados = productos.Select(p => new
+            {
+                p.ProductId,
+                p.ProductName,
+                CategoryName = p.Category?.CategoryName ?? "N/A",
+                CompanyName = p.Supplier?.CompanyName ?? "N/A",
+                p.QuantityPerUnit,
+                p.UnitPrice,
+                p.UnitsInStock,
+                p.UnitsOnOrder,
+                p.ReorderLevel,
+                p.Discontinued
+            }).ToList();
 
-            ProductDgv.DataSource = productos;
+            ProductDgv.AutoGenerateColumns = true; 
+            ProductDgv.DataSource = productosMostrados;
 
-            if (productos.Count == 0)
+            if (productosMostrados.Count == 0)
             {
                 MessageBox.Show("No se encontraron productos con los filtros aplicados.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
         }
 
         private void ConfigurarComboFiltros()
         {
-            //Status
+            // Status
             StatusCbx.Items.Clear();
             StatusCbx.Items.Add("Todos");
             StatusCbx.Items.Add("Activos");
@@ -102,13 +118,19 @@ namespace NorthwindApp_DA
                 return;
             }
 
-            var producto = (Product)ProductDgv.SelectedRows[0].DataBoundItem;
-            var form = _serviceProvider.GetService<ProductcrearFrm>();
-            if (form != null)
+            var productoSeleccionado = ProductDgv.SelectedRows[0].DataBoundItem;
+            var productId = (int)productoSeleccionado.GetType().GetProperty("ProductId").GetValue(productoSeleccionado);
+            var producto = _productRepos.GetAllProducts().FirstOrDefault(p => p.ProductId == productId);
+
+            if (producto != null)
             {
-                form.SetEditMode(producto);
-                form.FormClosed += (s, args) => CargarProductos();
-                form.ShowDialog();
+                var form = _serviceProvider.GetService<ProductcrearFrm>();
+                if (form != null)
+                {
+                    form.SetEditMode(producto);
+                    form.FormClosed += (s, args) => CargarProductos();
+                    form.ShowDialog();
+                }
             }
         }
 
@@ -120,22 +142,27 @@ namespace NorthwindApp_DA
                 return;
             }
 
-            var producto = (Product)ProductDgv.SelectedRows[0].DataBoundItem;
+            var productoSeleccionado = ProductDgv.SelectedRows[0].DataBoundItem;
+            var productId = (int)productoSeleccionado.GetType().GetProperty("ProductId").GetValue(productoSeleccionado);
+            var producto = _productRepos.GetAllProducts().FirstOrDefault(p => p.ProductId == productId);
 
-            var confirmar = MessageBox.Show($"¿Deseas marcar como descontinuado el producto '{producto.ProductName}'?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (confirmar == DialogResult.Yes)
+            if (producto != null)
             {
-                producto.Discontinued = true;
+                var confirmar = MessageBox.Show($"¿Deseas marcar como descontinuado el producto '{producto.ProductName}'?", "Confirmar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (confirmar == DialogResult.Yes)
+                {
+                    producto.Discontinued = true;
 
-                try
-                {
-                    _productRepos.UpdateProduct(producto); 
-                    CargarProductos();
-                    MessageBox.Show("Producto marcado como descontinuado.");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error al marcar como descontinuado: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    try
+                    {
+                        _productRepos.UpdateProduct(producto);
+                        CargarProductos();
+                        MessageBox.Show("Producto marcado como descontinuado.");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al marcar como descontinuado: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }

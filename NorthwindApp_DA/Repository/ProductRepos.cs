@@ -45,16 +45,6 @@ namespace NorthwindApp_DA.Repository
             _context.SaveChanges();
         }
 
-        //ELIMINAR
-        public void DeleteProduct(int id)
-        {
-            var product = _context.Products.Find(id);
-            if (product != null)
-            {
-                _context.Products.Remove(product);
-                _context.SaveChanges();
-            }
-        }
 
         public List<Category> GetAllCategories()
         {

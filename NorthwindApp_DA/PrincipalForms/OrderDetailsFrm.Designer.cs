@@ -61,9 +61,9 @@
             label1.ForeColor = SystemColors.ControlLightLight;
             label1.Location = new Point(13, 13);
             label1.Name = "label1";
-            label1.Size = new Size(522, 62);
+            label1.Size = new Size(553, 62);
             label1.TabIndex = 4;
-            label1.Text = "DETALLE DE LA ORDEN";
+            label1.Text = "ÓRDENES REGISTRADAS";
             label1.TextAlign = ContentAlignment.TopRight;
             // 
             // panel2

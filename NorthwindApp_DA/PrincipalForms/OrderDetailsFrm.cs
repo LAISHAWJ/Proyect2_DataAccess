@@ -11,42 +11,78 @@ namespace NorthwindApp_DA.PrincipalForms
         private readonly IServiceProvider _serviceProvider = Program.ServiceProvider;
         private readonly OrderDetailsRepos _orderDetailsRepos;
         private readonly MenuFrm _menuFrm;
+
         public OrderDetailsFrm(IServiceProvider serviceProvider, OrderDetailsRepos orderDetailsRepos, MenuFrm menuFrm)
         {
             InitializeComponent();
             _serviceProvider = serviceProvider;
             _orderDetailsRepos = orderDetailsRepos;
             _menuFrm = menuFrm;
-
         }
 
         private void CargarOrdenesDetalle()
         {
-            var orderDetails = _orderDetailsRepos.GetAllOrderDetail();
+            var orderDetails = _orderDetailsRepos.GetOrderWithDetails();
             if (orderDetails != null && orderDetails.Count > 0)
             {
                 OrderDetailDgv.DataSource = orderDetails;
+                OrderDetailDgv.Columns["OrderId"].HeaderText = "ID Orden";
+                OrderDetailDgv.Columns["CompanyName"].HeaderText = "Cliente";
+                OrderDetailDgv.Columns["LastName"].HeaderText = "Empleado";
+                OrderDetailDgv.Columns["OrderDate"].HeaderText = "Fecha Orden";
+                OrderDetailDgv.Columns["RequiredDate"].HeaderText = "Fecha Requerida";
+                OrderDetailDgv.Columns["ShippedDate"].HeaderText = "Fecha Envío";
+                OrderDetailDgv.Columns["ShipViaName"].HeaderText = "Transportista";
+                OrderDetailDgv.Columns["Freight"].HeaderText = "Cargos";
+                OrderDetailDgv.Columns["ShipName"].HeaderText = "Destinatario";
+                OrderDetailDgv.Columns["ShipAddress"].HeaderText = "Dirección Envío";
+                OrderDetailDgv.Columns["ShipCity"].HeaderText = "Ciudad Envío";
+                OrderDetailDgv.Columns["ShipRegion"].HeaderText = "Región Envío";
+                OrderDetailDgv.Columns["ShipPostalCode"].HeaderText = "Código Postal";
+                OrderDetailDgv.Columns["ShipCountry"].HeaderText = "País Envío";
+                OrderDetailDgv.Columns["ProductName"].HeaderText = "Nombre Producto";
+                OrderDetailDgv.Columns["UnitPrice"].HeaderText = "Precio Unitario";
+                OrderDetailDgv.Columns["Quantity"].HeaderText = "Cantidad";
+                OrderDetailDgv.Columns["Discount"].HeaderText = "Descuento";
             }
             else
             {
-                MessageBox.Show("No hay suplidores disponibles.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No hay detalles de órdenes disponibles.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                OrderDetailDgv.DataSource = null;
             }
-
         }
 
         private void CargarOrderDetails(int orderId)
         {
-            var detalles = _orderDetailsRepos.GetOrderDetailsByOrderId(orderId);
+            var detalles = _orderDetailsRepos.GetOrderWithDetailsByOrderId(orderId);
             if (detalles != null && detalles.Count > 0)
             {
                 OrderDetailDgv.DataSource = detalles;
+                OrderDetailDgv.Columns["OrderId"].HeaderText = "ID Orden";
+                OrderDetailDgv.Columns["CompanyName"].HeaderText = "Cliente";
+                OrderDetailDgv.Columns["LastName"].HeaderText = "Empleado";
+                OrderDetailDgv.Columns["OrderDate"].HeaderText = "Fecha Orden";
+                OrderDetailDgv.Columns["RequiredDate"].HeaderText = "Fecha Requerida";
+                OrderDetailDgv.Columns["ShippedDate"].HeaderText = "Fecha Envío";
+                OrderDetailDgv.Columns["ShipViaName"].HeaderText = "Transportista";
+                OrderDetailDgv.Columns["Freight"].HeaderText = "Cargos";
+                OrderDetailDgv.Columns["ShipName"].HeaderText = "Destinatario";
+                OrderDetailDgv.Columns["ShipAddress"].HeaderText = "Dirección Envío";
+                OrderDetailDgv.Columns["ShipCity"].HeaderText = "Ciudad Envío";
+                OrderDetailDgv.Columns["ShipRegion"].HeaderText = "Región Envío";
+                OrderDetailDgv.Columns["ShipPostalCode"].HeaderText = "Código Postal";
+                OrderDetailDgv.Columns["ShipCountry"].HeaderText = "País Envío";
+                OrderDetailDgv.Columns["ProductName"].HeaderText = "Nombre Producto";
+                OrderDetailDgv.Columns["UnitPrice"].HeaderText = "Precio Unitario";
+                OrderDetailDgv.Columns["Quantity"].HeaderText = "Cantidad";
+                OrderDetailDgv.Columns["Discount"].HeaderText = "Descuento";
             }
             else
             {
                 MessageBox.Show($"No se encontraron detalles para la orden con ID {orderId}.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                OrderDetailDgv.DataSource = null;
             }
         }
-
 
         private void BtClose_Click(object sender, EventArgs e)
         {
