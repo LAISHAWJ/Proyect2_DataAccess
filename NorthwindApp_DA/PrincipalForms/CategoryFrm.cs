@@ -11,8 +11,6 @@ namespace NorthwindApp_DA
         private readonly IServiceProvider _serviceProvider;
         private MenuFrm _menuFrm;
 
-
-
         public CategoryFrm(CategoryRepos categoryRepos, IServiceProvider serviceProvider, MenuFrm menuFrm)
         {
             InitializeComponent();

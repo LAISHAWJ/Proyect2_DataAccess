@@ -1,6 +1,9 @@
-﻿using NorthwindApp_DA;
+﻿using Microsoft.Extensions.DependencyInjection;
+using NorthwindApp_DA;
+using NorthwindApp_DA.CrearEditRegisFrm;
 using NorthwindApp_DA.Models;
 using NorthwindApp_DA.Repository;
+using NorthwindApp_Final.CrearEditRegisFrm;
 using NorthwindApp_Final.Repository;
 using System;
 using System.Collections.Generic;
@@ -54,6 +57,52 @@ namespace NorthwindApp_Final.PrincipalForms
         {
             _menuFrm.Show();
             this.Close();
+        }
+
+        private void BtAdd_Click(object sender, EventArgs e)
+        {
+            var form = Program.ServiceProvider.GetService<CustomerCrearFrm>();
+            if (form != null)
+            {
+                form.FormClosed += (s, args) => CargarCustomer(); // recargar lista al cerrar
+                form.ShowDialog();
+            }
+        }
+
+        private void BtUpdate_Click(object sender, EventArgs e)
+        {
+            if (DtGVwCustomer.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Selecciona un cliente para editar.");
+                return;
+            }
+
+            var customer = (Customer)DtGVwCustomer.SelectedRows[0].DataBoundItem;
+            var form = Program.ServiceProvider.GetService<CustomerCrearFrm>();
+            if (form != null)
+            {
+                form.SetEditMode(customer);
+                form.FormClosed += (s, args) => CargarCustomer();
+                form.ShowDialog();
+            }
+        }
+
+        private void BtDelete_Click(object sender, EventArgs e)
+        {
+            if (DtGVwCustomer.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Selecciona un cliente para eliminar.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var customer = (Customer)DtGVwCustomer.SelectedRows[0].DataBoundItem;
+
+            var confirmar = MessageBox.Show($"¿Deseas eliminar '{customer.CompanyName}'?", "Confirmar", MessageBoxButtons.YesNo);
+            if (confirmar == DialogResult.Yes)
+            {
+                _customerRepos.DeleteCustomer(customer.CustomerId);
+                CargarCustomer();
+            }
         }
     }
 }

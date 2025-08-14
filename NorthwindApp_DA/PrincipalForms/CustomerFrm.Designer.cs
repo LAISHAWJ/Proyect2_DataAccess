@@ -104,6 +104,7 @@
             BtAdd.Name = "BtAdd";
             BtAdd.Size = new Size(118, 32);
             BtAdd.Text = "Agregar";
+            BtAdd.Click += BtAdd_Click;
             // 
             // BtUpdate
             // 
@@ -115,6 +116,7 @@
             BtUpdate.Name = "BtUpdate";
             BtUpdate.Size = new Size(133, 32);
             BtUpdate.Text = "Actualizar";
+            BtUpdate.Click += BtUpdate_Click;
             // 
             // BtDelete
             // 
@@ -126,6 +128,7 @@
             BtDelete.Name = "BtDelete";
             BtDelete.Size = new Size(118, 32);
             BtDelete.Text = "Eliminar";
+            BtDelete.Click += BtDelete_Click;
             // 
             // BtClose
             // 

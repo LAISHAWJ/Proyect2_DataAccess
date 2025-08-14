@@ -25,11 +25,6 @@ namespace NorthwindApp_Final.Repository
             return _context.Customers.ToList();
         }
 
-        public Customer? GetCustomerById(int id)
-        {
-            return _context.Customers.Find(id);
-        }
-
         //AGREGAR
         public void AddCustomer(Customer customer)
         {
@@ -49,7 +44,7 @@ namespace NorthwindApp_Final.Repository
         }
 
         //ELIMINAR
-        public void DeleteCustomer(int id)
+        public void DeleteCustomer(string id)
         {
             var customer = _context.Customers.Find(id);
             if (customer != null)
