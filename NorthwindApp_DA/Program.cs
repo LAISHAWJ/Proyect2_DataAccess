@@ -6,8 +6,10 @@ using NorthwindApp_DA.Data;
 using NorthwindApp_DA.PrincipalForms;
 using NorthwindApp_DA.Repository;
 using NorthwindApp_DA.Validators;
+using NorthwindApp_Final.CrearEditRegisFrm;
 using NorthwindApp_Final.PrincipalForms;
 using NorthwindApp_Final.Repository;
+using NorthwindApp_Final.Validators;
 
 namespace NorthwindApp_DA
 {
@@ -57,25 +59,23 @@ namespace NorthwindApp_DA
             services.AddTransient<OrderCrearFrm>();
             services.AddTransient<OrderDetailsRepos>();
 
-
             //ENTIDAD EMPLEADO.
             services.AddTransient<EmployeeFrm>();
             services.AddTransient<EmployeeRepos>();
-
-
+            services.AddTransient<EmployeeCrearFrm>();
+            services.AddTransient<EmployeeValid>();
 
             //ENTIDAD CLIENTES.
             services.AddTransient<CustomerFrm>();
             services.AddTransient<CustomerRepos>();
-
+            services.AddTransient<CustomerCrearFrm>();
+            services.AddTransient<CustomerValid>();
 
             //ENTIDAD TRANSPORTISTAS.
             services.AddTransient<ShipperFrm>();
             services.AddTransient<ShipperRepos>();
-
-
-
-
+            services.AddTransient<ShipperCrearFrm>();
+            services.AddTransient<ShipperValid>();
 
             ServiceProvider = services.BuildServiceProvider();
             var context = ServiceProvider.GetService<NorthwindContext>();

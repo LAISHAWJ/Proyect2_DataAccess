@@ -1,16 +1,24 @@
 ﻿using FluentValidation;
 using NorthwindApp_DA.Models;
-using System.Text.RegularExpressions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace NorthwindApp_DA.Validators
+namespace NorthwindApp_Final.Validators
 {
-    public class SupplierValid : AbstractValidator<Supplier>
+    public class CustomerValid : AbstractValidator<Customer>
     {
-        public SupplierValid()
+        public CustomerValid() 
         {
+            RuleFor(s => s.CustomerId)
+                 .NotEmpty().WithMessage("El código es obligatorio.")
+                 .MaximumLength(5).WithMessage("Máximo 5 caracteres para el código.");
+
             RuleFor(s => s.CompanyName)
-                .NotEmpty().WithMessage("El nombre de la compañía es obligatorio.")
-                .MaximumLength(40).WithMessage("Máximo 40 caracteres para el nombre de la compañía.");
+                 .NotEmpty().WithMessage("El nombre de la compañía es obligatorio.")
+                 .MaximumLength(40).WithMessage("Máximo 40 caracteres para el nombre de la compañía.");
 
             RuleFor(s => s.ContactName)
                 .NotEmpty().WithMessage("El nombre de contacto es obligatorio.")
@@ -36,23 +44,14 @@ namespace NorthwindApp_DA.Validators
                 .MaximumLength(50).WithMessage("Máximo 50 caracteres para el país.");
 
             RuleFor(s => s.Phone)
-                 .NotEmpty().WithMessage("El teléfono es obligatorio.")
-                 .Matches(@"^\+?[\d\s\-\(\)]{7,20}$")
-                 .WithMessage("El teléfono debe contener solo números, espacios, guiones o paréntesis y tener entre 7 y 20 caracteres.");
+                .NotEmpty().WithMessage("El teléfono es obligatorio.")
+                .Matches(@"^\+?[\d\s\-\(\)]{7,20}$")
+                .WithMessage("El teléfono debe contener solo números, espacios, guiones o paréntesis y tener entre 7 y 20 caracteres.");
+
 
             RuleFor(s => s.Fax)
                 .MaximumLength(24).WithMessage("Máximo 24 caracteres para el fax.");
 
-            RuleFor(s => s.HomePage)
-                .Must(BeValidUrl).WithMessage("El sitio web debe tener un formato válido.")
-                .MaximumLength(200).WithMessage("Máximo 200 caracteres para la página web.")
-                .When(x => !string.IsNullOrWhiteSpace(x.HomePage));
-        }
-
-
-        private bool BeValidUrl(string url)
-        {
-            return Regex.IsMatch(url, @"^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$");
         }
     }
 }

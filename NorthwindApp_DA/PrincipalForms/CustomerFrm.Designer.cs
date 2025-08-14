@@ -28,7 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomerFrm));
             panel1 = new Panel();
+            panel4 = new Panel();
+            TxtBuscarId = new TextBox();
+            BtSearch = new Button();
+            label2 = new Label();
             panel2 = new Panel();
             DtGVwCustomer = new DataGridView();
             panel3 = new Panel();
@@ -39,6 +44,7 @@
             BtClose = new FontAwesome.Sharp.IconMenuItem();
             label1 = new Label();
             panel1.SuspendLayout();
+            panel4.SuspendLayout();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DtGVwCustomer).BeginInit();
             panel3.SuspendLayout();
@@ -49,6 +55,7 @@
             // 
             panel1.AutoSize = true;
             panel1.BackColor = Color.FromArgb(0, 74, 173);
+            panel1.Controls.Add(panel4);
             panel1.Controls.Add(panel2);
             panel1.Controls.Add(panel3);
             panel1.Controls.Add(label1);
@@ -57,13 +64,56 @@
             panel1.Size = new Size(1010, 672);
             panel1.TabIndex = 2;
             // 
+            // panel4
+            // 
+            panel4.AutoSize = true;
+            panel4.BackColor = Color.Lavender;
+            panel4.Controls.Add(TxtBuscarId);
+            panel4.Controls.Add(BtSearch);
+            panel4.Controls.Add(label2);
+            panel4.Location = new Point(0, 156);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(1007, 54);
+            panel4.TabIndex = 4;
+            // 
+            // TxtBuscarId
+            // 
+            TxtBuscarId.Location = new Point(94, 14);
+            TxtBuscarId.Name = "TxtBuscarId";
+            TxtBuscarId.Size = new Size(228, 27);
+            TxtBuscarId.TabIndex = 8;
+            // 
+            // BtSearch
+            // 
+            BtSearch.BackColor = Color.Lavender;
+            BtSearch.Cursor = Cursors.Hand;
+            BtSearch.FlatStyle = FlatStyle.Flat;
+            BtSearch.ForeColor = Color.Lavender;
+            BtSearch.Image = (Image)resources.GetObject("BtSearch.Image");
+            BtSearch.Location = new Point(327, 3);
+            BtSearch.Name = "BtSearch";
+            BtSearch.Size = new Size(44, 48);
+            BtSearch.TabIndex = 7;
+            BtSearch.UseVisualStyleBackColor = false;
+            BtSearch.Click += BtSearch_Click;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(17, 13);
+            label2.Name = "label2";
+            label2.Size = new Size(71, 28);
+            label2.TabIndex = 0;
+            label2.Text = "Buscar";
+            // 
             // panel2
             // 
             panel2.BackColor = Color.DimGray;
             panel2.Controls.Add(DtGVwCustomer);
-            panel2.Location = new Point(-1, 166);
+            panel2.Location = new Point(-1, 213);
             panel2.Name = "panel2";
-            panel2.Size = new Size(1008, 503);
+            panel2.Size = new Size(1008, 456);
             panel2.TabIndex = 3;
             // 
             // DtGVwCustomer
@@ -73,7 +123,7 @@
             DtGVwCustomer.Location = new Point(0, 0);
             DtGVwCustomer.Name = "DtGVwCustomer";
             DtGVwCustomer.RowHeadersWidth = 51;
-            DtGVwCustomer.Size = new Size(1008, 503);
+            DtGVwCustomer.Size = new Size(1008, 456);
             DtGVwCustomer.TabIndex = 0;
             // 
             // panel3
@@ -81,7 +131,7 @@
             panel3.Controls.Add(menuStrip1);
             panel3.Location = new Point(3, 113);
             panel3.Name = "panel3";
-            panel3.Size = new Size(998, 47);
+            panel3.Size = new Size(1004, 47);
             panel3.TabIndex = 2;
             // 
             // menuStrip1
@@ -90,7 +140,7 @@
             menuStrip1.Items.AddRange(new ToolStripItem[] { BtAdd, BtUpdate, BtDelete, BtClose });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(998, 36);
+            menuStrip1.Size = new Size(1004, 36);
             menuStrip1.TabIndex = 1;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -104,6 +154,7 @@
             BtAdd.Name = "BtAdd";
             BtAdd.Size = new Size(118, 32);
             BtAdd.Text = "Agregar";
+            BtAdd.Click += BtAdd_Click;
             // 
             // BtUpdate
             // 
@@ -115,6 +166,7 @@
             BtUpdate.Name = "BtUpdate";
             BtUpdate.Size = new Size(133, 32);
             BtUpdate.Text = "Actualizar";
+            BtUpdate.Click += BtUpdate_Click;
             // 
             // BtDelete
             // 
@@ -126,6 +178,7 @@
             BtDelete.Name = "BtDelete";
             BtDelete.Size = new Size(118, 32);
             BtDelete.Text = "Eliminar";
+            BtDelete.Click += BtDelete_Click;
             // 
             // BtClose
             // 
@@ -164,6 +217,8 @@
             Load += CustomerFrm_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
+            panel4.ResumeLayout(false);
+            panel4.PerformLayout();
             panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)DtGVwCustomer).EndInit();
             panel3.ResumeLayout(false);
@@ -186,5 +241,9 @@
         private FontAwesome.Sharp.IconMenuItem BtDelete;
         private FontAwesome.Sharp.IconMenuItem BtClose;
         private Label label1;
+        private Panel panel4;
+        private TextBox TxtBuscarId;
+        private Button BtSearch;
+        private Label label2;
     }
 }
