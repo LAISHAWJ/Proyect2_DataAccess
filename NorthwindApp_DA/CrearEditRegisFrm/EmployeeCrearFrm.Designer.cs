@@ -418,6 +418,7 @@
             TxtNotes.Location = new Point(131, 321);
             TxtNotes.Multiline = true;
             TxtNotes.Name = "TxtNotes";
+            TxtNotes.ScrollBars = ScrollBars.Both;
             TxtNotes.Size = new Size(346, 134);
             TxtNotes.TabIndex = 80;
             // 

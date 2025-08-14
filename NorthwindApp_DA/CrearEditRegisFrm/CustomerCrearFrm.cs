@@ -35,6 +35,8 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             _isEditMode = true;
 
             TxtCustomerId.Text = customer.CustomerId;
+            TxtCustomerId.Enabled = false;
+
             TxtCompanyName.Text = customer.CompanyName;
             TxtNameContact.Text = customer.ContactName;
             TxtContactTitle.Text = customer.ContactTitle;

@@ -104,5 +104,28 @@ namespace NorthwindApp_Final.PrincipalForms
                 CargarCustomer();
             }
         }
+
+        private void BtSearch_Click(object sender, EventArgs e)
+        {
+            string filtro = TxtBuscarId.Text.Trim();
+
+            if (string.IsNullOrEmpty(filtro))
+            {
+                // Si no hay texto, cargar todo
+                CargarCustomer();
+            }
+            else
+            {
+                var customers = _customerRepos
+                    .GetAllCustomer() // traes todos
+                    .Where(c => c.CustomerId.StartsWith(filtro, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                DtGVwCustomer.DataSource = customers;
+
+                DtGVwCustomer.Columns[nameof(Customer.Orders)].Visible = false;
+                DtGVwCustomer.Columns[nameof(Customer.CustomerTypes)].Visible = false;
+            }
+        }
     }
 }
