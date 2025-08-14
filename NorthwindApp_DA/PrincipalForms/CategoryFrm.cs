@@ -27,6 +27,8 @@ namespace NorthwindApp_DA
             try
             {
                 CategoryDtGvw.DataSource = _categoryRepos.GetAllCategories();
+                CategoryDtGvw.Columns[nameof(Category.Products)].Visible = false;
+
             }
             catch (Exception ex)
             {

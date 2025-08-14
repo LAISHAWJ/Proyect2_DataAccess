@@ -25,6 +25,7 @@ namespace NorthwindApp_DA
             if (suppliers != null && suppliers.Count > 0)
             {
                 SuppDgv.DataSource = suppliers;
+                SuppDgv.Columns[nameof(Supplier.Products)].Visible = false;
             }
             else
             {

@@ -38,6 +38,10 @@
             BtAllOrder = new FontAwesome.Sharp.IconMenuItem();
             BtCrearOrder = new FontAwesome.Sharp.IconMenuItem();
             BtViewOrder = new FontAwesome.Sharp.IconMenuItem();
+            BtEntidadesPlus = new FontAwesome.Sharp.IconMenuItem();
+            BtEmployee = new FontAwesome.Sharp.IconMenuItem();
+            BtCustomer = new FontAwesome.Sharp.IconMenuItem();
+            BtShipper = new FontAwesome.Sharp.IconMenuItem();
             BtExit = new FontAwesome.Sharp.IconMenuItem();
             panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
@@ -69,7 +73,7 @@
             // 
             menuStrip1.BackColor = Color.FromArgb(0, 74, 173);
             menuStrip1.ImageScalingSize = new Size(20, 20);
-            menuStrip1.Items.AddRange(new ToolStripItem[] { BtCategory, BtProducts, BtSupplier, BtAllOrder, BtExit });
+            menuStrip1.Items.AddRange(new ToolStripItem[] { BtCategory, BtProducts, BtSupplier, BtAllOrder, BtEntidadesPlus, BtExit });
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Size = new Size(968, 96);
@@ -161,6 +165,52 @@
             BtViewOrder.Text = "Ver orden registrada";
             BtViewOrder.Click += BtViewOrder_Click;
             // 
+            // BtEntidadesPlus
+            // 
+            BtEntidadesPlus.CheckOnClick = true;
+            BtEntidadesPlus.DropDownItems.AddRange(new ToolStripItem[] { BtEmployee, BtCustomer, BtShipper });
+            BtEntidadesPlus.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            BtEntidadesPlus.ForeColor = SystemColors.ButtonHighlight;
+            BtEntidadesPlus.IconChar = FontAwesome.Sharp.IconChar.FileCirclePlus;
+            BtEntidadesPlus.IconColor = SystemColors.ButtonHighlight;
+            BtEntidadesPlus.IconFont = FontAwesome.Sharp.IconFont.Solid;
+            BtEntidadesPlus.IconSize = 60;
+            BtEntidadesPlus.ImageScaling = ToolStripItemImageScaling.None;
+            BtEntidadesPlus.Name = "BtEntidadesPlus";
+            BtEntidadesPlus.Size = new Size(90, 92);
+            BtEntidadesPlus.Text = "OTROS";
+            BtEntidadesPlus.TextImageRelation = TextImageRelation.ImageAboveText;
+            // 
+            // BtEmployee
+            // 
+            BtEmployee.IconChar = FontAwesome.Sharp.IconChar.PeopleGroup;
+            BtEmployee.IconColor = Color.Black;
+            BtEmployee.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            BtEmployee.Name = "BtEmployee";
+            BtEmployee.Size = new Size(224, 32);
+            BtEmployee.Text = "Empleados";
+            BtEmployee.Click += BtEmployee_Click;
+            // 
+            // BtCustomer
+            // 
+            BtCustomer.IconChar = FontAwesome.Sharp.IconChar.PeopleLine;
+            BtCustomer.IconColor = Color.Black;
+            BtCustomer.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            BtCustomer.Name = "BtCustomer";
+            BtCustomer.Size = new Size(224, 32);
+            BtCustomer.Text = "Clientes";
+            BtCustomer.Click += BtCustomer_Click;
+            // 
+            // BtShipper
+            // 
+            BtShipper.IconChar = FontAwesome.Sharp.IconChar.PeopleCarryBox;
+            BtShipper.IconColor = Color.Black;
+            BtShipper.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            BtShipper.Name = "BtShipper";
+            BtShipper.Size = new Size(224, 32);
+            BtShipper.Text = "Transportistas";
+            BtShipper.Click += BtShipper_Click;
+            // 
             // BtExit
             // 
             BtExit.CheckOnClick = true;
@@ -207,5 +257,9 @@
         private FontAwesome.Sharp.IconMenuItem BtAllOrder;
         private FontAwesome.Sharp.IconMenuItem BtViewOrder;
         private FontAwesome.Sharp.IconMenuItem BtCrearOrder;
+        private FontAwesome.Sharp.IconMenuItem BtEntidadesPlus;
+        private FontAwesome.Sharp.IconMenuItem BtEmployee;
+        private FontAwesome.Sharp.IconMenuItem BtCustomer;
+        private FontAwesome.Sharp.IconMenuItem BtShipper;
     }
 }

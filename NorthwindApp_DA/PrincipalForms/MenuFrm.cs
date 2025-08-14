@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using NorthwindApp_DA.PrincipalForms;
+using NorthwindApp_Final.PrincipalForms;
 
 namespace NorthwindApp_DA
 {
@@ -73,6 +74,36 @@ namespace NorthwindApp_DA
             {
                 this.Hide();
                 orderdetailFrm.Show();
+            }
+        }
+
+        private void BtEmployee_Click(object sender, EventArgs e)
+        {
+            var employeeForm = Program.ServiceProvider.GetService<EmployeeFrm>();
+            if (employeeForm != null)
+            {
+                this.Hide();
+                employeeForm.Show();
+            }
+        }
+
+        private void BtCustomer_Click(object sender, EventArgs e)
+        {
+            var customerForm = Program.ServiceProvider.GetService<CustomerFrm>();
+            if (customerForm != null)
+            {
+                this.Hide();
+                customerForm.Show();
+            }
+        }
+
+        private void BtShipper_Click(object sender, EventArgs e)
+        {
+            var shipperForm = Program.ServiceProvider.GetService<ShipperFrm>();
+            if (shipperForm != null)
+            {
+                this.Hide();
+                shipperForm.Show();
             }
         }
     }
