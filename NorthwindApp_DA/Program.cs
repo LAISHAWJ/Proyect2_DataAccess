@@ -76,8 +76,6 @@ namespace NorthwindApp_DA
             services.AddTransient<ShipperRepos>();
             services.AddTransient<ShipperCrearFrm>();
             services.AddTransient<ShipperValid>();
-            
-
 
             ServiceProvider = services.BuildServiceProvider();
             var context = ServiceProvider.GetService<NorthwindContext>();
