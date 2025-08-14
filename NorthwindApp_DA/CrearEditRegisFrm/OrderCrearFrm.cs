@@ -176,14 +176,4 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
             this.Close();
         }
     }
-
-    // Clase para selección de productos
-    public class ProductSelectionOrder
-    {
-        public int ProductID { get; set; }
-        public string ProductName { get; set; }
-        public decimal UnitPrice { get; set; }
-        public string CategoryID { get; set; }
-        public string SupplierID { get; set; }
-    }
 }
