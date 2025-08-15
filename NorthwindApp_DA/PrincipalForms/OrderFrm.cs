@@ -1,12 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Northwind.Application.Services;
+using Northwind.Core.Models;
 using NorthwindApp_DA.CrearEditRegisFrm;
-using NorthwindApp_DA.Data;
-using NorthwindApp_DA.Models;
-using NorthwindApp_DA.Repository;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_DA
@@ -14,117 +12,135 @@ namespace NorthwindApp_DA
     public partial class OrderFrm : Form
     {
         private List<Order> _ordenesEnSesion;
-        private readonly IServiceProvider _serviceProvider = Program.ServiceProvider;
-        private readonly NorthwindContext _context;
-        private readonly OrderRepos _orderRepos;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly OrderService _orderService;
         private readonly MenuFrm _menuFrm;
 
-        public OrderFrm(NorthwindContext context, MenuFrm menuFrm)
+        public OrderFrm(IServiceProvider serviceProvider, OrderService orderService, MenuFrm menuFrm)
         {
             InitializeComponent();
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _orderRepos = new OrderRepos(_context);
-            _menuFrm = menuFrm;
+            _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+            _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
+            _menuFrm = menuFrm ?? throw new ArgumentNullException(nameof(menuFrm));
             _ordenesEnSesion = new List<Order>();
+            CargarOrdenesEnSesionAsync().ConfigureAwait(false); // Carga asíncrona al iniciar
         }
 
         private void OrderFrm_Load(object sender, EventArgs e)
         {
-            CargarOrdenesEnSesion();
-            CalcularTotales();
-            CargarCombos();
-            _ordenesEnSesion = new List<Order>();
+            CargarCombosAsync().ConfigureAwait(false); // Configuración asíncrona de combos
         }
 
-        private void CargarOrdenesEnSesion()
+        private async Task CargarOrdenesEnSesionAsync()
         {
-            if (_ordenesEnSesion == null || !_ordenesEnSesion.Any())
+            try
             {
-                OrderDgv.DataSource = null;
-                return;
+                if (_ordenesEnSesion == null || !_ordenesEnSesion.Any())
+                {
+                    OrderDgv.DataSource = null;
+                    return;
+                }
+                var detalles = _ordenesEnSesion.SelectMany(o => o.OrderDetails.Select(d => new
+                {
+                    o.OrderId,
+                    o.OrderDate,
+                    Producto = d.Product.ProductName,
+                    Categoria = d.Product.Category?.CategoryName ?? "N/A",
+                    Suplidor = d.Product.Supplier?.CompanyName ?? "N/A",
+                    d.UnitPrice,
+                    d.Quantity,
+                    d.Discount,
+                    ExtendedPrice = d.UnitPrice * d.Quantity * (1 - (decimal)d.Discount)
+                })).ToList();
+
+                OrderDgv.DataSource = detalles;
+                OrderDgv.Refresh();
+
+                await CalcularTotalesAsync();
             }
-            var detalles = _ordenesEnSesion.SelectMany(o => o.OrderDetails.Select(d => new
+            catch (Exception ex)
             {
-                o.OrderId,
-                o.OrderDate,
-                Producto = d.Product.ProductName,
-                Categoria = d.Product.Category.CategoryName,
-                Suplidor = d.Product.Supplier.CompanyName,
-                d.UnitPrice,
-                d.Quantity,
-                d.Discount,
-                ExtendedPrice = d.UnitPrice * d.Quantity * (1 - (decimal)d.Discount)
-            })).ToList();
-
-            OrderDgv.DataSource = detalles;
-            OrderDgv.Refresh();
-
-            CalcularTotales();
+                MessageBox.Show($"Error al cargar órdenes: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void CalcularTotales()
+        private async Task CalcularTotalesAsync()
         {
-            if (_ordenesEnSesion.Count == 0)
+            try
             {
-                TxtSubtotal.Text = "";
-                TxtFreight.Text = "";
-                TxtTotal.Text = "";
-                return;
+                if (_ordenesEnSesion.Count == 0)
+                {
+                    TxtSubtotal.Text = "";
+                    TxtFreight.Text = "";
+                    TxtTotal.Text = "";
+                    return;
+                }
+
+                decimal subtotal = _ordenesEnSesion
+                    .SelectMany(o => o.OrderDetails)
+                    .Sum(d => d.UnitPrice * d.Quantity * (1 - (decimal)d.Discount));
+
+                decimal freight = subtotal * 0.18m;
+
+                foreach (var orden in _ordenesEnSesion)
+                {
+                    orden.Freight = freight;
+                }
+
+                decimal total = subtotal + freight;
+
+                TxtSubtotal.Text = subtotal.ToString("C");
+                TxtFreight.Text = freight.ToString("C");
+                TxtTotal.Text = total.ToString("C");
             }
-
-            decimal subtotal = _ordenesEnSesion
-                .SelectMany(o => o.OrderDetails)
-                .Sum(d => d.UnitPrice * d.Quantity * (1 - (decimal)d.Discount));
-
-            decimal freight = subtotal * 0.18m;
-
-            foreach (var orden in _ordenesEnSesion)
+            catch (Exception ex)
             {
-                orden.Freight = freight;
+                MessageBox.Show($"Error al calcular totales: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            decimal total = subtotal + freight;
-
-            TxtSubtotal.Text = subtotal.ToString("C");
-            TxtFreight.Text = freight.ToString("C");
-            TxtTotal.Text = total.ToString("C");
         }
 
-        private void CargarCombos()
+        private async Task CargarCombosAsync()
         {
-            var clientes = _orderRepos.GetCustomers();
-            ClienteCbx.DataSource = clientes;
-            ClienteCbx.DisplayMember = "CompanyName";
-            ClienteCbx.ValueMember = "CustomerId";
+            try
+            {
+                var clientes = await _orderService.GetCustomersAsync();
+                ClienteCbx.DataSource = clientes;
+                ClienteCbx.DisplayMember = "CompanyName";
+                ClienteCbx.ValueMember = "CustomerId";
 
-            var empleados = _orderRepos.GetEmployees();
-            EmpleadoCbx.DataSource = empleados;
-            EmpleadoCbx.DisplayMember = "LastName";
-            EmpleadoCbx.ValueMember = "EmployeeId";
+                var empleados = await _orderService.GetEmployeesAsync();
+                EmpleadoCbx.DataSource = empleados;
+                EmpleadoCbx.DisplayMember = "LastName";
+                EmpleadoCbx.ValueMember = "EmployeeId";
 
-            var transportistas = _orderRepos.GetShippers();
-            ShipViaCbx.DataSource = transportistas;
-            ShipViaCbx.DisplayMember = "CompanyName";
-            ShipViaCbx.ValueMember = "ShipperId";
+                var transportistas = await _orderService.GetShippersAsync();
+                ShipViaCbx.DataSource = transportistas;
+                ShipViaCbx.DisplayMember = "CompanyName";
+                ShipViaCbx.ValueMember = "ShipperId";
 
-            var destinatarios = _orderRepos.GetAllOrders()
-            .Select(o => o.ShipName)
-            .Where(s => !string.IsNullOrEmpty(s))
-            .Distinct()
-            .ToList();
-            ShipNameCbx.DataSource = destinatarios;
+                var destinatarios = (await _orderService.GetAllAsync())
+                    .Select(o => o.ShipName)
+                    .Where(s => !string.IsNullOrEmpty(s))
+                    .Distinct()
+                    .ToList();
+                ShipNameCbx.DataSource = destinatarios;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar combos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private Order CrearNuevaOrden()
+        private async Task<Order> CrearNuevaOrdenAsync()
         {
             var nuevaOrden = new Order
             {
                 CustomerId = ClienteCbx.SelectedValue?.ToString(),
-                EmployeeId = EmpleadoCbx.SelectedValue != null ? (int)EmpleadoCbx.SelectedValue : null,
+                EmployeeId = EmpleadoCbx.SelectedValue != null ? (int?)EmpleadoCbx.SelectedValue : null,
                 OrderDate = DtOrderDate.Value,
                 RequiredDate = DtRequiredDate.Value,
                 ShippedDate = DtShippedDate.Value,
-                ShipVia = ShipViaCbx.SelectedValue != null ? (int)ShipViaCbx.SelectedValue : null,
+                ShipVia = ShipViaCbx.SelectedValue != null ? (int?)ShipViaCbx.SelectedValue : null,
                 Freight = decimal.TryParse(TxtFreight.Text, out var freight) ? freight : 0,
                 ShipName = ShipNameCbx.Text,
                 ShipAddress = TxtDirecOrder.Text,
@@ -135,9 +151,7 @@ namespace NorthwindApp_DA
                 OrderDetails = new List<OrderDetail>()
             };
 
-            _context.Orders.Add(nuevaOrden);
-            _context.SaveChanges();
-
+            await _orderService.AddAsync(nuevaOrden);
             return nuevaOrden;
         }
 
@@ -147,7 +161,7 @@ namespace NorthwindApp_DA
             this.Close();
         }
 
-        private void BtCrearOrderDetail_Click(object sender, EventArgs e)
+        private async void BtCrearOrderDetail_Click(object sender, EventArgs e)
         {
             if (_ordenesEnSesion == null)
             {
@@ -158,7 +172,7 @@ namespace NorthwindApp_DA
 
             if (_ordenesEnSesion.Count == 0)
             {
-                ordenActual = CrearNuevaOrden();
+                ordenActual = await CrearNuevaOrdenAsync();
                 _ordenesEnSesion.Add(ordenActual);
             }
             else
@@ -166,39 +180,34 @@ namespace NorthwindApp_DA
                 ordenActual = _ordenesEnSesion[0];
             }
 
-            using (var crearOrderFrm = new OrderCrearFrm(_context, ordenActual.OrderId))
+            using (var crearOrderFrm = _serviceProvider.GetService<OrderCrearFrm>())
             {
-                if (crearOrderFrm.ShowDialog() == DialogResult.OK)
+                if (crearOrderFrm != null)
                 {
-                    var ordenRecargada = _context.Orders
-                        .Include(o => o.OrderDetails)
-                        .ThenInclude(od => od.Product)
-                        .ThenInclude(p => p.Category)
-                        .Include(o => o.OrderDetails)
-                        .ThenInclude(od => od.Product)
-                        .ThenInclude(p => p.Supplier)
-                        .FirstOrDefault(o => o.OrderId == ordenActual.OrderId);
-
-                    if (ordenRecargada != null)
+                    crearOrderFrm.SetOrderId(ordenActual.OrderId);
+                    if (crearOrderFrm.ShowDialog() == DialogResult.OK)
                     {
-                        int index = _ordenesEnSesion.FindIndex(o => o.OrderId == ordenRecargada.OrderId);
-                        if (index >= 0)
+                        var ordenRecargada = await _orderService.GetByIdAsync(ordenActual.OrderId);
+                        if (ordenRecargada != null)
                         {
-                            _ordenesEnSesion[index] = ordenRecargada;
+                            int index = _ordenesEnSesion.FindIndex(o => o.OrderId == ordenRecargada.OrderId);
+                            if (index >= 0)
+                            {
+                                _ordenesEnSesion[index] = ordenRecargada;
+                            }
+                            else
+                            {
+                                _ordenesEnSesion.Add(ordenRecargada);
+                            }
                         }
-                        else
-                        {
-                            _ordenesEnSesion.Add(ordenRecargada);
-                        }
+                        await CargarOrdenesEnSesionAsync();
+                        await CalcularTotalesAsync();
                     }
-
-                    CargarOrdenesEnSesion();
-                    CalcularTotales();
                 }
             }
         }
 
-        private void BtSave_Click(object sender, EventArgs e)
+        private async void BtSave_Click(object sender, EventArgs e)
         {
             if (_ordenesEnSesion == null || !_ordenesEnSesion.Any())
             {
@@ -209,15 +218,15 @@ namespace NorthwindApp_DA
             var ordenAValidar = new Order
             {
                 CustomerId = ClienteCbx.SelectedValue?.ToString(),
-                EmployeeId = EmpleadoCbx.SelectedValue != null ? (int)EmpleadoCbx.SelectedValue : 0,
+                EmployeeId = EmpleadoCbx.SelectedValue != null ? (int?)EmpleadoCbx.SelectedValue : 0,
                 OrderDate = DtOrderDate.Value,
                 RequiredDate = DtRequiredDate.Value,
-                ShipVia = ShipViaCbx.SelectedValue != null ? (int)ShipViaCbx.SelectedValue : 0,
+                ShipVia = ShipViaCbx.SelectedValue != null ? (int?)ShipViaCbx.SelectedValue : 0,
                 ShipName = ShipNameCbx.Text,
                 ShipAddress = TxtDirecOrder.Text,
             };
 
-            var validador = new Validators.OrderValid();
+            var validador = new Northwind.Application.Validators.OrderValid(); // Ajuste de namespace
             var resultado = validador.Validate(ordenAValidar);
 
             if (!resultado.IsValid)
@@ -269,9 +278,9 @@ namespace NorthwindApp_DA
                 ordenActual.ShipPostalCode = TxtCodePostalOrder.Text;
                 ordenActual.ShipCountry = TxtShipCountry.Text;
 
-                _context.SaveChanges();
+                await _orderService.UpdateAsync(ordenActual);
                 MessageBox.Show("Orden guardada exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                CargarOrdenesEnSesion();
+                await CargarOrdenesEnSesionAsync();
                 LimpiarFormulario();
                 _ordenesEnSesion = new List<Order>();
             }
@@ -281,7 +290,7 @@ namespace NorthwindApp_DA
             }
         }
 
-        private void BtDeleteOrder_Click(object sender, EventArgs e)
+        private async void BtDeleteOrder_Click(object sender, EventArgs e)
         {
             if (OrderDgv.SelectedRows.Count == 0)
             {
@@ -297,16 +306,7 @@ namespace NorthwindApp_DA
             foreach (DataGridViewRow row in OrderDgv.SelectedRows)
             {
                 var orderId = (int)row.Cells["OrderId"].Value;
-
-                var ordenDb = _context.Orders
-                    .Include(o => o.OrderDetails)
-                    .FirstOrDefault(o => o.OrderId == orderId);
-
-                if (ordenDb != null)
-                {
-                    _context.OrderDetails.RemoveRange(ordenDb.OrderDetails);
-                    _context.Orders.Remove(ordenDb);
-                }
+                await _orderService.DeleteAsync(orderId);
 
                 var ordenSesion = _ordenesEnSesion.FirstOrDefault(o => o.OrderId == orderId);
                 if (ordenSesion != null)
@@ -315,15 +315,13 @@ namespace NorthwindApp_DA
                 }
             }
 
-            _context.SaveChanges();
-
-            CargarOrdenesEnSesion();
+            await CargarOrdenesEnSesionAsync();
             LimpiarFormulario();
 
             MessageBox.Show("Orden(es) eliminada(s) correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void BtEditOrderDetail_Click(object sender, EventArgs e)
+        private async void BtEditOrderDetail_Click(object sender, EventArgs e)
         {
             if (_ordenesEnSesion == null || !_ordenesEnSesion.Any())
             {
@@ -356,34 +354,30 @@ namespace NorthwindApp_DA
 
                 if (orderDetail != null)
                 {
-                    using (var crearOrderFrm = new OrderCrearFrm(_context, ordenActual.OrderId, orderDetail))
+                    using (var crearOrderFrm = _serviceProvider.GetService<OrderCrearFrm>())
                     {
-                        if (crearOrderFrm.ShowDialog() == DialogResult.OK)
+                        if (crearOrderFrm != null)
                         {
-                            var ordenRecargada = _context.Orders
-                                .Include(o => o.OrderDetails)
-                                .ThenInclude(od => od.Product)
-                                .ThenInclude(p => p.Category)
-                                .Include(o => o.OrderDetails)
-                                .ThenInclude(od => od.Product)
-                                .ThenInclude(p => p.Supplier)
-                                .FirstOrDefault(o => o.OrderId == ordenActual.OrderId);
-
-                            if (ordenRecargada != null)
+                            crearOrderFrm.SetOrderId(ordenActual.OrderId);
+                            crearOrderFrm.SetOrderDetail(orderDetail);
+                            if (crearOrderFrm.ShowDialog() == DialogResult.OK)
                             {
-                                int index = _ordenesEnSesion.FindIndex(o => o.OrderId == ordenRecargada.OrderId);
-                                if (index >= 0)
+                                var ordenRecargada = await _orderService.GetByIdAsync(ordenActual.OrderId);
+                                if (ordenRecargada != null)
                                 {
-                                    _ordenesEnSesion[index] = ordenRecargada;
+                                    int index = _ordenesEnSesion.FindIndex(o => o.OrderId == ordenRecargada.OrderId);
+                                    if (index >= 0)
+                                    {
+                                        _ordenesEnSesion[index] = ordenRecargada;
+                                    }
+                                    else
+                                    {
+                                        _ordenesEnSesion.Add(ordenRecargada);
+                                    }
                                 }
-                                else
-                                {
-                                    _ordenesEnSesion.Add(ordenRecargada);
-                                }
+                                await CargarOrdenesEnSesionAsync();
+                                await CalcularTotalesAsync();
                             }
-
-                            CargarOrdenesEnSesion();
-                            CalcularTotales();
                         }
                     }
                 }
@@ -404,8 +398,8 @@ namespace NorthwindApp_DA
             ordenActual.ShipPostalCode = TxtCodePostalOrder.Text;
             ordenActual.ShipCountry = TxtShipCountry.Text;
 
-            CargarOrdenesEnSesion();
-            CalcularTotales();
+            await CargarOrdenesEnSesionAsync();
+            await CalcularTotalesAsync();
         }
 
         private void LimpiarFormulario()

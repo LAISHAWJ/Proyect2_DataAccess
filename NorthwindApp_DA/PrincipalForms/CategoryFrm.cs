@@ -1,32 +1,35 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Northwind.Application.Servicios;
+using Northwind.Core.Models;
 using NorthwindApp_DA.CrearEditRegisFrm;
-using NorthwindApp_DA.Models;
-using NorthwindApp_DA.Repository;
+using System;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NorthwindApp_DA
 {
     public partial class CategoryFrm : Form
     {
-        private readonly CategoryRepos _categoryRepos;
+        private readonly CategoryService _categoryService;
         private readonly IServiceProvider _serviceProvider;
-        private MenuFrm _menuFrm;
+        private readonly MenuFrm _menuFrm;
 
-        public CategoryFrm(CategoryRepos categoryRepos, IServiceProvider serviceProvider, MenuFrm menuFrm)
+        public CategoryFrm(CategoryService categoryService, IServiceProvider serviceProvider, MenuFrm menuFrm)
         {
             InitializeComponent();
-            _categoryRepos = categoryRepos;
+            _categoryService = categoryService;
             _serviceProvider = serviceProvider;
-            CargarCategorias();
             _menuFrm = menuFrm;
+            CargarCategoriasAsync().ConfigureAwait(false); // Carga asíncrona al iniciar
         }
 
-        private void CargarCategorias()
+        private async Task CargarCategoriasAsync()
         {
             try
             {
-                CategoryDtGvw.DataSource = _categoryRepos.GetAllCategories();
+                var categories = await _categoryService.GetAllAsync();
+                CategoryDtGvw.DataSource = categories;
                 CategoryDtGvw.Columns[nameof(Category.Products)].Visible = false;
-
             }
             catch (Exception ex)
             {
@@ -36,10 +39,10 @@ namespace NorthwindApp_DA
 
         private void CategoryFrm_Load(object sender, EventArgs e)
         {
-            CargarCategorias();
+            // La carga ya se hace en el constructor con async
         }
 
-        private void BtUpdate_Click(object sender, EventArgs e)
+        private async void BtUpdate_Click(object sender, EventArgs e)
         {
             if (CategoryDtGvw.SelectedRows.Count == 0)
             {
@@ -47,17 +50,17 @@ namespace NorthwindApp_DA
                 return;
             }
 
-            var categoria = (Category)CategoryDtGvw.SelectedRows[0].DataBoundItem;
-            var form = Program.ServiceProvider.GetService<CategoryCrearFrm>();
+            var category = (Category)CategoryDtGvw.SelectedRows[0].DataBoundItem;
+            var form = _serviceProvider.GetService<CategoryCrearFrm>();
             if (form != null)
             {
-                form.SetEditMode(categoria);
-                form.FormClosed += (s, args) => CargarCategorias();
+                form.SetEditMode(category);
+                form.FormClosed += async (s, args) => await CargarCategoriasAsync();
                 form.ShowDialog();
             }
         }
 
-        private void BtDelete_Click(object sender, EventArgs e)
+        private async void BtDelete_Click(object sender, EventArgs e)
         {
             if (CategoryDtGvw.SelectedRows.Count == 0)
             {
@@ -65,13 +68,13 @@ namespace NorthwindApp_DA
                 return;
             }
 
-            var categoria = (Category)CategoryDtGvw.SelectedRows[0].DataBoundItem;
+            var category = (Category)CategoryDtGvw.SelectedRows[0].DataBoundItem;
 
-            var confirmar = MessageBox.Show($"¿Deseas eliminar '{categoria.CategoryName}'?", "Confirmar", MessageBoxButtons.YesNo);
+            var confirmar = MessageBox.Show($"¿Deseas eliminar '{category.CategoryName}'?", "Confirmar", MessageBoxButtons.YesNo);
             if (confirmar == DialogResult.Yes)
             {
-                _categoryRepos.DeleteCategory(categoria.CategoryId);
-                CargarCategorias();
+                await _categoryService.DeleteAsync(category.CategoryId);
+                await CargarCategoriasAsync();
             }
         }
 
@@ -83,10 +86,10 @@ namespace NorthwindApp_DA
 
         private void BtAddCat_Click(object sender, EventArgs e)
         {
-            var form = Program.ServiceProvider.GetService<CategoryCrearFrm>();
+            var form = _serviceProvider.GetService<CategoryCrearFrm>();
             if (form != null)
             {
-                form.FormClosed += (s, args) => CargarCategorias(); // recargar lista al cerrar
+                form.FormClosed += async (s, args) => await CargarCategoriasAsync(); // Recargar lista al cerrar
                 form.ShowDialog();
             }
         }

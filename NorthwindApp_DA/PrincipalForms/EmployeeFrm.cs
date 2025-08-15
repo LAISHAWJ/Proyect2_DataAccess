@@ -1,17 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Northwind.Application.Servicios;
+using Northwind.Core.Models;
 using NorthwindApp_DA;
 using NorthwindApp_DA.CrearEditRegisFrm;
-using NorthwindApp_DA.Models;
-using NorthwindApp_DA.Repository;
 using NorthwindApp_Final.CrearEditRegisFrm;
-using NorthwindApp_Final.Repository;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,38 +12,45 @@ namespace NorthwindApp_Final.PrincipalForms
 {
     public partial class EmployeeFrm : Form
     {
-        private readonly EmployeeRepos _employeeRepos;
+        private readonly EmployeeService _employeeService;
         private readonly IServiceProvider _serviceProvider;
-        private MenuFrm _menuFrm;
-        public EmployeeFrm(EmployeeRepos employeeRepos, IServiceProvider serviceProvider, MenuFrm menuFrm)
+        private readonly MenuFrm _menuFrm;
+
+        public EmployeeFrm(EmployeeService employeeService, IServiceProvider serviceProvider, MenuFrm menuFrm)
         {
             InitializeComponent();
-            _employeeRepos = employeeRepos;
+            _employeeService = employeeService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            CargarEmployee();
+            CargarEmployeeAsync().ConfigureAwait(false); // Carga asíncrona al iniciar
         }
 
-        private void CargarEmployee()
+        private async Task CargarEmployeeAsync()
         {
-            var employees = _employeeRepos.GetAllEmployee();
-            if (employees != null && employees.Count > 0)
+            try
             {
-                DtGVwEmployee.DataSource = employees;
-                // Ocultar las propiedades de navegación
-                DtGVwEmployee.Columns[nameof(Employee.InverseReportsToNavigation)].Visible = false;
-                DtGVwEmployee.Columns[nameof(Employee.Orders)].Visible = false;
-                DtGVwEmployee.Columns[nameof(Employee.ReportsToNavigation)].Visible = false;
-                DtGVwEmployee.Columns[nameof(Employee.PhotoPath)].Visible = false;
-                DtGVwEmployee.Columns[nameof(Employee.ReportsTo)].Visible = false;
+                var employees = await _employeeService.GetAllAsync();
+                if (employees != null && employees.Any())
+                {
+                    DtGVwEmployee.DataSource = employees;
+                    // Ocultar las propiedades de navegación
+                    DtGVwEmployee.Columns[nameof(Employee.InverseReportsToNavigation)].Visible = false;
+                    DtGVwEmployee.Columns[nameof(Employee.Orders)].Visible = false;
+                    DtGVwEmployee.Columns[nameof(Employee.ReportsToNavigation)].Visible = false;
+                    DtGVwEmployee.Columns[nameof(Employee.PhotoPath)].Visible = false;
+                    DtGVwEmployee.Columns[nameof(Employee.ReportsTo)].Visible = false;
+                }
+                else
+                {
+                    MessageBox.Show("No hay empleados disponibles.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DtGVwEmployee.DataSource = null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("No hay empleados disponibles.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Error al cargar empleados: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
-
 
         private void BtClose_Click(object sender, EventArgs e)
         {
@@ -60,20 +60,20 @@ namespace NorthwindApp_Final.PrincipalForms
 
         private void EmployeeFrm_Load(object sender, EventArgs e)
         {
-            CargarEmployee();
+            // La carga ya se hace en el constructor con async
         }
 
         private void BtAdd_Click(object sender, EventArgs e)
         {
-            var form = Program.ServiceProvider.GetService<EmployeeCrearFrm>();
+            var form = _serviceProvider.GetService<EmployeeCrearFrm>();
             if (form != null)
             {
-                form.FormClosed += (s, args) => CargarEmployee(); // recargar lista al cerrar
+                form.FormClosed += async (s, args) => await CargarEmployeeAsync(); // Recargar lista al cerrar
                 form.ShowDialog();
             }
         }
 
-        private void BtUpdate_Click(object sender, EventArgs e)
+        private async void BtUpdate_Click(object sender, EventArgs e)
         {
             if (DtGVwEmployee.SelectedRows.Count == 0)
             {
@@ -81,17 +81,17 @@ namespace NorthwindApp_Final.PrincipalForms
                 return;
             }
 
-            var empleado = (Employee)DtGVwEmployee.SelectedRows[0].DataBoundItem;
-            var form = Program.ServiceProvider.GetService<EmployeeCrearFrm>();
+            var employee = (Employee)DtGVwEmployee.SelectedRows[0].DataBoundItem;
+            var form = _serviceProvider.GetService<EmployeeCrearFrm>();
             if (form != null)
             {
-                form.SetEditMode(empleado);
-                form.FormClosed += (s, args) => CargarEmployee();
+                form.SetEditMode(employee);
+                form.FormClosed += async (s, args) => await CargarEmployeeAsync();
                 form.ShowDialog();
             }
         }
 
-        private void BtDelete_Click(object sender, EventArgs e)
+        private async void BtDelete_Click(object sender, EventArgs e)
         {
             if (DtGVwEmployee.SelectedRows.Count == 0)
             {
@@ -99,13 +99,13 @@ namespace NorthwindApp_Final.PrincipalForms
                 return;
             }
 
-            var empleado = (Employee)DtGVwEmployee.SelectedRows[0].DataBoundItem;
+            var employee = (Employee)DtGVwEmployee.SelectedRows[0].DataBoundItem;
 
-            var confirmar = MessageBox.Show($"¿Deseas eliminar '{empleado.FirstName}'?", "Confirmar", MessageBoxButtons.YesNo);
+            var confirmar = MessageBox.Show($"¿Deseas eliminar '{employee.FirstName}'?", "Confirmar", MessageBoxButtons.YesNo);
             if (confirmar == DialogResult.Yes)
             {
-                _employeeRepos.DeleteEmployee(empleado.EmployeeId);
-                CargarEmployee();
+                await _employeeService.DeleteAsync(employee.EmployeeId);
+                await CargarEmployeeAsync();
             }
         }
     }

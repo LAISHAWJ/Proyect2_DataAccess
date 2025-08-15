@@ -1,66 +1,80 @@
-﻿using NorthwindApp_DA.Models;
-using NorthwindApp_DA.Repository;
-using NorthwindApp_DA.Validators;
+﻿using FluentValidation.Results;
+using Northwind.Application.Services;
+using Northwind.Application.Validators;
+using Northwind.Core.Models;
+using System;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NorthwindApp_DA.CrearEditRegisFrm
 {
     public partial class ProductcrearFrm : Form
     {
-        private readonly ProductRepos _productRepos;
-        private readonly CategoryRepos _categoryRepos;
-        private readonly SupplierRepos _supplierRepos;
+        private readonly ProductService _productService;
         private readonly ProductValid _validator;
         private Product _productEdit;
         private bool _isEditMode = false;
-        public ProductcrearFrm(ProductRepos productRepos, CategoryRepos categoryRepos, SupplierRepos supplierRepos, ProductValid validator)
+
+        public ProductcrearFrm(ProductService productService, ProductValid validator)
         {
             InitializeComponent();
-            _productRepos = productRepos;
-            _categoryRepos = categoryRepos;
-            _supplierRepos = supplierRepos;
+            _productService = productService;
             _validator = validator;
             _productEdit = new Product();
 
-            CargarCategorias();
-            CargarSuplidores();
+            CargarCategoriasAsync().ConfigureAwait(false);
+            CargarSuplidoresAsync().ConfigureAwait(false);
         }
 
-        private void CargarCategorias()
+        private async Task CargarCategoriasAsync()
         {
-            var categorias = _categoryRepos.GetAllCategories();
-            CategCmbx.DisplayMember = "CategoryName";
-            CategCmbx.ValueMember = "CategoryId";
-            CategCmbx.DataSource = categorias;
-            CategCmbx.SelectedIndex = -1;
+            try
+            {
+                var categorias = await _productService.GetAllCategoriesAsync();
+                CategCmbx.DisplayMember = "CategoryName";
+                CategCmbx.ValueMember = "CategoryId";
+                CategCmbx.DataSource = categorias;
+                CategCmbx.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar categorías: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void CargarSuplidores()
+        private async Task CargarSuplidoresAsync()
         {
-            var suplidores = _supplierRepos.GetAllSupplier();
-            SuppCmbx.DisplayMember = "CompanyName";
-            SuppCmbx.ValueMember = "SupplierId";
-            SuppCmbx.DataSource = suplidores;
-            SuppCmbx.SelectedIndex = -1;
+            try
+            {
+                var suplidores = await _productService.GetAllSuppliersAsync();
+                SuppCmbx.DisplayMember = "CompanyName";
+                SuppCmbx.ValueMember = "SupplierId";
+                SuppCmbx.DataSource = suplidores;
+                SuppCmbx.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar suplidores: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
 
         public void SetEditMode(Product product)
         {
-            _productEdit = product;
+            _productEdit = product ?? new Product();
             _isEditMode = true;
 
-            TxtNameProduct.Text = product.ProductName;
-            TxtQuantityPerUnit.Text = product.QuantityPerUnit;
-            TxtUnitPrice.Text = product.UnitPrice?.ToString();
-            TxtUnitsInStock.Text = product.UnitsInStock?.ToString();
-            TxtUnitsOnOrder.Text = product.UnitsOnOrder?.ToString();
-            TxtReorderLevel.Text = product.ReorderLevel?.ToString();
-            CategCmbx.SelectedValue = product.CategoryId ?? 0;
-            SuppCmbx.SelectedValue = product.SupplierId ?? 0;
-            DiscontCbx.Checked = product.Discontinued;
+            TxtNameProduct.Text = _productEdit.ProductName ?? string.Empty;
+            TxtQuantityPerUnit.Text = _productEdit.QuantityPerUnit ?? string.Empty;
+            TxtUnitPrice.Text = _productEdit.UnitPrice?.ToString() ?? string.Empty;
+            TxtUnitsInStock.Text = _productEdit.UnitsInStock?.ToString() ?? string.Empty;
+            TxtUnitsOnOrder.Text = _productEdit.UnitsOnOrder?.ToString() ?? string.Empty;
+            TxtReorderLevel.Text = _productEdit.ReorderLevel?.ToString() ?? string.Empty;
+            CategCmbx.SelectedValue = _productEdit.CategoryId ?? 0;
+            SuppCmbx.SelectedValue = _productEdit.SupplierId ?? 0;
+            DiscontCbx.Checked = _productEdit.Discontinued;
         }
 
-        private void BtSave_Click(object sender, EventArgs e)
+        private async void BtSave_Click(object sender, EventArgs e)
         {
             if (CategCmbx.SelectedValue == null || !(CategCmbx.SelectedValue is int))
             {
@@ -73,7 +87,6 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
                 MessageBox.Show("Seleccione un suplidor válido.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
 
             var product = _isEditMode ? _productEdit : new Product();
 
@@ -100,20 +113,20 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
             try
             {
                 if (_isEditMode)
-                    _productRepos.UpdateProduct(product);
+                    await _productService.UpdateAsync(product);
                 else
-                    _productRepos.AddProduct(product);
+                    await _productService.AddAsync(product);
 
                 MessageBox.Show("Producto guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar el producto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al guardar el producto: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void MostrarErroresPorCampo(IEnumerable<FluentValidation.Results.ValidationFailure> errores)
+        private void MostrarErroresPorCampo(IEnumerable<ValidationFailure> errores)
         {
             foreach (var error in errores)
             {

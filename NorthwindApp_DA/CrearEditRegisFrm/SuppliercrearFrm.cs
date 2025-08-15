@@ -1,44 +1,48 @@
-﻿using NorthwindApp_DA.Models;
-using NorthwindApp_DA.Repository;
-using NorthwindApp_DA.Validators;
+﻿using FluentValidation.Results;
+using Northwind.Application.Servicios;
+using Northwind.Application.Validators;
+using Northwind.Core.Models;
+using System;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NorthwindApp_DA.CrearEditRegisFrm
 {
     public partial class SuppliercrearFrm : Form
     {
-        private readonly SupplierRepos _supplierRepos;
+        private readonly SupplierService _supplierService;
         private readonly SupplierValid _validator;
         private Supplier _supplierEdit;
         private bool _isEditMode = false;
-        public SuppliercrearFrm(SupplierRepos supplierRepos, SupplierValid validator)
+
+        public SuppliercrearFrm(SupplierService supplierService, SupplierValid validator)
         {
             InitializeComponent();
-            _supplierRepos = supplierRepos;
+            _supplierService = supplierService;
             _validator = validator;
             _supplierEdit = new Supplier();
         }
 
         public void SetEditMode(Supplier supplier)
         {
-            _supplierEdit = supplier;
+            _supplierEdit = supplier ?? new Supplier();
             _isEditMode = true;
             this.Text = "Editar Proveedor";
 
-            TxtNameCompany.Text = supplier.CompanyName;
-            TxtNameContact.Text = supplier.ContactName;
-            TxtContactTitle.Text = supplier.ContactTitle;
-            TxtDirec.Text = supplier.Address;
-            TxtCity.Text = supplier.City;
-            TxtRegion.Text = supplier.Region;
-            TxtCodePostal.Text = supplier.PostalCode;
-            TxtCountry.Text = supplier.Country;
-            TxtTel.Text = supplier.Phone;
-            TxtFax.Text = supplier.Fax;
-            TxtHomePage.Text = supplier.HomePage;
-
+            TxtNameCompany.Text = _supplierEdit.CompanyName ?? string.Empty;
+            TxtNameContact.Text = _supplierEdit.ContactName ?? string.Empty;
+            TxtContactTitle.Text = _supplierEdit.ContactTitle ?? string.Empty;
+            TxtDirec.Text = _supplierEdit.Address ?? string.Empty;
+            TxtCity.Text = _supplierEdit.City ?? string.Empty;
+            TxtRegion.Text = _supplierEdit.Region ?? string.Empty;
+            TxtCodePostal.Text = _supplierEdit.PostalCode ?? string.Empty;
+            TxtCountry.Text = _supplierEdit.Country ?? string.Empty;
+            TxtTel.Text = _supplierEdit.Phone ?? string.Empty;
+            TxtFax.Text = _supplierEdit.Fax ?? string.Empty;
+            TxtHomePage.Text = _supplierEdit.HomePage ?? string.Empty;
         }
 
-        private void BtSave_Click(object sender, EventArgs e)
+        private async void BtSave_Click(object sender, EventArgs e)
         {
             var supplier = _isEditMode ? _supplierEdit : new Supplier();
 
@@ -65,20 +69,20 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
             try
             {
                 if (_isEditMode)
-                    _supplierRepos.UpdateSupplier(supplier);
+                    await _supplierService.UpdateAsync(supplier);
                 else
-                    _supplierRepos.AddSupplier(supplier);
+                    await _supplierService.AddAsync(supplier);
 
                 MessageBox.Show("Proveedor guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar el proveedor: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al guardar el proveedor: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
-        private void MostrarErroresPorCampo(IEnumerable<FluentValidation.Results.ValidationFailure> errores)
+
+        private void MostrarErroresPorCampo(IEnumerable<ValidationFailure> errores)
         {
             foreach (var error in errores)
             {

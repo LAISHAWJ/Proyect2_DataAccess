@@ -1,38 +1,57 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NorthwindApp_DA.Data;
-using NorthwindApp_DA.Models;
-using NorthwindApp_DA.Repository;
+﻿using Northwind.Application.Services;
+using Northwind.Core.Models;
+using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_DA.CrearEditRegisFrm
 {
     public partial class OrderCrearFrm : Form
     {
-        private readonly NorthwindContext _context;
-        private readonly OrderRepos _orderRepos;
+        private readonly OrderService _orderService;
         private readonly int _orderId;
         private readonly OrderDetail _orderDetailToEdit;
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public OrderDetail CreatedOrderDetail { get; private set; }
 
-        public OrderCrearFrm(NorthwindContext context, int orderId, OrderDetail orderDetailToEdit = null)
+        public OrderCrearFrm(OrderService orderService, int orderId, OrderDetail orderDetailToEdit = null)
         {
             InitializeComponent();
-            _context = context ?? throw new ArgumentNullException(nameof(context));
-            _orderRepos = new OrderRepos(_context);
+            _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
             _orderId = orderId;
             _orderDetailToEdit = orderDetailToEdit;
-            CargarProductos();
+            CargarProductosAsync().ConfigureAwait(false);
             if (_orderDetailToEdit != null)
             {
                 ConfigurarModoEdicion();
             }
         }
 
-        public OrderCrearFrm(NorthwindContext context)
+        private async Task CargarProductosAsync()
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            try
+            {
+                // Simulamos GetProductsAsync (ajusta según tu implementación en OrderService)
+                var productos = await _orderService.GetProductsAsync(); // Ajusta si necesitas un método específico
+                var productList = productos.Select(p => new ProductSelectionOrder
+                {
+                    ProductID = p.ProductId,
+                    ProductName = p.ProductName ?? "Sin Nombre",
+                    UnitPrice = p.UnitPrice ?? 0m,
+                    CategoryID = p.Category != null ? p.Category.CategoryName : "No Category",
+                    SupplierID = p.Supplier != null ? p.Supplier.CompanyName : "No Supplier"
+                }).OrderBy(p => p.ProductID).ToList();
+
+                ProductOrderDgv.DataSource = productList;
+                // ProductOrderDgv.Columns["ProductID"].Visible = false; // Descomenta si deseas ocultar
+                ProductOrderDgv.Columns["CategoryID"].HeaderText = "Categoría";
+                ProductOrderDgv.Columns["SupplierID"].HeaderText = "Proveedor";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al cargar los productos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ConfigurarModoEdicion()
@@ -56,34 +75,7 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
             TxtDescuento.Text = (_orderDetailToEdit.Discount * 100).ToString("F2");
         }
 
-        private void CargarProductos()
-        {
-            try
-            {
-                var productos = _context.Products
-                    .Select(p => new ProductSelectionOrder
-                    {
-                        ProductID = p.ProductId,
-                        ProductName = p.ProductName ?? "Sin Nombre",
-                        UnitPrice = p.UnitPrice ?? 0m,
-                        CategoryID = p.Category != null ? p.Category.CategoryName : "No Category",
-                        SupplierID = p.Supplier != null ? p.Supplier.CompanyName : "No Supplier"
-                    })
-                    .OrderBy(p => p.ProductID)
-                    .ToList();
-
-                ProductOrderDgv.DataSource = productos;
-                //ProductOrderDgv.Columns["ProductID"].Visible = false;
-                ProductOrderDgv.Columns["CategoryID"].HeaderText = "Categoría";
-                ProductOrderDgv.Columns["SupplierID"].HeaderText = "Proveedor";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error al cargar los productos: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void BtCrear_Click(object sender, EventArgs e)
+        private async void BtCrear_Click(object sender, EventArgs e)
         {
             if (ProductOrderDgv.SelectedRows.Count == 0)
             {
@@ -123,7 +115,7 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
                         Discount = (float)(descuento / 100)
                     };
 
-                    _context.OrderDetails.Add(CreatedOrderDetail);
+                    await _orderService.AddAsync(CreatedOrderDetail);
                 }
                 else
                 {
@@ -131,9 +123,7 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
                     if (_orderDetailToEdit.ProductId != productId)
                     {
                         // Si el ProductId cambia, eliminar el detalle existente y crear uno nuevo
-                        _context.OrderDetails.Remove(_orderDetailToEdit);
-                        _context.SaveChanges();
-
+                        await _orderService.DeleteAsync(_orderDetailToEdit.OrderId, _orderDetailToEdit.ProductId); // Ajusta si necesitas un método específico
                         CreatedOrderDetail = new OrderDetail
                         {
                             OrderId = _orderId,
@@ -142,8 +132,7 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
                             Quantity = (short)cantidad,
                             Discount = (float)(descuento / 100)
                         };
-
-                        _context.OrderDetails.Add(CreatedOrderDetail);
+                        await _orderService.AddAsync(CreatedOrderDetail);
                     }
                     else
                     {
@@ -152,21 +141,17 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
                         _orderDetailToEdit.Quantity = (short)cantidad;
                         _orderDetailToEdit.Discount = (float)(descuento / 100);
                         CreatedOrderDetail = _orderDetailToEdit;
+                        await _orderService.UpdateAsync(CreatedOrderDetail);
                     }
                 }
 
-                _context.SaveChanges();
                 MessageBox.Show(_orderDetailToEdit == null ? "Detalle de orden creado exitosamente." : "Detalle de orden actualizado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
-            catch (DbUpdateException ex)
-            {
-                MessageBox.Show($"Error al guardar el detalle de la orden: {ex.InnerException?.Message ?? ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error inesperado: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al guardar el detalle de la orden: {ex.InnerException?.Message ?? ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -176,4 +161,5 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
             this.Close();
         }
     }
+  
 }

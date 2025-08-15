@@ -1,15 +1,8 @@
-﻿using NorthwindApp_DA.Models;
-using NorthwindApp_DA.Repository;
-using NorthwindApp_DA.Validators;
-using NorthwindApp_Final.Repository;
-using NorthwindApp_Final.Validators;
+﻿using FluentValidation.Results;
+using Northwind.Application.Servicios;
+using Northwind.Application.Validators;
+using Northwind.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,44 +10,45 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
 {
     public partial class CustomerCrearFrm : Form
     {
-        private readonly CustomerRepos _customerRepos;
+        private readonly CustomerService _customerService;
         private readonly CustomerValid _validator;
         private Customer _customerEdit;
         private bool _isEditMode = false;
-        public CustomerCrearFrm(CustomerRepos customerRepos, CustomerValid validator)
+
+        public CustomerCrearFrm(CustomerService customerService, CustomerValid validator)
         {
             InitializeComponent();
-            _customerRepos = customerRepos;
+            _customerService = customerService;
             _validator = validator;
             _customerEdit = new Customer();
         }
 
         public void SetEditMode(Customer customer)
         {
-            _customerEdit = customer;
+            _customerEdit = customer ?? new Customer();
             _isEditMode = true;
 
-            TxtCustomerId.Text = customer.CustomerId;
+            TxtCustomerId.Text = _customerEdit.CustomerId ?? string.Empty;
             TxtCustomerId.Enabled = false;
 
-            TxtCompanyName.Text = customer.CompanyName;
-            TxtNameContact.Text = customer.ContactName;
-            TxtContactTitle.Text = customer.ContactTitle;
-            TxtDirec.Text = customer.Address;
-            TxtCity.Text = customer.City;
-            TxtRegion.Text = customer.Region;
-            TxtCodePostal.Text = customer.PostalCode;
-            TxtCountry.Text = customer.Country;
-            TxtTel.Text = customer.Phone;
-            TxtFax.Text = customer.Fax;
+            TxtCompanyName.Text = _customerEdit.CompanyName ?? string.Empty;
+            TxtNameContact.Text = _customerEdit.ContactName ?? string.Empty;
+            TxtContactTitle.Text = _customerEdit.ContactTitle ?? string.Empty;
+            TxtDirec.Text = _customerEdit.Address ?? string.Empty;
+            TxtCity.Text = _customerEdit.City ?? string.Empty;
+            TxtRegion.Text = _customerEdit.Region ?? string.Empty;
+            TxtCodePostal.Text = _customerEdit.PostalCode ?? string.Empty;
+            TxtCountry.Text = _customerEdit.Country ?? string.Empty;
+            TxtTel.Text = _customerEdit.Phone ?? string.Empty;
+            TxtFax.Text = _customerEdit.Fax ?? string.Empty;
         }
 
         private void CustomerCrearFrm_Load(object sender, EventArgs e)
         {
-
+          
         }
 
-        private void BtSave_Click(object sender, EventArgs e)
+        private async void BtSave_Click(object sender, EventArgs e)
         {
             var customer = _isEditMode ? _customerEdit : new Customer();
 
@@ -81,21 +75,20 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             try
             {
                 if (_isEditMode)
-                    _customerRepos.UpdateCustomer(customer);
+                    await _customerService.UpdateAsync(customer);
                 else
-                    _customerRepos.AddCustomer(customer);
+                    await _customerService.AddAsync(customer);
 
                 MessageBox.Show("Cliente guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al guardar el cliente: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Error al guardar el cliente: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
-        private void MostrarErroresPorCampo(IEnumerable<FluentValidation.Results.ValidationFailure> errores)
+        private void MostrarErroresPorCampo(IEnumerable<ValidationFailure> errores)
         {
             foreach (var error in errores)
             {
@@ -145,7 +138,6 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
                         MessageBox.Show(error.ErrorMessage, "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         TxtFax.Focus();
                         return;
-
                 }
             }
         }

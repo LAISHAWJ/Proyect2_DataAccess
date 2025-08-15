@@ -1,55 +1,66 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Northwind.Application.Servicios;
+using Northwind.Core.Models;
 using NorthwindApp_DA.CrearEditRegisFrm;
-using NorthwindApp_DA.Models;
-using NorthwindApp_DA.Repository;
+using System;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NorthwindApp_DA
 {
     public partial class SupplierFrm : Form
     {
-        private readonly SupplierRepos _supplierRepos;
+        private readonly SupplierService _supplierService;
         private readonly IServiceProvider _serviceProvider;
-        private MenuFrm _menuFrm;
-        public SupplierFrm(SupplierRepos supplierRepos, IServiceProvider serviceProvider, MenuFrm menuFrm)
+        private readonly MenuFrm _menuFrm;
+
+        public SupplierFrm(SupplierService supplierService, IServiceProvider serviceProvider, MenuFrm menuFrm)
         {
             InitializeComponent();
-            _supplierRepos = supplierRepos;
+            _supplierService = supplierService;
             _serviceProvider = serviceProvider;
-            CargarSuppliers();
             _menuFrm = menuFrm;
+            CargarSuppliersAsync().ConfigureAwait(false); // Carga asíncrona al iniciar
         }
 
-        private void CargarSuppliers()
+        private async Task CargarSuppliersAsync()
         {
-            var suppliers = _supplierRepos.GetAllSupplier();
-            if (suppliers != null && suppliers.Count > 0)
+            try
             {
-                SuppDgv.DataSource = suppliers;
-                SuppDgv.Columns[nameof(Supplier.Products)].Visible = false;
+                var suppliers = await _supplierService.GetAllAsync();
+                if (suppliers != null && suppliers.Any())
+                {
+                    SuppDgv.DataSource = suppliers;
+                    SuppDgv.Columns[nameof(Supplier.Products)].Visible = false;
+                }
+                else
+                {
+                    MessageBox.Show("No hay suplidores disponibles.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    SuppDgv.DataSource = null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("No hay suplidores disponibles.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Error al cargar suplidores: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void SupplierFrm_Load(object sender, EventArgs e)
         {
-            CargarSuppliers();
+            // La carga ya se hace en el constructor con async
         }
 
         private void BtAdd_Click(object sender, EventArgs e)
         {
-            var form = Program.ServiceProvider.GetService<SuppliercrearFrm>();
+            var form = _serviceProvider.GetService<SuppliercrearFrm>();
             if (form != null)
             {
-                form.FormClosed += (s, args) => CargarSuppliers(); // recargar lista al cerrar
+                form.FormClosed += async (s, args) => await CargarSuppliersAsync(); // Recargar lista al cerrar
                 form.ShowDialog();
             }
         }
 
-        private void BtUpdate_Click(object sender, EventArgs e)
+        private async void BtUpdate_Click(object sender, EventArgs e)
         {
             if (SuppDgv.SelectedRows.Count == 0)
             {
@@ -58,16 +69,16 @@ namespace NorthwindApp_DA
             }
 
             var supplier = (Supplier)SuppDgv.SelectedRows[0].DataBoundItem;
-            var form = Program.ServiceProvider.GetService<SuppliercrearFrm>();
+            var form = _serviceProvider.GetService<SuppliercrearFrm>();
             if (form != null)
             {
                 form.SetEditMode(supplier);
-                form.FormClosed += (s, args) => CargarSuppliers();
+                form.FormClosed += async (s, args) => await CargarSuppliersAsync();
                 form.ShowDialog();
             }
         }
 
-        private void BtDelete_Click(object sender, EventArgs e)
+        private async void BtDelete_Click(object sender, EventArgs e)
         {
             if (SuppDgv.SelectedRows.Count == 0)
             {
@@ -75,13 +86,13 @@ namespace NorthwindApp_DA
                 return;
             }
 
-            var suplidor = (Supplier)SuppDgv.SelectedRows[0].DataBoundItem;
+            var supplier = (Supplier)SuppDgv.SelectedRows[0].DataBoundItem;
 
-            var confirmar = MessageBox.Show($"¿Deseas eliminar '{suplidor.CompanyName}'?", "Confirmar", MessageBoxButtons.YesNo);
+            var confirmar = MessageBox.Show($"¿Deseas eliminar '{supplier.CompanyName}'?", "Confirmar", MessageBoxButtons.YesNo);
             if (confirmar == DialogResult.Yes)
             {
-                _supplierRepos.DeleteSupplier(suplidor.SupplierId);
-                CargarSuppliers();
+                await _supplierService.DeleteAsync(supplier.SupplierId);
+                await CargarSuppliersAsync();
             }
         }
 

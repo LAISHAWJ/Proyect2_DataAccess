@@ -1,17 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Northwind.Application.Servicios;
+using Northwind.Core.Models;
 using NorthwindApp_DA;
 using NorthwindApp_DA.CrearEditRegisFrm;
-using NorthwindApp_DA.Models;
-using NorthwindApp_DA.Repository;
 using NorthwindApp_Final.CrearEditRegisFrm;
-using NorthwindApp_Final.Repository;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -19,38 +12,45 @@ namespace NorthwindApp_Final.PrincipalForms
 {
     public partial class CustomerFrm : Form
     {
-        private readonly CustomerRepos _customerRepos;
+        private readonly CustomerService _customerService;
         private readonly IServiceProvider _serviceProvider;
-        private MenuFrm _menuFrm;
+        private readonly MenuFrm _menuFrm;
 
-        public CustomerFrm(CustomerRepos customerRepos, IServiceProvider serviceProvider, MenuFrm menuFrm)
+        public CustomerFrm(CustomerService customerService, IServiceProvider serviceProvider, MenuFrm menuFrm)
         {
             InitializeComponent();
-            _customerRepos = customerRepos;
+            _customerService = customerService;
             _serviceProvider = serviceProvider;
-            CargarCustomer();
             _menuFrm = menuFrm;
+            CargarCustomerAsync().ConfigureAwait(false); // Carga asíncrona al iniciar
         }
 
-        private void CargarCustomer()
+        private async Task CargarCustomerAsync()
         {
-            var customers = _customerRepos.GetAllCustomer();
-            if (customers != null && customers.Count > 0)
+            try
             {
-                DtGVwCustomer.DataSource = customers;
-                DtGVwCustomer.Columns[nameof(Customer.Orders)].Visible = false;
-                DtGVwCustomer.Columns[nameof(Customer.CustomerTypes)].Visible = false;
+                var customers = await _customerService.GetAllAsync();
+                if (customers != null && customers.Any())
+                {
+                    DtGVwCustomer.DataSource = customers;
+                    DtGVwCustomer.Columns[nameof(Customer.Orders)].Visible = false;
+                    DtGVwCustomer.Columns[nameof(Customer.CustomerTypes)].Visible = false;
+                }
+                else
+                {
+                    MessageBox.Show("No hay clientes disponibles.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DtGVwCustomer.DataSource = null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("No hay clientes disponibles.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Error al cargar clientes: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void CustomerFrm_Load(object sender, EventArgs e)
         {
-            CargarCustomer();
+            // La carga ya se hace en el constructor con async
         }
 
         private void BtClose_Click(object sender, EventArgs e)
@@ -61,15 +61,15 @@ namespace NorthwindApp_Final.PrincipalForms
 
         private void BtAdd_Click(object sender, EventArgs e)
         {
-            var form = Program.ServiceProvider.GetService<CustomerCrearFrm>();
+            var form = _serviceProvider.GetService<CustomerCrearFrm>();
             if (form != null)
             {
-                form.FormClosed += (s, args) => CargarCustomer(); // recargar lista al cerrar
+                form.FormClosed += async (s, args) => await CargarCustomerAsync(); // Recargar lista al cerrar
                 form.ShowDialog();
             }
         }
 
-        private void BtUpdate_Click(object sender, EventArgs e)
+        private async void BtUpdate_Click(object sender, EventArgs e)
         {
             if (DtGVwCustomer.SelectedRows.Count == 0)
             {
@@ -78,16 +78,16 @@ namespace NorthwindApp_Final.PrincipalForms
             }
 
             var customer = (Customer)DtGVwCustomer.SelectedRows[0].DataBoundItem;
-            var form = Program.ServiceProvider.GetService<CustomerCrearFrm>();
+            var form = _serviceProvider.GetService<CustomerCrearFrm>();
             if (form != null)
             {
                 form.SetEditMode(customer);
-                form.FormClosed += (s, args) => CargarCustomer();
+                form.FormClosed += async (s, args) => await CargarCustomerAsync();
                 form.ShowDialog();
             }
         }
 
-        private void BtDelete_Click(object sender, EventArgs e)
+        private async void BtDelete_Click(object sender, EventArgs e)
         {
             if (DtGVwCustomer.SelectedRows.Count == 0)
             {
@@ -100,31 +100,37 @@ namespace NorthwindApp_Final.PrincipalForms
             var confirmar = MessageBox.Show($"¿Deseas eliminar '{customer.CompanyName}'?", "Confirmar", MessageBoxButtons.YesNo);
             if (confirmar == DialogResult.Yes)
             {
-                _customerRepos.DeleteCustomer(customer.CustomerId);
-                CargarCustomer();
+                await _customerService.DeleteAsync(customer.CustomerId);
+                await CargarCustomerAsync();
             }
         }
 
-        private void BtSearch_Click(object sender, EventArgs e)
+        private async void BtSearch_Click(object sender, EventArgs e)
         {
             string filtro = TxtBuscarId.Text.Trim();
 
-            if (string.IsNullOrEmpty(filtro))
+            try
             {
-                // Si no hay texto, cargar todo
-                CargarCustomer();
+                var allCustomers = await _customerService.GetAllAsync();
+                if (string.IsNullOrEmpty(filtro))
+                {
+                    // Si no hay texto, cargar todo
+                    await CargarCustomerAsync();
+                }
+                else
+                {
+                    var filteredCustomers = allCustomers
+                        .Where(c => c.CustomerId.StartsWith(filtro, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+
+                    DtGVwCustomer.DataSource = filteredCustomers;
+                    DtGVwCustomer.Columns[nameof(Customer.Orders)].Visible = false;
+                    DtGVwCustomer.Columns[nameof(Customer.CustomerTypes)].Visible = false;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var customers = _customerRepos
-                    .GetAllCustomer() // traes todos
-                    .Where(c => c.CustomerId.StartsWith(filtro, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-
-                DtGVwCustomer.DataSource = customers;
-
-                DtGVwCustomer.Columns[nameof(Customer.Orders)].Visible = false;
-                DtGVwCustomer.Columns[nameof(Customer.CustomerTypes)].Visible = false;
+                MessageBox.Show($"Error al buscar clientes: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
