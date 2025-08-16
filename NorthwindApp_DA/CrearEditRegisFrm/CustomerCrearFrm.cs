@@ -2,20 +2,19 @@
 using Northwind.Application.Servicios;
 using Northwind.Application.Validators;
 using Northwind.Core.Models;
-using NorthwindApp_DA.CrearEditRegisFrm;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NorthwindApp_DA.CrearEditRegisFrm
+namespace NorthwindApp_Final.CrearEditRegisFrm
 {
     public partial class CustomerCrearFrm : Form
     {
         private readonly CustomerService _customerService;
         private readonly CustomerValid _validator;
+
         private Customer _customerEdit;
         private bool _isEditMode = false;
-
         public CustomerCrearFrm(CustomerService customerService, CustomerValid validator)
         {
             InitializeComponent();

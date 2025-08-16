@@ -8,11 +8,12 @@ using Northwind.Application.Servicios;
 using Northwind.Application.Validators;
 using Northwind.Infrastructure.Repositories;
 using NorthwindApp.Infrastructure.Data;
-using NorthwindApp_DA;
-using NorthwindApp_DA.CrearEditRegisFrm;
-using NorthwindApp_DA.PrincipalForms;
+using NorthwindApp_Final;
+using NorthwindApp_Final.CrearEditRegisFrm;
+using NorthwindApp_Final.PrincipalForms;
 
-namespace NorthwindApp_DA
+
+namespace NorthwindApp_Final
 {
     static class Program
     {

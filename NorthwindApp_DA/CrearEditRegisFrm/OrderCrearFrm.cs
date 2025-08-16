@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NorthwindApp_DA.CrearEditRegisFrm
+namespace NorthwindApp_Final.CrearEditRegisFrm
 {
     public partial class OrderCrearFrm : Form
     {

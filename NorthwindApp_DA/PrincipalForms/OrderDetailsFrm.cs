@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Northwind.Application.Services;
+using NorthwindApp_Final.CrearEditRegisFrm;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NorthwindApp_DA.PrincipalForms
+namespace NorthwindApp_Final.PrincipalForms
 {
     public partial class OrderDetailsFrm : Form
     {

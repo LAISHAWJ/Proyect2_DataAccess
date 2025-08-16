@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NorthwindApp_DA.CrearEditRegisFrm
+namespace NorthwindApp_Final.CrearEditRegisFrm
 {
     public partial class CategoryCrearFrm : Form
     {

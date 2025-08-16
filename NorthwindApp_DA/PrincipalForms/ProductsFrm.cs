@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Northwind.Application.Services;
-using NorthwindApp_DA.CrearEditRegisFrm;
+using NorthwindApp_Final.CrearEditRegisFrm;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NorthwindApp_DA
+namespace NorthwindApp_Final.PrincipalForms
 {
     public partial class ProductsFrm : Form
     {

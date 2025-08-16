@@ -1,4 +1,4 @@
-﻿namespace NorthwindApp_DA.PrincipalForms
+﻿namespace NorthwindApp_Final.PrincipalForms
 {
     partial class OrderDetailsFrm
     {

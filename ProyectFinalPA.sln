@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36202.13
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthwindApp_DA", "NorthwindApp_DA\NorthwindApp_DA.csproj", "{E433D015-7C5D-494F-8F4E-35CAE77CE746}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NorthwindApp_Final", "NorthwindApp_DA\NorthwindApp_Final.csproj", "{E433D015-7C5D-494F-8F4E-35CAE77CE746}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Northwind.Core", "Northwind.Core\Northwind.Core.csproj", "{A07C6326-2A28-44E7-99FB-7EF097758B65}"
 EndProject

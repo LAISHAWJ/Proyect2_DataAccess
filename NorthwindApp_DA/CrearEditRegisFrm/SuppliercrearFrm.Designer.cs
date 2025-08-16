@@ -1,4 +1,4 @@
-﻿namespace NorthwindApp_DA.CrearEditRegisFrm
+﻿namespace NorthwindApp_Final.CrearEditRegisFrm
 {
     partial class SuppliercrearFrm
     {

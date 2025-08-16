@@ -1,9 +1,11 @@
 using Microsoft.Extensions.DependencyInjection;
-using NorthwindApp_DA.PrincipalForms;
+using NorthwindApp_Final;
+using NorthwindApp_Final.CrearEditRegisFrm;
+using NorthwindApp_Final.PrincipalForms;
 using System;
 using System.Windows.Forms;
 
-namespace NorthwindApp_DA
+namespace NorthwindApp_Final.PrincipalForms
 {
     public partial class MenuFrm : Form
     {
