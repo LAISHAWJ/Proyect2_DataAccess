@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Northwind.Core.Models
 {
-    internal class ProductSelectionOrder
+    public class ProductSelectionOrder
     {
         public int ProductID { get; set; }
         public string ProductName { get; set; }

@@ -1,15 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NorthwindApp_DA.Data;
-using NorthwindApp_DA.Models;
+using Northwind.Application.Interfaces;
+using Northwind.Core.Models;
+using NorthwindApp.Infrastructure.Data;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace NorthwindApp_DA.Repository
+namespace Northwind.Infrastructure.Repositories
 {
-    public class OrderDetailsRepos
+    public class OrderDetailsRepos : IOrderDetailsRepository
     {
         private readonly NorthwindContext _context;
 
@@ -18,11 +17,11 @@ namespace NorthwindApp_DA.Repository
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public List<OrderWithDetailsViewModel> GetOrderWithDetails()
+        public async Task<List<OrderWithDetailsViewModel>> GetOrderWithDetailsAsync()
         {
-            return _context.Orders
+            return await _context.Orders
                 .Include(o => o.OrderDetails)
-                .ThenInclude(od => od.Product)
+                    .ThenInclude(od => od.Product)
                 .Include(o => o.Customer)
                 .Include(o => o.Employee)
                 .Include(o => o.ShipViaNavigation)
@@ -46,14 +45,14 @@ namespace NorthwindApp_DA.Repository
                     UnitPrice = od.UnitPrice,
                     Quantity = od.Quantity,
                     Discount = od.Discount
-                })).ToList();
+                })).ToListAsync();
         }
 
-        public List<OrderWithDetailsViewModel> GetOrderWithDetailsByOrderId(int orderId)
+        public async Task<List<OrderWithDetailsViewModel>> GetOrderWithDetailsByOrderIdAsync(int orderId)
         {
-            return _context.Orders
+            return await _context.Orders
                 .Include(o => o.OrderDetails)
-                .ThenInclude(od => od.Product)
+                    .ThenInclude(od => od.Product)
                 .Include(o => o.Customer)
                 .Include(o => o.Employee)
                 .Include(o => o.ShipViaNavigation)
@@ -78,30 +77,8 @@ namespace NorthwindApp_DA.Repository
                     UnitPrice = od.UnitPrice,
                     Quantity = od.Quantity,
                     Discount = od.Discount
-                })).ToList();
+                })).ToListAsync();
         }
     }
-
-    // Vista modelo para combinar Order y OrderDetails
-    public class OrderWithDetailsViewModel
-    {
-        public int OrderId { get; set; }
-        public string CompanyName { get; set; }
-        public string LastName { get; set; }
-        public DateTime? OrderDate { get; set; }
-        public DateTime? RequiredDate { get; set; }
-        public DateTime? ShippedDate { get; set; }
-        public string ShipViaName { get; set; }
-        public decimal? Freight { get; set; }
-        public string ShipName { get; set; }
-        public string ShipAddress { get; set; }
-        public string ShipCity { get; set; }
-        public string ShipRegion { get; set; }
-        public string ShipPostalCode { get; set; }
-        public string ShipCountry { get; set; }
-        public string ProductName { get; set; }
-        public decimal UnitPrice { get; set; }
-        public short Quantity { get; set; }
-        public float Discount { get; set; }
-    }
+   
 }

@@ -163,106 +163,113 @@ namespace NorthwindApp_DA
 
         private async void BtCrearOrderDetail_Click(object sender, EventArgs e)
         {
-            if (_ordenesEnSesion == null)
+            try
             {
-                _ordenesEnSesion = new List<Order>();
-            }
-
-            Order ordenActual;
-
-            if (_ordenesEnSesion.Count == 0)
-            {
-                ordenActual = await CrearNuevaOrdenAsync();
-                _ordenesEnSesion.Add(ordenActual);
-            }
-            else
-            {
-                ordenActual = _ordenesEnSesion[0];
-            }
-
-            using (var crearOrderFrm = _serviceProvider.GetService<OrderCrearFrm>())
-            {
-                if (crearOrderFrm != null)
+                if (_ordenesEnSesion == null)
                 {
-                    crearOrderFrm.SetOrderId(ordenActual.OrderId);
-                    if (crearOrderFrm.ShowDialog() == DialogResult.OK)
+                    _ordenesEnSesion = new List<Order>();
+                }
+
+                Order ordenActual;
+
+                if (_ordenesEnSesion.Count == 0)
+                {
+                    ordenActual = await CrearNuevaOrdenAsync();
+                    _ordenesEnSesion.Add(ordenActual);
+                }
+                else
+                {
+                    ordenActual = _ordenesEnSesion[0];
+                }
+
+                using (var crearOrderFrm = _serviceProvider.GetService<OrderCrearFrm>())
+                {
+                    if (crearOrderFrm != null)
                     {
-                        var ordenRecargada = await _orderService.GetByIdAsync(ordenActual.OrderId);
-                        if (ordenRecargada != null)
+                        crearOrderFrm.SetOrderId(ordenActual.OrderId); // Método añadido
+                        if (crearOrderFrm.ShowDialog() == DialogResult.OK)
                         {
-                            int index = _ordenesEnSesion.FindIndex(o => o.OrderId == ordenRecargada.OrderId);
-                            if (index >= 0)
+                            var ordenRecargada = await _orderService.GetByIdAsync(ordenActual.OrderId);
+                            if (ordenRecargada != null)
                             {
-                                _ordenesEnSesion[index] = ordenRecargada;
+                                int index = _ordenesEnSesion.FindIndex(o => o.OrderId == ordenRecargada.OrderId);
+                                if (index >= 0)
+                                {
+                                    _ordenesEnSesion[index] = ordenRecargada;
+                                }
+                                else
+                                {
+                                    _ordenesEnSesion.Add(ordenRecargada);
+                                }
                             }
-                            else
-                            {
-                                _ordenesEnSesion.Add(ordenRecargada);
-                            }
+                            await CargarOrdenesEnSesionAsync();
+                            await CalcularTotalesAsync();
                         }
-                        await CargarOrdenesEnSesionAsync();
-                        await CalcularTotalesAsync();
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al crear detalle de orden: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private async void BtSave_Click(object sender, EventArgs e)
         {
-            if (_ordenesEnSesion == null || !_ordenesEnSesion.Any())
-            {
-                MessageBox.Show("Por favor, cree una orden antes de guardar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            var ordenAValidar = new Order
-            {
-                CustomerId = ClienteCbx.SelectedValue?.ToString(),
-                EmployeeId = EmpleadoCbx.SelectedValue != null ? (int?)EmpleadoCbx.SelectedValue : 0,
-                OrderDate = DtOrderDate.Value,
-                RequiredDate = DtRequiredDate.Value,
-                ShipVia = ShipViaCbx.SelectedValue != null ? (int?)ShipViaCbx.SelectedValue : 0,
-                ShipName = ShipNameCbx.Text,
-                ShipAddress = TxtDirecOrder.Text,
-            };
-
-            var validador = new Northwind.Application.Validators.OrderValid(); // Ajuste de namespace
-            var resultado = validador.Validate(ordenAValidar);
-
-            if (!resultado.IsValid)
-            {
-                foreach (var error in resultado.Errors)
-                {
-                    MessageBox.Show(error.ErrorMessage, "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                    if (error.PropertyName == "CustomerId") ClienteCbx.Focus();
-                    else if (error.PropertyName == "EmployeeId") EmpleadoCbx.Focus();
-                    else if (error.PropertyName == "OrderDate") DtOrderDate.Focus();
-                    else if (error.PropertyName == "RequiredDate") DtRequiredDate.Focus();
-                    else if (error.PropertyName == "ShipVia") ShipViaCbx.Focus();
-                    else if (error.PropertyName == "ShipName") ShipNameCbx.Focus();
-                    else if (error.PropertyName == "ShipAddress") TxtDirecOrder.Focus();
-
-                    return;
-                }
-            }
-
-            if (string.IsNullOrWhiteSpace(TxtCityOrder.Text))
-            {
-                MessageBox.Show("Ciudad obligatoria.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                TxtCityOrder.Focus();
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(TxtShipCountry.Text))
-            {
-                MessageBox.Show("País de envío obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                TxtShipCountry.Focus();
-                return;
-            }
-
             try
             {
+                if (_ordenesEnSesion == null || !_ordenesEnSesion.Any())
+                {
+                    MessageBox.Show("Por favor, cree una orden antes de guardar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                var ordenAValidar = new Order
+                {
+                    CustomerId = ClienteCbx.SelectedValue?.ToString(),
+                    EmployeeId = EmpleadoCbx.SelectedValue != null ? (int?)EmpleadoCbx.SelectedValue : 0,
+                    OrderDate = DtOrderDate.Value,
+                    RequiredDate = DtRequiredDate.Value,
+                    ShipVia = ShipViaCbx.SelectedValue != null ? (int?)ShipViaCbx.SelectedValue : 0,
+                    ShipName = ShipNameCbx.Text,
+                    ShipAddress = TxtDirecOrder.Text,
+                };
+
+                var validador = new Northwind.Application.Validators.OrderValid(); // Ajustado namespace
+                var resultado = validador.Validate(ordenAValidar);
+
+                if (!resultado.IsValid)
+                {
+                    foreach (var error in resultado.Errors)
+                    {
+                        MessageBox.Show(error.ErrorMessage, "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        if (error.PropertyName == "CustomerId") ClienteCbx.Focus();
+                        else if (error.PropertyName == "EmployeeId") EmpleadoCbx.Focus();
+                        else if (error.PropertyName == "OrderDate") DtOrderDate.Focus();
+                        else if (error.PropertyName == "RequiredDate") DtRequiredDate.Focus();
+                        else if (error.PropertyName == "ShipVia") ShipViaCbx.Focus();
+                        else if (error.PropertyName == "ShipName") ShipNameCbx.Focus();
+                        else if (error.PropertyName == "ShipAddress") TxtDirecOrder.Focus();
+
+                        return;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(TxtCityOrder.Text))
+                {
+                    MessageBox.Show("Ciudad obligatoria.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    TxtCityOrder.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(TxtShipCountry.Text))
+                {
+                    MessageBox.Show("País de envío obligatorio.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    TxtShipCountry.Focus();
+                    return;
+                }
+
                 var ordenActual = _ordenesEnSesion[0];
                 ordenActual.CustomerId = ClienteCbx.SelectedValue?.ToString();
                 ordenActual.EmployeeId = EmpleadoCbx.SelectedValue != null ? (int?)EmpleadoCbx.SelectedValue : null;
@@ -292,114 +299,128 @@ namespace NorthwindApp_DA
 
         private async void BtDeleteOrder_Click(object sender, EventArgs e)
         {
-            if (OrderDgv.SelectedRows.Count == 0)
+            try
             {
-                MessageBox.Show("Por favor, selecciona una o varias órdenes para eliminar.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            var confirm = MessageBox.Show($"¿Seguro que quieres eliminar {OrderDgv.SelectedRows.Count} orden(es)?",
-                "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-
-            if (confirm != DialogResult.Yes) return;
-
-            foreach (DataGridViewRow row in OrderDgv.SelectedRows)
-            {
-                var orderId = (int)row.Cells["OrderId"].Value;
-                await _orderService.DeleteAsync(orderId);
-
-                var ordenSesion = _ordenesEnSesion.FirstOrDefault(o => o.OrderId == orderId);
-                if (ordenSesion != null)
+                if (OrderDgv.SelectedRows.Count == 0)
                 {
-                    _ordenesEnSesion.Remove(ordenSesion);
+                    MessageBox.Show("Por favor, selecciona una o varias órdenes para eliminar.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
+
+                var confirm = MessageBox.Show($"¿Seguro que quieres eliminar {OrderDgv.SelectedRows.Count} orden(es)?",
+                    "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (confirm != DialogResult.Yes) return;
+
+                foreach (DataGridViewRow row in OrderDgv.SelectedRows)
+                {
+                    var orderId = (int)row.Cells["OrderId"].Value;
+                    await _orderService.DeleteAsync(orderId);
+
+                    var ordenSesion = _ordenesEnSesion.FirstOrDefault(o => o.OrderId == orderId);
+                    if (ordenSesion != null)
+                    {
+                        _ordenesEnSesion.Remove(ordenSesion);
+                    }
+                }
+
+                await CargarOrdenesEnSesionAsync();
+                LimpiarFormulario();
+
+                MessageBox.Show("Orden(es) eliminada(s) correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-            await CargarOrdenesEnSesionAsync();
-            LimpiarFormulario();
-
-            MessageBox.Show("Orden(es) eliminada(s) correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al eliminar orden(es): {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private async void BtEditOrderDetail_Click(object sender, EventArgs e)
         {
-            if (_ordenesEnSesion == null || !_ordenesEnSesion.Any())
+            try
             {
-                MessageBox.Show("No hay ninguna orden para editar. Por favor, cree una orden primero.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            var ordenActual = _ordenesEnSesion[0]; // Assuming only one order in session
-
-            // Populate form fields with the current order's data
-            ClienteCbx.SelectedValue = ordenActual.CustomerId;
-            EmpleadoCbx.SelectedValue = ordenActual.EmployeeId;
-            DtOrderDate.Value = ordenActual.OrderDate ?? DateTime.Now;
-            DtRequiredDate.Value = ordenActual.RequiredDate ?? DateTime.Now;
-            DtShippedDate.Value = ordenActual.ShippedDate ?? DateTime.Now;
-            ShipViaCbx.SelectedValue = ordenActual.ShipVia;
-            ShipNameCbx.Text = ordenActual.ShipName;
-            TxtDirecOrder.Text = ordenActual.ShipAddress;
-            TxtCityOrder.Text = ordenActual.ShipCity;
-            TxtRegionOrder.Text = ordenActual.ShipRegion;
-            TxtCodePostalOrder.Text = ordenActual.ShipPostalCode;
-            TxtShipCountry.Text = ordenActual.ShipCountry;
-
-            // Allow editing of OrderDetails via OrderCrearFrm
-            if (OrderDgv.SelectedRows.Count > 0)
-            {
-                var selectedRow = OrderDgv.SelectedRows[0];
-                var productName = (string)selectedRow.Cells["Producto"].Value;
-                var orderDetail = ordenActual.OrderDetails.FirstOrDefault(od => od.Product.ProductName == productName);
-
-                if (orderDetail != null)
+                if (_ordenesEnSesion == null || !_ordenesEnSesion.Any())
                 {
-                    using (var crearOrderFrm = _serviceProvider.GetService<OrderCrearFrm>())
+                    MessageBox.Show("No hay ninguna orden para editar. Por favor, cree una orden primero.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var ordenActual = _ordenesEnSesion[0]; // Assuming only one order in session
+
+                // Populate form fields with the current order's data
+                ClienteCbx.SelectedValue = ordenActual.CustomerId;
+                EmpleadoCbx.SelectedValue = ordenActual.EmployeeId;
+                DtOrderDate.Value = ordenActual.OrderDate ?? DateTime.Now;
+                DtRequiredDate.Value = ordenActual.RequiredDate ?? DateTime.Now;
+                DtShippedDate.Value = ordenActual.ShippedDate ?? DateTime.Now;
+                ShipViaCbx.SelectedValue = ordenActual.ShipVia;
+                ShipNameCbx.Text = ordenActual.ShipName;
+                TxtDirecOrder.Text = ordenActual.ShipAddress;
+                TxtCityOrder.Text = ordenActual.ShipCity;
+                TxtRegionOrder.Text = ordenActual.ShipRegion;
+                TxtCodePostalOrder.Text = ordenActual.ShipPostalCode;
+                TxtShipCountry.Text = ordenActual.ShipCountry;
+
+                // Allow editing of OrderDetails via OrderCrearFrm
+                if (OrderDgv.SelectedRows.Count > 0)
+                {
+                    var selectedRow = OrderDgv.SelectedRows[0];
+                    var productName = (string)selectedRow.Cells["Producto"].Value;
+                    var orderDetail = ordenActual.OrderDetails.FirstOrDefault(od => od.Product.ProductName == productName);
+
+                    if (orderDetail != null)
                     {
-                        if (crearOrderFrm != null)
+                        using (var crearOrderFrm = _serviceProvider.GetService<OrderCrearFrm>())
                         {
-                            crearOrderFrm.SetOrderId(ordenActual.OrderId);
-                            crearOrderFrm.SetOrderDetail(orderDetail);
-                            if (crearOrderFrm.ShowDialog() == DialogResult.OK)
+                            if (crearOrderFrm != null)
                             {
-                                var ordenRecargada = await _orderService.GetByIdAsync(ordenActual.OrderId);
-                                if (ordenRecargada != null)
+                                crearOrderFrm.SetOrderId(ordenActual.OrderId); // Método añadido
+                                crearOrderFrm.SetOrderDetail(orderDetail); // Método añadido
+                                if (crearOrderFrm.ShowDialog() == DialogResult.OK)
                                 {
-                                    int index = _ordenesEnSesion.FindIndex(o => o.OrderId == ordenRecargada.OrderId);
-                                    if (index >= 0)
+                                    var ordenRecargada = await _orderService.GetByIdAsync(ordenActual.OrderId);
+                                    if (ordenRecargada != null)
                                     {
-                                        _ordenesEnSesion[index] = ordenRecargada;
+                                        int index = _ordenesEnSesion.FindIndex(o => o.OrderId == ordenRecargada.OrderId);
+                                        if (index >= 0)
+                                        {
+                                            _ordenesEnSesion[index] = ordenRecargada;
+                                        }
+                                        else
+                                        {
+                                            _ordenesEnSesion.Add(ordenRecargada);
+                                        }
                                     }
-                                    else
-                                    {
-                                        _ordenesEnSesion.Add(ordenRecargada);
-                                    }
+                                    await CargarOrdenesEnSesionAsync();
+                                    await CalcularTotalesAsync();
                                 }
-                                await CargarOrdenesEnSesionAsync();
-                                await CalcularTotalesAsync();
                             }
                         }
                     }
                 }
+
+                // Update order metadata in session
+                ordenActual.CustomerId = ClienteCbx.SelectedValue?.ToString();
+                ordenActual.EmployeeId = EmpleadoCbx.SelectedValue != null ? (int?)EmpleadoCbx.SelectedValue : null;
+                ordenActual.OrderDate = DtOrderDate.Value;
+                ordenActual.RequiredDate = DtRequiredDate.Value;
+                ordenActual.ShippedDate = DtShippedDate.Value;
+                ordenActual.ShipVia = ShipViaCbx.SelectedValue != null ? (int?)ShipViaCbx.SelectedValue : null;
+                ordenActual.Freight = decimal.TryParse(TxtFreight.Text, out var freight) ? freight : ordenActual.Freight ?? 0m;
+                ordenActual.ShipName = ShipNameCbx.Text;
+                ordenActual.ShipAddress = TxtDirecOrder.Text;
+                ordenActual.ShipCity = TxtCityOrder.Text;
+                ordenActual.ShipRegion = TxtRegionOrder.Text;
+                ordenActual.ShipPostalCode = TxtCodePostalOrder.Text;
+                ordenActual.ShipCountry = TxtShipCountry.Text;
+
+                await CargarOrdenesEnSesionAsync();
+                await CalcularTotalesAsync();
             }
-
-            // Update order metadata in session
-            ordenActual.CustomerId = ClienteCbx.SelectedValue?.ToString();
-            ordenActual.EmployeeId = EmpleadoCbx.SelectedValue != null ? (int?)EmpleadoCbx.SelectedValue : null;
-            ordenActual.OrderDate = DtOrderDate.Value;
-            ordenActual.RequiredDate = DtRequiredDate.Value;
-            ordenActual.ShippedDate = DtShippedDate.Value;
-            ordenActual.ShipVia = ShipViaCbx.SelectedValue != null ? (int?)ShipViaCbx.SelectedValue : null;
-            ordenActual.Freight = decimal.TryParse(TxtFreight.Text, out var freight) ? freight : ordenActual.Freight ?? 0m;
-            ordenActual.ShipName = ShipNameCbx.Text;
-            ordenActual.ShipAddress = TxtDirecOrder.Text;
-            ordenActual.ShipCity = TxtCityOrder.Text;
-            ordenActual.ShipRegion = TxtRegionOrder.Text;
-            ordenActual.ShipPostalCode = TxtCodePostalOrder.Text;
-            ordenActual.ShipCountry = TxtShipCountry.Text;
-
-            await CargarOrdenesEnSesionAsync();
-            await CalcularTotalesAsync();
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al editar detalle de orden: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void LimpiarFormulario()

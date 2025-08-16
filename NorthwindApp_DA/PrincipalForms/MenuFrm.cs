@@ -1,6 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using NorthwindApp_DA.PrincipalForms;
 using NorthwindApp_Final.PrincipalForms;
+using System;
+using System.Windows.Forms;
 
 namespace NorthwindApp_DA
 {
@@ -8,30 +10,37 @@ namespace NorthwindApp_DA
     {
         private readonly IServiceProvider _services;
 
-
         public MenuFrm(IServiceProvider services)
         {
             InitializeComponent();
             _services = services ?? throw new ArgumentNullException(nameof(services));
-
         }
 
+        private void NavigateToForm<TForm>() where TForm : Form
+        {
+            var form = _services.GetService<TForm>();
+            if (form != null)
+            {
+                this.Hide();
+                form.Show();
+            }
+            else
+            {
+                MessageBox.Show($"No se pudo cargar el formulario de tipo {typeof(TForm).Name}.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void BtCategory_Click(object sender, EventArgs e)
         {
-            var categoryForm = Program.ServiceProvider.GetService<CategoryFrm>();
-            if (categoryForm != null)
-            {
-                this.Hide();
-                categoryForm.Show();
-            }
+            NavigateToForm<CategoryFrm>();
         }
 
         private void BtExit_Click(object sender, EventArgs e)
         {
-            DialogResult Opcionsalir = MessageBox.Show("¿Desea salir del Sistema de Inventario?", "SALIR", MessageBoxButtons.YesNo,
-          MessageBoxIcon.Question);
-            if (Opcionsalir == DialogResult.Yes)
+            DialogResult optionToExit = MessageBox.Show("¿Desea salir del Sistema de Inventario?", "SALIR",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (optionToExit == DialogResult.Yes)
             {
                 Application.Exit();
             }
@@ -39,72 +48,37 @@ namespace NorthwindApp_DA
 
         private void BtProducts_Click(object sender, EventArgs e)
         {
-            var productFrm = Program.ServiceProvider.GetService<ProductsFrm>();
-            if (productFrm != null)
-            {
-                this.Hide();
-                productFrm.Show();
-            }
+            NavigateToForm<ProductsFrm>();
         }
 
         private void BtSupplier_Click(object sender, EventArgs e)
         {
-            var supplierFrm = Program.ServiceProvider.GetService<SupplierFrm>();
-            if (supplierFrm != null)
-            {
-                this.Hide();
-                supplierFrm.Show();
-            }
+            NavigateToForm<SupplierFrm>();
         }
 
         private void BtCrearOrder_Click(object sender, EventArgs e)
         {
-            var orderFrm = Program.ServiceProvider.GetService<OrderFrm>();
-            if (orderFrm != null)
-            {
-                this.Hide();
-                orderFrm.Show();
-            }
+            NavigateToForm<OrderFrm>();
         }
 
         private void BtViewOrder_Click(object sender, EventArgs e)
         {
-            var orderdetailFrm = Program.ServiceProvider.GetService<OrderDetailsFrm>();
-            if (orderdetailFrm != null)
-            {
-                this.Hide();
-                orderdetailFrm.Show();
-            }
+            NavigateToForm<OrderDetailsFrm>();
         }
 
         private void BtEmployee_Click(object sender, EventArgs e)
         {
-            var employeeForm = Program.ServiceProvider.GetService<EmployeeFrm>();
-            if (employeeForm != null)
-            {
-                this.Hide();
-                employeeForm.Show();
-            }
+            NavigateToForm<EmployeeFrm>();
         }
 
         private void BtCustomer_Click(object sender, EventArgs e)
         {
-            var customerForm = Program.ServiceProvider.GetService<CustomerFrm>();
-            if (customerForm != null)
-            {
-                this.Hide();
-                customerForm.Show();
-            }
+            NavigateToForm<CustomerFrm>();
         }
 
         private void BtShipper_Click(object sender, EventArgs e)
         {
-            var shipperForm = Program.ServiceProvider.GetService<ShipperFrm>();
-            if (shipperForm != null)
-            {
-                this.Hide();
-                shipperForm.Show();
-            }
+            NavigateToForm<ShipperFrm>();
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using Northwind.Core.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Northwind.Application.Interfaces
@@ -18,5 +15,9 @@ namespace Northwind.Application.Interfaces
         Task<IEnumerable<Customer>> GetCustomersAsync();
         Task<IEnumerable<Employee>> GetEmployeesAsync();
         Task<IEnumerable<Shipper>> GetShippersAsync();
+        Task<IEnumerable<Product>> GetProductsAsync();
+        Task DeleteOrderDetail(int orderId, int productId);
+        Task AddOrderDetailAsync(OrderDetail orderDetail); 
+        Task UpdateOrderDetailAsync(OrderDetail orderDetail);
     }
 }

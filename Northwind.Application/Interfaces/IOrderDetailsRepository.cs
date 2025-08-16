@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Northwind.Core.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Northwind.Application.Interfaces
 {
     public interface IOrderDetailsRepository
     {
-
+        Task<List<OrderWithDetailsViewModel>> GetOrderWithDetailsAsync();
+        Task<List<OrderWithDetailsViewModel>> GetOrderWithDetailsByOrderIdAsync(int orderId);
     }
 }

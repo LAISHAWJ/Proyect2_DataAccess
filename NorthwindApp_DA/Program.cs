@@ -10,6 +10,7 @@ using Northwind.Infrastructure.Repositories;
 using NorthwindApp.Infrastructure.Data;
 using NorthwindApp_DA;
 using NorthwindApp_DA.CrearEditRegisFrm;
+using NorthwindApp_DA.PrincipalForms;
 using NorthwindApp_Final.CrearEditRegisFrm;
 using NorthwindApp_Final.PrincipalForms;
 
@@ -26,7 +27,7 @@ namespace NorthwindApp_Final
 
             using (var serviceProvider = services.BuildServiceProvider())
             {
-                var menuform = serviceProvider.GetRequiredService<MenuFrm>(); // O tu form principal
+                var menuform = serviceProvider.GetRequiredService<MenuFrm>();
                 Application.Run(menuform);
             }
 
@@ -49,6 +50,8 @@ namespace NorthwindApp_Final
             services.AddTransient<ISupplierRepository, SupplierRepos>();
             services.AddTransient<IShipperRepository, ShipperRepos>();
             services.AddTransient<IProductRepository, ProductRepos>();
+            services.AddTransient<IOrderRepository, OrderRepos>();
+            services.AddTransient<IOrderDetailsRepository, OrderDetailsRepos>();
 
             // Services
             services.AddTransient<CategoryService>();
@@ -57,6 +60,8 @@ namespace NorthwindApp_Final
             services.AddTransient<SupplierService>();
             services.AddTransient<ShipperService>();
             services.AddTransient<ProductService>();
+            services.AddTransient<OrderService>();
+            services.AddTransient<OrderDetailsService>();
 
             // Validators
             services.AddValidatorsFromAssemblyContaining<CategoryValid>();
@@ -65,6 +70,7 @@ namespace NorthwindApp_Final
             services.AddValidatorsFromAssemblyContaining<SupplierValid>();
             services.AddValidatorsFromAssemblyContaining<ShipperValid>();
             services.AddValidatorsFromAssemblyContaining<ProductValid>();
+            services.AddValidatorsFromAssemblyContaining<OrderValid>();
 
             // Forms
             services.AddTransient<CategoryFrm>();
@@ -79,5 +85,8 @@ namespace NorthwindApp_Final
             services.AddTransient<ShipperCrearFrm>();
             services.AddTransient<ProductsFrm>();
             services.AddTransient<ProductcrearFrm>();
+            services.AddTransient<OrderFrm>();
+            services.AddTransient<OrderCrearFrm>();
+            services.AddTransient<OrderDetailsFrm>();
         }
 }   }

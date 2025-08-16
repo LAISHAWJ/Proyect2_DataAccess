@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-using Northwind.Application.Interfaces;
-using Northwind.Application.Validators;
+﻿using Northwind.Application.Interfaces;
 using Northwind.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -30,16 +28,12 @@ namespace Northwind.Application.Services
         public async Task AddAsync(Order order)
         {
             if (order == null) throw new ArgumentNullException(nameof(order));
-            var validator = new OrderValid(); 
-            validator.ValidateAndThrow(order);
             await _repository.AddAsync(order);
         }
 
         public async Task UpdateAsync(Order order)
         {
             if (order == null) throw new ArgumentNullException(nameof(order));
-            var validator = new OrderValid();
-            validator.ValidateAndThrow(order);
             await _repository.UpdateAsync(order);
         }
 
@@ -48,6 +42,19 @@ namespace Northwind.Application.Services
             var order = await _repository.GetByIdAsync(id);
             if (order == null) throw new Exception("Orden no encontrada.");
             await _repository.DeleteAsync(id);
+        }
+
+        public async Task DeleteOrderDetailAsync(int orderId, int productId)
+        {
+            var order = await _repository.GetByIdAsync(orderId);
+            if (order != null)
+            {
+                var detailToDelete = order.OrderDetails.FirstOrDefault(od => od.ProductId == productId);
+                if (detailToDelete != null)
+                {
+                    await _repository.DeleteOrderDetail(orderId, productId);
+                }
+            }
         }
 
         public async Task<IEnumerable<OrderDetail>> GetOrderDetailsForSelectionAsync()
@@ -68,6 +75,23 @@ namespace Northwind.Application.Services
         public async Task<IEnumerable<Shipper>> GetShippersAsync()
         {
             return await _repository.GetShippersAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsAsync()
+        {
+            return await _repository.GetProductsAsync();
+        }
+
+        public async Task AddOrderDetailAsync(OrderDetail orderDetail)
+        {
+            if (orderDetail == null) throw new ArgumentNullException(nameof(orderDetail));
+            await _repository.AddOrderDetailAsync(orderDetail);
+        }
+
+        public async Task UpdateOrderDetailAsync(OrderDetail orderDetail)
+        {
+            if (orderDetail == null) throw new ArgumentNullException(nameof(orderDetail));
+            await _repository.UpdateOrderDetailAsync(orderDetail);
         }
     }
 }

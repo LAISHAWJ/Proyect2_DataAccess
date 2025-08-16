@@ -14,7 +14,7 @@ namespace Northwind.Infrastructure.Repositories
 
         public OrderRepos(NorthwindContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<IEnumerable<Order>> GetAllAsync()
@@ -95,6 +95,64 @@ namespace Northwind.Infrastructure.Repositories
         public async Task<IEnumerable<Shipper>> GetShippersAsync()
         {
             return await _context.Shippers.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsAsync()
+        {
+            return await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Supplier)
+                .ToListAsync();
+        }
+
+        public async Task DeleteOrderDetail(int orderId, int productId)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderDetails)
+                .FirstOrDefaultAsync(o => o.OrderId == orderId);
+
+            if (order != null)
+            {
+                var detailToDelete = order.OrderDetails.FirstOrDefault(od => od.ProductId == productId);
+                if (detailToDelete != null)
+                {
+                    _context.OrderDetails.Remove(detailToDelete);
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+
+        public async Task AddOrderDetailAsync(OrderDetail orderDetail)
+        {
+            if (orderDetail == null) throw new ArgumentNullException(nameof(orderDetail));
+            var order = await _context.Orders
+                .Include(o => o.OrderDetails)
+                .FirstOrDefaultAsync(o => o.OrderId == orderDetail.OrderId);
+            if (order != null)
+            {
+                order.OrderDetails.Add(orderDetail);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Orden no encontrada para agregar el detalle.");
+            }
+        }
+
+        public async Task UpdateOrderDetailAsync(OrderDetail orderDetail)
+        {
+            if (orderDetail == null) throw new ArgumentNullException(nameof(orderDetail));
+            var existingDetail = await _context.OrderDetails
+                .FirstOrDefaultAsync(od => od.OrderId == orderDetail.OrderId && od.ProductId == orderDetail.ProductId);
+            if (existingDetail != null)
+            {
+                _context.Entry(existingDetail).CurrentValues.SetValues(orderDetail);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new Exception("Detalle de orden no encontrado para actualizar.");
+            }
         }
     }
 }
