@@ -13,7 +13,7 @@ namespace Northwind.Application.Validators
 
             RuleFor(c => c.Description)
                 .NotEmpty().WithMessage("La descripción de la categoría es obligatoria.")
-                .Length(1, 50).WithMessage("La descripción de la categoría debe tener entre 1 y 50 caracteres.");
+                .Length(1, 100).WithMessage("La descripción de la categoría debe tener entre 1 y 100 caracteres.");
         }
 
     }

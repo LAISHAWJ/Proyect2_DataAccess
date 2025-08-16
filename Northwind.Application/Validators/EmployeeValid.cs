@@ -28,13 +28,15 @@ namespace Northwind.Application.Validators
                 .WithMessage("El teléfono debe contener solo números, espacios, guiones o paréntesis y tener entre 7 y 20 caracteres.");
 
 
+            RuleFor(e => e.Extension)
+                .MaximumLength(4).WithMessage("Debe ser máximo 4 digitos");
+
+
             RuleFor(e => e.Address)
                 .NotEmpty().WithMessage("La dirección es obligatoria.")
                 .MaximumLength(100).WithMessage("La dirección no debe exceder los 100 caracteres.");
 
-            RuleFor(e => e.Extension)
-                .MaximumLength(4).WithMessage("Debe ser máximo 4 digitos");
-
+            
             RuleFor(e => e.City)
                .NotEmpty().WithMessage("La ciudad es obligatoria.")
                .MaximumLength(50).WithMessage("La ciudad no debe exceder los 50 caracteres.");
