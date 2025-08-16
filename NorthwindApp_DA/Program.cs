@@ -11,10 +11,8 @@ using NorthwindApp.Infrastructure.Data;
 using NorthwindApp_DA;
 using NorthwindApp_DA.CrearEditRegisFrm;
 using NorthwindApp_DA.PrincipalForms;
-using NorthwindApp_Final.CrearEditRegisFrm;
-using NorthwindApp_Final.PrincipalForms;
 
-namespace NorthwindApp_Final
+namespace NorthwindApp_DA
 {
     static class Program
     {

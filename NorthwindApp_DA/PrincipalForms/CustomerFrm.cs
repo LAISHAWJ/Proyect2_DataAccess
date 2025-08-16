@@ -8,7 +8,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NorthwindApp_Final.PrincipalForms
+namespace NorthwindApp_DA.PrincipalForms
 {
     public partial class CustomerFrm : Form
     {

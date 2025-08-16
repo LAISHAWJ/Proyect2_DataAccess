@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Northwind.Infrastructure.Repositories
 {
-    internal class OrderRepos : IOrderRepository
+    public class OrderRepos : IOrderRepository
     {
         private readonly NorthwindContext _context;
 

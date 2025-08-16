@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NorthwindApp_Final.CrearEditRegisFrm
+namespace NorthwindApp_DA.CrearEditRegisFrm
 {
     public partial class ShipperCrearFrm : Form
     {

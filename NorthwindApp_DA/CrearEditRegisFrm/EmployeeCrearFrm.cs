@@ -1,6 +1,8 @@
 ﻿using FluentValidation.Results;
 using Northwind.Application.Servicios;
 using Northwind.Application.Validators;
+using NorthwindApp_DA;
+using NorthwindApp_DA.CrearEditRegisFrm;
 using Northwind.Core.Models;
 using System;
 using System.Drawing;
@@ -8,7 +10,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NorthwindApp_Final.CrearEditRegisFrm
+namespace NorthwindApp_DA.CrearEditRegisFrm
 {
     public partial class EmployeeCrearFrm : Form
     {

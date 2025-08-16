@@ -2,11 +2,12 @@
 using Northwind.Application.Servicios;
 using Northwind.Application.Validators;
 using Northwind.Core.Models;
+using NorthwindApp_DA.CrearEditRegisFrm;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NorthwindApp_Final.CrearEditRegisFrm
+namespace NorthwindApp_DA.CrearEditRegisFrm
 {
     public partial class CustomerCrearFrm : Form
     {

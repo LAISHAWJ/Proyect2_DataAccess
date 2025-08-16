@@ -2,12 +2,12 @@
 using Northwind.Application.Servicios;
 using Northwind.Core.Models;
 using NorthwindApp_DA;
-using NorthwindApp_Final.CrearEditRegisFrm;
+using NorthwindApp_DA.CrearEditRegisFrm;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace NorthwindApp_Final.PrincipalForms
+namespace NorthwindApp_DA.PrincipalForms
 {
     public partial class ShipperFrm : Form
     {
