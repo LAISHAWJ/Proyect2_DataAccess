@@ -1,90 +1,105 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NorthwindApp_DA.CrearEditRegisFrm;
-using NorthwindApp_DA.Data;
-using NorthwindApp_DA.PrincipalForms;
-using NorthwindApp_DA.Repository;
-using NorthwindApp_DA.Validators;
+using Northwind.Application.Interfaces;
+using Northwind.Application.Services;
+using Northwind.Application.Servicios;
+using Northwind.Application.Validators;
+using Northwind.Infrastructure.Repositories;
+using NorthwindApp.Infrastructure.Data;
 using NorthwindApp_Final.CrearEditRegisFrm;
 using NorthwindApp_Final.PrincipalForms;
-using NorthwindApp_Final.Repository;
-using NorthwindApp_Final.Validators;
 
-namespace NorthwindApp_DA
+namespace NorthwindApp_Final
 {
-    internal static class Program
+    static class Program
     {
-        public static IServiceProvider ServiceProvider { get; private set; }
         [STAThread]
         static void Main()
         {
-            var configuration = new ConfigurationBuilder()
-           .AddJsonFile("appsettings.json")
-           .Build();
-
             var services = new ServiceCollection();
-            services.AddSingleton<IConfiguration>(configuration);
-            services.AddDbContext<NorthwindContext>(options =>
+            ConfigureServices(services);
+
+            using (var serviceProvider = services.BuildServiceProvider())
             {
-                options.UseSqlServer(configuration.GetConnectionString("NorthwindDb"));
-            });
+                try
+                {
+                    var menuFrm = serviceProvider.GetRequiredService<MenuFrm>();
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    Application.Run(menuFrm);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    MessageBox.Show($"Error al resolver el formulario principal: {ex.Message}", "Error Fatal",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error inesperado al iniciar la aplicación: {ex.Message}", "Error Fatal",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
 
+        private static void ConfigureServices(IServiceCollection services)
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .Build();
+
+            services.AddDbContext<NorthwindContext>(options =>
+                options.UseSqlServer(configuration.GetConnectionString("NorthwindDb") ?? throw new InvalidOperationException("La cadena de conexión 'NorthwindDb' no está configurada en appsettings.json")),
+                ServiceLifetime.Scoped);
+
+            // Repositories
+            services.AddTransient<ICategoryRepository, CategoryRepos>();
+            services.AddTransient<ICustomerRepository, CustomerRepos>();
+            services.AddTransient<IEmployeeRepository, EmployeeRepos>();
+            services.AddTransient<ISupplierRepository, SupplierRepos>();
+            services.AddTransient<IShipperRepository, ShipperRepos>();
+            services.AddTransient<IProductRepository, ProductRepos>();
+            services.AddTransient<IOrderRepository, OrderRepos>();
+            services.AddTransient<IOrderDetailsRepository, OrderDetailsRepos>();
+
+            // Services
+            services.AddTransient<CategoryService>();
+            services.AddTransient<CustomerService>();
+            services.AddTransient<EmployeeService>();
+            services.AddTransient<SupplierService>();
+            services.AddTransient<ShipperService>();
+            services.AddTransient<ProductService>();
+            services.AddTransient<OrderService>();
+            services.AddTransient<OrderDetailsService>();
+
+            // Validators
+            services.AddValidatorsFromAssemblyContaining<CategoryValid>();
+            services.AddValidatorsFromAssemblyContaining<CustomerValid>();
+            services.AddValidatorsFromAssemblyContaining<EmployeeValid>();
+            services.AddValidatorsFromAssemblyContaining<SupplierValid>();
+            services.AddValidatorsFromAssemblyContaining<ShipperValid>();
+            services.AddValidatorsFromAssemblyContaining<ProductValid>();
+            services.AddValidatorsFromAssemblyContaining<OrderValid>();
+
+            // Forms
             services.AddTransient<MenuFrm>();
-
-            //ENTIDAD CATEGORIA.
             services.AddTransient<CategoryFrm>();
             services.AddTransient<CategoryCrearFrm>();
-            services.AddTransient<CategoryValid>();
-            services.AddTransient<CategoryRepos>();
-
-            //ENTIDAD SUPLIDOR.
+            services.AddTransient<CustomerFrm>();
+            services.AddTransient<CustomerCrearFrm>();
+            services.AddTransient<EmployeeFrm>();
+            services.AddTransient<EmployeeCrearFrm>();
             services.AddTransient<SupplierFrm>();
             services.AddTransient<SuppliercrearFrm>();
-            services.AddTransient<SupplierValid>();
-            services.AddTransient<SupplierRepos>();
-
-            //ENTIDAD PRODUCTO.
+            services.AddTransient<ShipperFrm>();
+            services.AddTransient<ShipperCrearFrm>();
             services.AddTransient<ProductsFrm>();
             services.AddTransient<ProductcrearFrm>();
-            services.AddTransient<ProductValid>();
-            services.AddTransient<ProductRepos>();
-
-
-            //ENTIDAD ORDER & ORDERDETAIL.
             services.AddTransient<OrderFrm>();
-            services.AddTransient<OrderDetailsFrm>();
-            services.AddTransient<OrderValid>();
-            services.AddTransient<OrderRepos>();
             services.AddTransient<OrderCrearFrm>();
-            services.AddTransient<OrderDetailsRepos>();
-
-            //ENTIDAD EMPLEADO.
-            services.AddTransient<EmployeeFrm>();
-            services.AddTransient<EmployeeRepos>();
-            services.AddTransient<EmployeeCrearFrm>();
-            services.AddTransient<EmployeeValid>();
-
-            //ENTIDAD CLIENTES.
-            services.AddTransient<CustomerFrm>();
-            services.AddTransient<CustomerRepos>();
-            services.AddTransient<CustomerCrearFrm>();
-            services.AddTransient<CustomerValid>();
-
-            //ENTIDAD TRANSPORTISTAS.
-            services.AddTransient<ShipperFrm>();
-            services.AddTransient<ShipperRepos>();
-            services.AddTransient<ShipperCrearFrm>();
-            services.AddTransient<ShipperValid>();
-
-            ServiceProvider = services.BuildServiceProvider();
-            var context = ServiceProvider.GetService<NorthwindContext>();
-
-            ApplicationConfiguration.Initialize();
-
-            var menufrm = ServiceProvider.GetService<MenuFrm>();
-            Application.Run(menufrm);
-
+            services.AddTransient<OrderDetailsFrm>();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace NorthwindApp_DA.CrearEditRegisFrm
+﻿namespace NorthwindApp_Final.CrearEditRegisFrm
 {
     partial class SuppliercrearFrm
     {
@@ -55,7 +55,6 @@
             BtCancel = new Button();
             BtSave = new Button();
             panel1.SuspendLayout();
-            SuspendLayout();
             // 
             // panel1
             // 

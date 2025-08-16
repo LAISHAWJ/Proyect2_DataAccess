@@ -1,15 +1,10 @@
-﻿using NorthwindApp_DA.Models;
-using NorthwindApp_DA.Repository;
-using NorthwindApp_DA.Validators;
-using NorthwindApp_Final.Repository;
-using NorthwindApp_Final.Validators;
+﻿using FluentValidation.Results;
+using Northwind.Application.Servicios;
+using Northwind.Application.Validators;
+using Northwind.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,15 +12,15 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
 {
     public partial class EmployeeCrearFrm : Form
     {
-        private readonly EmployeeRepos _employeeRepos;
+        private readonly EmployeeService _employeeService;
         private readonly EmployeeValid _validator;
         private Employee _employeeEdit;
         private bool _isEditMode = false; // Indica el modo edición
 
-        public EmployeeCrearFrm(EmployeeRepos employeeRepos, EmployeeValid validator)
+        public EmployeeCrearFrm(EmployeeService employeeService, EmployeeValid validator)
         {
             InitializeComponent();
-            _employeeRepos = employeeRepos;
+            _employeeService = employeeService;
             _validator = validator;
             _employeeEdit = new Employee();
         }
@@ -33,25 +28,25 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
         public void SetEditMode(Employee employee)
         {
             _isEditMode = true;
-            _employeeEdit = employee;
-            TxtLastNames.Text = employee.LastName;
-            TxtNames.Text = employee.FirstName;
-            TxtTitleCortes.Text = employee.TitleOfCourtesy;
-            TxtDateTimBirth.Value = employee.BirthDate ?? DateTime.Today;
-            TxtPhone.Text = employee.HomePhone;
-            TxtExt.Text = employee.Extension;
-            TxtDirec.Text = employee.Address;
-            TxtCity.Text = employee.City;
-            TxtRegion.Text = employee.Region;
-            TxtCodePostal.Text = employee.PostalCode;
-            TxtCountry.Text = employee.Country;
-            TxtDateTimHire.Value = employee.HireDate ?? DateTime.Today;
-            TxtTitle.Text = employee.Title;
-            TxtNotes.Text = employee.Notes;
+            _employeeEdit = employee ?? new Employee();
+            TxtLastNames.Text = _employeeEdit.LastName ?? string.Empty;
+            TxtNames.Text = _employeeEdit.FirstName ?? string.Empty;
+            TxtTitleCortes.Text = _employeeEdit.TitleOfCourtesy ?? string.Empty;
+            TxtDateTimBirth.Value = _employeeEdit.BirthDate ?? DateTime.Today;
+            TxtPhone.Text = _employeeEdit.HomePhone ?? string.Empty;
+            TxtExt.Text = _employeeEdit.Extension ?? string.Empty;
+            TxtDirec.Text = _employeeEdit.Address ?? string.Empty;
+            TxtCity.Text = _employeeEdit.City ?? string.Empty;
+            TxtRegion.Text = _employeeEdit.Region ?? string.Empty;
+            TxtCodePostal.Text = _employeeEdit.PostalCode ?? string.Empty;
+            TxtCountry.Text = _employeeEdit.Country ?? string.Empty;
+            TxtDateTimHire.Value = _employeeEdit.HireDate ?? DateTime.Today;
+            TxtTitle.Text = _employeeEdit.Title ?? string.Empty;
+            TxtNotes.Text = _employeeEdit.Notes ?? string.Empty;
 
-            if (employee.Photo != null)
+            if (_employeeEdit.Photo != null)
             {
-                var imagen = ConvertirBytesAImagen(employee.Photo);
+                var imagen = ConvertirBytesAImagen(_employeeEdit.Photo);
                 if (imagen != null)
                 {
                     PbxEmployee.Image = imagen;
@@ -108,7 +103,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             }
         }
 
-        private void MostrarErroresPorCampo(IEnumerable<FluentValidation.Results.ValidationFailure> errores)
+        private void MostrarErroresPorCampo(IEnumerable<ValidationFailure> errores)
         {
             foreach (var error in errores)
             {
@@ -158,13 +153,11 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
                         MessageBox.Show(error.ErrorMessage, "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         TxtDateTimHire.Focus();
                         return;
-
                 }
             }
         }
 
-
-        private void BtSave_Click(object sender, EventArgs e)
+        private async void BtSave_Click(object sender, EventArgs e)
         {
             _employeeEdit.LastName = TxtLastNames.Text;
             _employeeEdit.FirstName = TxtNames.Text;
@@ -177,10 +170,9 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             _employeeEdit.Region = TxtRegion.Text;
             _employeeEdit.PostalCode = TxtCodePostal.Text;
             _employeeEdit.Country = TxtCountry.Text;
-            _employeeEdit.HireDate = DateTime.TryParse(TxtDateTimHire.Text, out var hireDate) ? hireDate : null;
+            _employeeEdit.HireDate = TxtDateTimHire.Value;
             _employeeEdit.Title = TxtTitle.Text;
             _employeeEdit.Notes = TxtNotes.Text;
-
 
             if (PbxEmployee.Image != null)
             {
@@ -196,18 +188,20 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
                 return;
             }
 
-            if (_isEditMode)
+            try
             {
-                _employeeRepos.UpdateEmployee(_employeeEdit);
-                MessageBox.Show("Empleado actualizado.");
-            }
-            else
-            {
-                _employeeRepos.AddEmployee(_employeeEdit);
-                MessageBox.Show("Empleado agregado.");
-            }
+                if (_isEditMode)
+                    await _employeeService.UpdateAsync(_employeeEdit);
+                else
+                    await _employeeService.AddAsync(_employeeEdit);
 
-            this.Close();
+                MessageBox.Show(_isEditMode ? "Empleado actualizado." : "Empleado agregado.");
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al guardar el empleado: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void BtCancel_Click(object sender, EventArgs e)

@@ -1,16 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using NorthwindApp_DA;
-using NorthwindApp_DA.Models;
-using NorthwindApp_DA.Repository;
+using Northwind.Application.Servicios;
+using Northwind.Core.Models;
 using NorthwindApp_Final.CrearEditRegisFrm;
-using NorthwindApp_Final.Repository;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,36 +10,44 @@ namespace NorthwindApp_Final.PrincipalForms
 {
     public partial class ShipperFrm : Form
     {
-        private readonly ShipperRepos _shipperRepos;
+        private readonly ShipperService _shipperService;
         private readonly IServiceProvider _serviceProvider;
-        private MenuFrm _menuFrm;
-        public ShipperFrm(ShipperRepos shipperRepos, IServiceProvider serviceProvider, MenuFrm menuFrm)
+        private readonly MenuFrm _menuFrm;
+
+        public ShipperFrm(ShipperService shipperService, IServiceProvider serviceProvider, MenuFrm menuFrm)
         {
             InitializeComponent();
-            _shipperRepos = shipperRepos;
+            _shipperService = shipperService;
             _serviceProvider = serviceProvider;
-            CargarShippers();
             _menuFrm = menuFrm;
+            this.Load += async (s, e) => await CargarShippersAsync(); // Carga asíncrona al iniciar
         }
 
-        private void CargarShippers()
+        private async Task CargarShippersAsync()
         {
-            var shippers = _shipperRepos.GetAllShipper();
-            if (shippers != null && shippers.Count > 0)
+            try
             {
-                DtGVwShipper.DataSource = shippers;
-                DtGVwShipper.Columns[nameof(Customer.Orders)].Visible = false;
+                var shippers = await _shipperService.GetAllAsync();
+                if (shippers != null && shippers.Any())
+                {
+                    DtGVwShipper.DataSource = shippers;
+                    DtGVwShipper.Columns[nameof(Shipper.Orders)].Visible = false; // Corregido a Shipper.Orders
+                }
+                else
+                {
+                    MessageBox.Show("No hay transportistas disponibles.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DtGVwShipper.DataSource = null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("No hay transportistas disponibles.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show($"Error al cargar transportistas: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
         }
 
         private void ShipperFrm_Load(object sender, EventArgs e)
         {
-            CargarShippers();
+            // La carga ya se hace en el constructor con async
         }
 
         private void BtClose_Click(object sender, EventArgs e)
@@ -58,15 +58,15 @@ namespace NorthwindApp_Final.PrincipalForms
 
         private void BtAdd_Click(object sender, EventArgs e)
         {
-            var form = Program.ServiceProvider.GetService<ShipperCrearFrm>();
+            var form = _serviceProvider.GetService<ShipperCrearFrm>();
             if (form != null)
             {
-                form.FormClosed += (s, args) => CargarShippers(); // recargar lista al cerrar
+                form.FormClosed += async (s, args) => await CargarShippersAsync(); // Recargar lista al cerrar
                 form.ShowDialog();
             }
         }
 
-        private void BtUpdate_Click(object sender, EventArgs e)
+        private async void BtUpdate_Click(object sender, EventArgs e)
         {
             if (DtGVwShipper.SelectedRows.Count == 0)
             {
@@ -75,16 +75,16 @@ namespace NorthwindApp_Final.PrincipalForms
             }
 
             var shipper = (Shipper)DtGVwShipper.SelectedRows[0].DataBoundItem;
-            var form = Program.ServiceProvider.GetService<ShipperCrearFrm>();
+            var form = _serviceProvider.GetService<ShipperCrearFrm>();
             if (form != null)
             {
                 form.SetEditMode(shipper);
-                form.FormClosed += (s, args) => CargarShippers();
+                form.FormClosed += async (s, args) => await CargarShippersAsync();
                 form.ShowDialog();
             }
         }
 
-        private void BtDelete_Click(object sender, EventArgs e)
+        private async void BtDelete_Click(object sender, EventArgs e)
         {
             if (DtGVwShipper.SelectedRows.Count == 0)
             {
@@ -97,8 +97,8 @@ namespace NorthwindApp_Final.PrincipalForms
             var confirmar = MessageBox.Show($"¿Deseas eliminar '{shipper.CompanyName}'?", "Confirmar", MessageBoxButtons.YesNo);
             if (confirmar == DialogResult.Yes)
             {
-                _shipperRepos.DeleteShipper(shipper.ShipperId);
-                CargarShippers();
+                await _shipperService.DeleteAsync(shipper.ShipperId);
+                await CargarShippersAsync();
             }
         }
     }

@@ -1,19 +1,27 @@
-﻿using NorthwindApp_DA.Models;
-using NorthwindApp_DA.Repository;
-using NorthwindApp_DA.Validators;
+﻿using FluentValidation.Results;
+using Northwind.Application.Servicios;
+using Northwind.Application.Validators;
+using Northwind.Core.Models;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace NorthwindApp_DA.CrearEditRegisFrm
+namespace NorthwindApp_Final.CrearEditRegisFrm
 {
     public partial class CategoryCrearFrm : Form
     {
-        private readonly CategoryRepos _categoryRepos;
+        private readonly CategoryService _categoryService;
         private readonly CategoryValid _validator;
         private Category _categoryEdit;
         private bool _isEditMode = false; // Indica el modo edición
-        public CategoryCrearFrm(CategoryRepos categoryRepos, CategoryValid validator)
+
+        public CategoryCrearFrm(CategoryService categoryService, CategoryValid validator)
         {
             InitializeComponent();
-            _categoryRepos = categoryRepos;
+            _categoryService = categoryService;
             _validator = validator;
             _categoryEdit = new Category();
         }
@@ -22,12 +30,12 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
         public void SetEditMode(Category category)
         {
             _isEditMode = true;
-            _categoryEdit = category;
-            TxtNameCat.Text = category.CategoryName;
-            TxtDescripCat.Text = category.Description;
-            if (category.Picture != null)
+            _categoryEdit = category ?? new Category();
+            TxtNameCat.Text = _categoryEdit.CategoryName ?? string.Empty;
+            TxtDescripCat.Text = _categoryEdit.Description ?? string.Empty;
+            if (_categoryEdit.Picture != null)
             {
-                var imagen = ConvertirBytesAImagen(category.Picture);
+                var imagen = ConvertirBytesAImagen(_categoryEdit.Picture);
                 if (imagen != null)
                 {
                     PbxCat.Image = imagen;
@@ -53,7 +61,6 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
                 PbxCat.Image = Image.FromFile(dialog.FileName);
             }
         }
-
 
         private Image ConvertirBytesAImagen(byte[] bytes)
         {
@@ -90,8 +97,7 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
             this.Close();
         }
 
-
-        private void MostrarErroresPorCampo(IEnumerable<FluentValidation.Results.ValidationFailure> errores)
+        private void MostrarErroresPorCampo(IEnumerable<ValidationFailure> errores)
         {
             foreach (var error in errores)
             {
@@ -106,12 +112,11 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
                         MessageBox.Show(error.ErrorMessage, "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         TxtDescripCat.Focus();
                         return;
-
                 }
             }
         }
 
-        private void BtSave_Click(object sender, EventArgs e)
+        private async void BtSave_Click(object sender, EventArgs e)
         {
             _categoryEdit.CategoryName = TxtNameCat.Text;
             _categoryEdit.Description = TxtDescripCat.Text;
@@ -130,18 +135,24 @@ namespace NorthwindApp_DA.CrearEditRegisFrm
                 return;
             }
 
-            if (_isEditMode)
+            try
             {
-                _categoryRepos.UpdateCategory(_categoryEdit);
-                MessageBox.Show("Categoría actualizada.");
+                if (_isEditMode)
+                {
+                    await _categoryService.UpdateAsync(_categoryEdit);
+                    MessageBox.Show("Categoría actualizada.");
+                }
+                else
+                {
+                    await _categoryService.AddAsync(_categoryEdit);
+                    MessageBox.Show("Categoría agregada.");
+                }
+                this.Close();
             }
-            else
+            catch (Exception ex)
             {
-                _categoryRepos.AddCategory(_categoryEdit);
-                MessageBox.Show("Categoría agregada.");
+                MessageBox.Show($"Error al guardar: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            this.Close();
         }
     }
 }

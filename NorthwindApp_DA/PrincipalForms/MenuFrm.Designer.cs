@@ -1,4 +1,4 @@
-﻿namespace NorthwindApp_DA
+﻿namespace NorthwindApp_Final.PrincipalForms
 {
     partial class MenuFrm
     {

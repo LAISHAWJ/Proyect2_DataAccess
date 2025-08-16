@@ -1,25 +1,21 @@
 using Microsoft.Extensions.DependencyInjection;
-using NorthwindApp_DA.PrincipalForms;
 using NorthwindApp_Final.PrincipalForms;
 
-namespace NorthwindApp_DA
+namespace NorthwindApp_Final.PrincipalForms
 {
     public partial class MenuFrm : Form
     {
         private readonly IServiceProvider _services;
 
-
         public MenuFrm(IServiceProvider services)
         {
             InitializeComponent();
             _services = services ?? throw new ArgumentNullException(nameof(services));
-
         }
-
 
         private void BtCategory_Click(object sender, EventArgs e)
         {
-            var categoryForm = Program.ServiceProvider.GetService<CategoryFrm>();
+            var categoryForm = _services.GetService<CategoryFrm>();
             if (categoryForm != null)
             {
                 this.Hide();
@@ -29,8 +25,12 @@ namespace NorthwindApp_DA
 
         private void BtExit_Click(object sender, EventArgs e)
         {
-            DialogResult Opcionsalir = MessageBox.Show("¿Desea salir del Sistema de Inventario?", "SALIR", MessageBoxButtons.YesNo,
-          MessageBoxIcon.Question);
+            DialogResult Opcionsalir = MessageBox.Show(
+                "¿Desea salir del Sistema de Inventario?",
+                "SALIR",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
             if (Opcionsalir == DialogResult.Yes)
             {
                 Application.Exit();
@@ -39,7 +39,7 @@ namespace NorthwindApp_DA
 
         private void BtProducts_Click(object sender, EventArgs e)
         {
-            var productFrm = Program.ServiceProvider.GetService<ProductsFrm>();
+            var productFrm = _services.GetService<ProductsFrm>();
             if (productFrm != null)
             {
                 this.Hide();
@@ -49,7 +49,7 @@ namespace NorthwindApp_DA
 
         private void BtSupplier_Click(object sender, EventArgs e)
         {
-            var supplierFrm = Program.ServiceProvider.GetService<SupplierFrm>();
+            var supplierFrm = _services.GetService<SupplierFrm>();
             if (supplierFrm != null)
             {
                 this.Hide();
@@ -59,7 +59,7 @@ namespace NorthwindApp_DA
 
         private void BtCrearOrder_Click(object sender, EventArgs e)
         {
-            var orderFrm = Program.ServiceProvider.GetService<OrderFrm>();
+            var orderFrm = _services.GetService<OrderFrm>();
             if (orderFrm != null)
             {
                 this.Hide();
@@ -69,7 +69,7 @@ namespace NorthwindApp_DA
 
         private void BtViewOrder_Click(object sender, EventArgs e)
         {
-            var orderdetailFrm = Program.ServiceProvider.GetService<OrderDetailsFrm>();
+            var orderdetailFrm = _services.GetService<OrderDetailsFrm>();
             if (orderdetailFrm != null)
             {
                 this.Hide();
@@ -79,7 +79,7 @@ namespace NorthwindApp_DA
 
         private void BtEmployee_Click(object sender, EventArgs e)
         {
-            var employeeForm = Program.ServiceProvider.GetService<EmployeeFrm>();
+            var employeeForm = _services.GetService<EmployeeFrm>();
             if (employeeForm != null)
             {
                 this.Hide();
@@ -89,7 +89,7 @@ namespace NorthwindApp_DA
 
         private void BtCustomer_Click(object sender, EventArgs e)
         {
-            var customerForm = Program.ServiceProvider.GetService<CustomerFrm>();
+            var customerForm = _services.GetService<CustomerFrm>();
             if (customerForm != null)
             {
                 this.Hide();
@@ -99,7 +99,7 @@ namespace NorthwindApp_DA
 
         private void BtShipper_Click(object sender, EventArgs e)
         {
-            var shipperForm = Program.ServiceProvider.GetService<ShipperFrm>();
+            var shipperForm = _services.GetService<ShipperFrm>();
             if (shipperForm != null)
             {
                 this.Hide();
