@@ -38,7 +38,7 @@ namespace NorthwindApp_DA
 
         private void BtExit_Click(object sender, EventArgs e)
         {
-            DialogResult optionToExit = MessageBox.Show("¿Desea salir del Sistema de Inventario?", "SALIR",
+            DialogResult optionToExit = MessageBox.Show("¿Desea salir de Northwind App?", "SALIR",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (optionToExit == DialogResult.Yes)
             {
