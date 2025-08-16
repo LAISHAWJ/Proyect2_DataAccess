@@ -20,7 +20,7 @@ namespace NorthwindApp_Final.PrincipalForms
             _categoryService = categoryService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            CargarCategoriasAsync().ConfigureAwait(false); // Carga asíncrona al iniciar
+            this.Load += async (s, e) => await CargarCategoriasAsync();  // Carga asíncrona al iniciar
         }
 
         private async Task CargarCategoriasAsync()

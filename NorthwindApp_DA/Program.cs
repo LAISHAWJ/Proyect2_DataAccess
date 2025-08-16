@@ -8,10 +8,8 @@ using Northwind.Application.Servicios;
 using Northwind.Application.Validators;
 using Northwind.Infrastructure.Repositories;
 using NorthwindApp.Infrastructure.Data;
-using NorthwindApp_Final;
 using NorthwindApp_Final.CrearEditRegisFrm;
 using NorthwindApp_Final.PrincipalForms;
-
 
 namespace NorthwindApp_Final
 {
@@ -20,27 +18,41 @@ namespace NorthwindApp_Final
         [STAThread]
         static void Main()
         {
-           
             var services = new ServiceCollection();
             ConfigureServices(services);
 
             using (var serviceProvider = services.BuildServiceProvider())
             {
-                var menuform = serviceProvider.GetRequiredService<MenuFrm>();
-                Application.Run(menuform);
+                try
+                {
+                    var menuFrm = serviceProvider.GetRequiredService<MenuFrm>();
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    Application.Run(menuFrm);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    MessageBox.Show($"Error al resolver el formulario principal: {ex.Message}", "Error Fatal",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error inesperado al iniciar la aplicación: {ex.Message}", "Error Fatal",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-
         }
 
         private static void ConfigureServices(IServiceCollection services)
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .Build();
 
             services.AddDbContext<NorthwindContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("NorthwindDb")));
+                options.UseSqlServer(configuration.GetConnectionString("NorthwindDb") ?? throw new InvalidOperationException("La cadena de conexión 'NorthwindDb' no está configurada en appsettings.json")),
+                ServiceLifetime.Scoped);
 
             // Repositories
             services.AddTransient<ICategoryRepository, CategoryRepos>();
@@ -72,6 +84,7 @@ namespace NorthwindApp_Final
             services.AddValidatorsFromAssemblyContaining<OrderValid>();
 
             // Forms
+            services.AddTransient<MenuFrm>();
             services.AddTransient<CategoryFrm>();
             services.AddTransient<CategoryCrearFrm>();
             services.AddTransient<CustomerFrm>();
@@ -88,4 +101,5 @@ namespace NorthwindApp_Final
             services.AddTransient<OrderCrearFrm>();
             services.AddTransient<OrderDetailsFrm>();
         }
-}   }
+    }
+}

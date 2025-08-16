@@ -19,7 +19,7 @@ namespace NorthwindApp_Final.PrincipalForms
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _orderDetailsService = orderDetailsService ?? throw new ArgumentNullException(nameof(orderDetailsService));
             _menuFrm = menuFrm ?? throw new ArgumentNullException(nameof(menuFrm));
-            CargarOrdenesDetalleAsync().ConfigureAwait(false); // Carga asíncrona al iniciar
+            this.Load += async (s, e) => await CargarOrdenesDetalleAsync(); // Carga asíncrona al iniciar
         }
 
         private async Task CargarOrdenesDetalleAsync()

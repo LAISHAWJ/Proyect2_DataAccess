@@ -20,7 +20,7 @@ namespace NorthwindApp_Final.PrincipalForms
             _shipperService = shipperService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            CargarShippersAsync().ConfigureAwait(false); // Carga asíncrona al iniciar
+            this.Load += async (s, e) => await CargarShippersAsync(); // Carga asíncrona al iniciar
         }
 
         private async Task CargarShippersAsync()

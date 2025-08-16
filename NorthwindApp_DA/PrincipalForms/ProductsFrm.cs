@@ -20,7 +20,7 @@ namespace NorthwindApp_Final.PrincipalForms
             _productService = productService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            CargarProductosAsync().ConfigureAwait(false); // Carga asíncrona al iniciar
+            this.Load += async (s, e) => await CargarProductosAsync(); // Carga asíncrona al iniciar
         }
 
         private void ProductsFrm_Load(object sender, EventArgs e)

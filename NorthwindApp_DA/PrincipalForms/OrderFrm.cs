@@ -23,7 +23,7 @@ namespace NorthwindApp_Final.PrincipalForms
             _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
             _menuFrm = menuFrm ?? throw new ArgumentNullException(nameof(menuFrm));
             _ordenesEnSesion = new List<Order>();
-            CargarOrdenesEnSesionAsync().ConfigureAwait(false); // Carga asíncrona al iniciar
+            this.Load += async (s, e) => await CargarOrdenesEnSesionAsync(); // Carga asíncrona al iniciar
         }
 
         private void OrderFrm_Load(object sender, EventArgs e)

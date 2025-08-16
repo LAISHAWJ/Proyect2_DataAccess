@@ -20,7 +20,7 @@ namespace NorthwindApp_Final.PrincipalForms
             _customerService = customerService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            CargarCustomerAsync().ConfigureAwait(false); // Carga asíncrona al iniciar
+            this.Load += async (s, e) => await CargarCustomerAsync();
         }
 
         private async Task CargarCustomerAsync()
