@@ -10,7 +10,7 @@ namespace NorthwindApp_Final.PrincipalForms
         public MenuFrm(IServiceProvider services)
         {
             InitializeComponent();
-            _services = services ?? throw new ArgumentNullException(nameof(services));
+           _services = services ?? throw new ArgumentNullException(nameof(services));
         }
 
         private void BtCategory_Click(object sender, EventArgs e)

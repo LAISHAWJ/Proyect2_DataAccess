@@ -18,9 +18,6 @@ namespace NorthwindApp_Final
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
             var services = new ServiceCollection();
             ConfigureServices(services);
 
@@ -31,8 +28,7 @@ namespace NorthwindApp_Final
                     try
                     {
                         var menuFrm = scope.ServiceProvider.GetRequiredService<MenuFrm>();
-                        menuFrm.Show();
-                        Application.Run(); 
+                        Application.Run(menuFrm);
                     }
                     catch (InvalidOperationException ex)
                     {
