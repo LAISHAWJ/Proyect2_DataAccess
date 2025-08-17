@@ -3,7 +3,6 @@ using Northwind.Application.Servicios;
 using Northwind.Core.Models;
 using NorthwindApp_Final.CrearEditRegisFrm;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_Final.PrincipalForms
@@ -20,17 +19,17 @@ namespace NorthwindApp_Final.PrincipalForms
             _customerService = customerService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            this.Load += async (s, e) => await CargarCustomerAsync();
+            this.Load += new EventHandler(CargarCustomer); // Carga sincrónica al iniciar
         }
 
-        private async Task CargarCustomerAsync()
+        private void CargarCustomer(object sender, EventArgs e)
         {
             try
             {
-                var customers = await _customerService.GetAllAsync();
+                var customers = _customerService.GetAllCustomer();
                 if (customers != null && customers.Any())
                 {
-                    DtGVwCustomer.DataSource = customers;
+                    DtGVwCustomer.DataSource = customers.ToList();
                     DtGVwCustomer.Columns[nameof(Customer.Orders)].Visible = false;
                     DtGVwCustomer.Columns[nameof(Customer.CustomerTypes)].Visible = false;
                 }
@@ -48,7 +47,7 @@ namespace NorthwindApp_Final.PrincipalForms
 
         private void CustomerFrm_Load(object sender, EventArgs e)
         {
-            // La carga ya se hace en el constructor con async
+            // La carga ya se hace en el evento Load
         }
 
         private void BtClose_Click(object sender, EventArgs e)
@@ -62,12 +61,12 @@ namespace NorthwindApp_Final.PrincipalForms
             var form = _serviceProvider.GetService<CustomerCrearFrm>();
             if (form != null)
             {
-                form.FormClosed += async (s, args) => await CargarCustomerAsync(); // Recargar lista al cerrar
+                form.FormClosed += (s, args) => CargarCustomer(s, args); // Recargar lista al cerrar
                 form.ShowDialog();
             }
         }
 
-        private async void BtUpdate_Click(object sender, EventArgs e)
+        private void BtUpdate_Click(object sender, EventArgs e)
         {
             if (DtGVwCustomer.SelectedRows.Count == 0)
             {
@@ -80,12 +79,12 @@ namespace NorthwindApp_Final.PrincipalForms
             if (form != null)
             {
                 form.SetEditMode(customer);
-                form.FormClosed += async (s, args) => await CargarCustomerAsync();
+                form.FormClosed += (s, args) => CargarCustomer(s, args);
                 form.ShowDialog();
             }
         }
 
-        private async void BtDelete_Click(object sender, EventArgs e)
+        private void BtDelete_Click(object sender, EventArgs e)
         {
             if (DtGVwCustomer.SelectedRows.Count == 0)
             {
@@ -98,22 +97,22 @@ namespace NorthwindApp_Final.PrincipalForms
             var confirmar = MessageBox.Show($"¿Deseas eliminar '{customer.CompanyName}'?", "Confirmar", MessageBoxButtons.YesNo);
             if (confirmar == DialogResult.Yes)
             {
-                await _customerService.DeleteAsync(customer.CustomerId);
-                await CargarCustomerAsync();
+                _customerService.DeleteCustomer(customer.CustomerId);
+                CargarCustomer(sender, e);
             }
         }
 
-        private async void BtSearch_Click(object sender, EventArgs e)
+        private void BtSearch_Click(object sender, EventArgs e)
         {
             string filtro = TxtBuscarId.Text.Trim();
 
             try
             {
-                var allCustomers = await _customerService.GetAllAsync();
+                var allCustomers = _customerService.GetAllCustomer();
                 if (string.IsNullOrEmpty(filtro))
                 {
                     // Si no hay texto, cargar todo
-                    await CargarCustomerAsync();
+                    CargarCustomer(sender, e);
                 }
                 else
                 {

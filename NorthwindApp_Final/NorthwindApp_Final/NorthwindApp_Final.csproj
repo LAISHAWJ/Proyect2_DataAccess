@@ -57,9 +57,7 @@
     <Compile Update="PrincipalForms\CustomerFrm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="PrincipalForms\EmployeeFrm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="PrincipalForms\EmployeeFrm.cs" />
     <Compile Update="PrincipalForms\MenuFrm.cs">
       <SubType>Form</SubType>
     </Compile>

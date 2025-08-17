@@ -3,8 +3,6 @@ using Northwind.Application.Interfaces;
 using Northwind.Core.Models;
 using NorthwindApp.Infrastructure.Data;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Northwind.Infrastructure.Repositories
 {
@@ -12,50 +10,44 @@ namespace Northwind.Infrastructure.Repositories
     {
         private readonly NorthwindContext _context;
 
-        // Constructor
         public EmployeeRepos(NorthwindContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        // Obtener todos
-        public async Task<IEnumerable<Employee>> GetAllAsync()
+        public IEnumerable<Employee> GetAllEmployee()
         {
-            return await _context.Employees.ToListAsync();
+            return _context.Employees.ToList();
         }
 
-        // Obtener por ID
-        public async Task<Employee?> GetByIdAsync(int id)
+        public Employee GetByIdEmployee(int id)
         {
-            return await _context.Employees.FindAsync(id);
+            return _context.Employees.Find(id);
         }
 
-        // Agregar
-        public async Task AddAsync(Employee employee)
+        public void AddEmployee(Employee employee)
         {
             if (employee == null)
                 throw new ArgumentNullException(nameof(employee));
             _context.Employees.Add(employee);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        // Actualizar
-        public async Task UpdateAsync(Employee employee)
+        public void UpdateEmployee(Employee employee)
         {
             if (employee == null)
                 throw new ArgumentNullException(nameof(employee));
             _context.Entry(employee).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        // Eliminar
-        public async Task DeleteAsync(int id)
+        public void DeleteEmployee(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
+            var employee = _context.Employees.Find(id);
             if (employee != null)
             {
                 _context.Employees.Remove(employee);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
     }

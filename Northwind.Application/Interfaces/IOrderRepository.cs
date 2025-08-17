@@ -1,23 +1,22 @@
 ﻿using Northwind.Core.Models;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Northwind.Application.Interfaces
 {
     public interface IOrderRepository
     {
-        Task<IEnumerable<Order>> GetAllAsync();
-        Task<Order?> GetByIdAsync(int id);
-        Task AddAsync(Order order);
-        Task UpdateAsync(Order order);
-        Task DeleteAsync(int id);
-        Task<IEnumerable<OrderDetail>> GetOrderDetailsForSelectionAsync();
-        Task<IEnumerable<Customer>> GetCustomersAsync();
-        Task<IEnumerable<Employee>> GetEmployeesAsync();
-        Task<IEnumerable<Shipper>> GetShippersAsync();
-        Task<IEnumerable<Product>> GetProductsAsync();
-        Task DeleteOrderDetail(int orderId, int productId);
-        Task AddOrderDetailAsync(OrderDetail orderDetail); 
-        Task UpdateOrderDetailAsync(OrderDetail orderDetail);
+        IEnumerable<Order> GetAllOrder();
+        Order GetByIdOrder(int id);
+        void AddOrder(Order order);
+        void UpdateOrder(Order order);
+        void DeleteOrder(int id);
+        IEnumerable<OrderDetail> GetOrderDetailsForSelectionAsync();
+        IEnumerable<Customer> GetCustomersAsync();
+        IEnumerable<Employee> GetEmployeesAsync();
+        IEnumerable<Shipper> GetShippersAsync();
+        IEnumerable<Product> GetProductsAsync();
+        void DeleteOrderDetail(int orderId, int productId);
+        void AddOrderDetailAsync(OrderDetail orderDetail);
+        void UpdateOrderDetailAsync(OrderDetail orderDetail);
     }
 }

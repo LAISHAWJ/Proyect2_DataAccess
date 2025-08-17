@@ -4,9 +4,6 @@ using Northwind.Application.Validators;
 using Northwind.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Northwind.Application.Servicios
 {
@@ -19,36 +16,35 @@ namespace Northwind.Application.Servicios
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Customer>> GetAllAsync()
+        public IEnumerable<Customer> GetAllCustomer()
         {
-            return await _repository.GetAllAsync();
+            return _repository.GetAllCustomer();
         }
 
-        public async Task<Customer> GetByIdAsync(string id)
+        public Customer GetByIdCustomer(string id)
         {
-            var customer = await _repository.GetByIdAsync(id);
+            var customer = _repository.GetByIdCustomer(id);
             if (customer == null) throw new Exception("Cliente no encontrado");
             return customer;
         }
 
-        public async Task AddAsync(Customer customer)
-        {
-            var validator = new CustomerValid();
-            validator.ValidateAndThrow(customer); 
-            await _repository.AddAsync(customer);
-        }
-
-        public async Task UpdateAsync(Customer customer)
+        public void AddCustomer(Customer customer)
         {
             var validator = new CustomerValid();
             validator.ValidateAndThrow(customer);
-            await _repository.UpdateAsync(customer);
+            _repository.AddCustomer(customer);
         }
 
-        public async Task DeleteAsync(string id)
+        public void UpdateCustomer(Customer customer)
         {
-            await _repository.DeleteAsync(id);
+            var validator = new CustomerValid();
+            validator.ValidateAndThrow(customer);
+            _repository.UpdateCustomer(customer);
         }
 
+        public void DeleteCustomer(string id)
+        {
+            _repository.DeleteCustomer(id);
+        }
     }
 }

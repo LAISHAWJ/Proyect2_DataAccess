@@ -3,8 +3,6 @@ using Northwind.Application.Interfaces;
 using Northwind.Core.Models;
 using NorthwindApp.Infrastructure.Data;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Northwind.Infrastructure.Repositories
 {
@@ -17,37 +15,37 @@ namespace Northwind.Infrastructure.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<IEnumerable<Order>> GetAllAsync()
+        public IEnumerable<Order> GetAllOrder()
         {
-            return await _context.Orders
+            return _context.Orders
                 .Include(o => o.Customer)
                 .Include(o => o.Employee)
                 .Include(o => o.ShipViaNavigation)
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<Order?> GetByIdAsync(int id)
+        public Order GetByIdOrder(int id)
         {
-            return await _context.Orders
+            return _context.Orders
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
                         .ThenInclude(p => p.Category)
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
                         .ThenInclude(p => p.Supplier)
-                .FirstOrDefaultAsync(o => o.OrderId == id);
+                .FirstOrDefault(o => o.OrderId == id);
         }
 
-        public async Task AddAsync(Order order)
+        public void AddOrder(Order order)
         {
             if (order == null) throw new ArgumentNullException(nameof(order));
             _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task UpdateAsync(Order order)
+        public void UpdateOrder(Order order)
         {
             if (order == null) throw new ArgumentNullException(nameof(order));
             _context.Entry(order).State = EntityState.Modified;
@@ -55,61 +53,61 @@ namespace Northwind.Infrastructure.Repositories
             {
                 _context.Entry(item).State = item.OrderId == 0 ? EntityState.Added : EntityState.Modified;
             }
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task DeleteAsync(int id)
+        public void DeleteOrder(int id)
         {
-            var order = await _context.Orders
+            var order = _context.Orders
                 .Include(o => o.OrderDetails)
-                .FirstOrDefaultAsync(o => o.OrderId == id);
+                .FirstOrDefault(o => o.OrderId == id);
 
             if (order != null)
             {
                 _context.OrderDetails.RemoveRange(order.OrderDetails);
                 _context.Orders.Remove(order);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
 
-        public async Task<IEnumerable<OrderDetail>> GetOrderDetailsForSelectionAsync()
+        public IEnumerable<OrderDetail> GetOrderDetailsForSelectionAsync()
         {
-            return await _context.OrderDetails
+            return _context.OrderDetails
                 .Include(od => od.Product)
                     .ThenInclude(p => p.Category)
                 .Include(od => od.Product)
                     .ThenInclude(p => p.Supplier)
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task<IEnumerable<Customer>> GetCustomersAsync()
+        public IEnumerable<Customer> GetCustomersAsync()
         {
-            return await _context.Customers.ToListAsync();
+            return _context.Customers.ToList();
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployeesAsync()
+        public IEnumerable<Employee> GetEmployeesAsync()
         {
-            return await _context.Employees.ToListAsync();
+            return _context.Employees.ToList();
         }
 
-        public async Task<IEnumerable<Shipper>> GetShippersAsync()
+        public IEnumerable<Shipper> GetShippersAsync()
         {
-            return await _context.Shippers.ToListAsync();
+            return _context.Shippers.ToList();
         }
 
-        public async Task<IEnumerable<Product>> GetProductsAsync()
+        public IEnumerable<Product> GetProductsAsync()
         {
-            return await _context.Products
+            return _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Supplier)
-                .ToListAsync();
+                .ToList();
         }
 
-        public async Task DeleteOrderDetail(int orderId, int productId)
+        public void DeleteOrderDetail(int orderId, int productId)
         {
-            var order = await _context.Orders
+            var order = _context.Orders
                 .Include(o => o.OrderDetails)
-                .FirstOrDefaultAsync(o => o.OrderId == orderId);
+                .FirstOrDefault(o => o.OrderId == orderId);
 
             if (order != null)
             {
@@ -117,21 +115,21 @@ namespace Northwind.Infrastructure.Repositories
                 if (detailToDelete != null)
                 {
                     _context.OrderDetails.Remove(detailToDelete);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                 }
             }
         }
 
-        public async Task AddOrderDetailAsync(OrderDetail orderDetail)
+        public void AddOrderDetailAsync(OrderDetail orderDetail)
         {
             if (orderDetail == null) throw new ArgumentNullException(nameof(orderDetail));
-            var order = await _context.Orders
+            var order = _context.Orders
                 .Include(o => o.OrderDetails)
-                .FirstOrDefaultAsync(o => o.OrderId == orderDetail.OrderId);
+                .FirstOrDefault(o => o.OrderId == orderDetail.OrderId);
             if (order != null)
             {
                 order.OrderDetails.Add(orderDetail);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             else
             {
@@ -139,15 +137,15 @@ namespace Northwind.Infrastructure.Repositories
             }
         }
 
-        public async Task UpdateOrderDetailAsync(OrderDetail orderDetail)
+        public void UpdateOrderDetailAsync(OrderDetail orderDetail)
         {
             if (orderDetail == null) throw new ArgumentNullException(nameof(orderDetail));
-            var existingDetail = await _context.OrderDetails
-                .FirstOrDefaultAsync(od => od.OrderId == orderDetail.OrderId && od.ProductId == orderDetail.ProductId);
+            var existingDetail = _context.OrderDetails
+                .FirstOrDefault(od => od.OrderId == orderDetail.OrderId && od.ProductId == orderDetail.ProductId);
             if (existingDetail != null)
             {
                 _context.Entry(existingDetail).CurrentValues.SetValues(orderDetail);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             else
             {

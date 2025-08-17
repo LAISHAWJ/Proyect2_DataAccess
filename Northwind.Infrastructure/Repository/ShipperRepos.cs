@@ -3,8 +3,6 @@ using Northwind.Application.Interfaces;
 using Northwind.Core.Models;
 using NorthwindApp.Infrastructure.Data;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Northwind.Infrastructure.Repositories
 {
@@ -19,43 +17,43 @@ namespace Northwind.Infrastructure.Repositories
         }
 
         // Obtener todos
-        public async Task<IEnumerable<Shipper>> GetAllAsync()
+        public IEnumerable<Shipper> GetAllShipper()
         {
-            return await _context.Shippers.ToListAsync();
+            return _context.Shippers.ToList();
         }
 
         // Obtener por ID
-        public async Task<Shipper?> GetByIdAsync(int id)
+        public Shipper GetByIdShipper(int id)
         {
-            return await _context.Shippers.FindAsync(id);
+            return _context.Shippers.Find(id);
         }
 
         // Agregar
-        public async Task AddAsync(Shipper shipper)
+        public void AddShipper(Shipper shipper)
         {
             if (shipper == null)
                 throw new ArgumentNullException(nameof(shipper));
             _context.Shippers.Add(shipper);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         // Actualizar
-        public async Task UpdateAsync(Shipper shipper)
+        public void UpdateShipper(Shipper shipper)
         {
             if (shipper == null)
                 throw new ArgumentNullException(nameof(shipper));
             _context.Entry(shipper).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         // Eliminar
-        public async Task DeleteAsync(int id)
+        public void DeleteShipper(int id)
         {
-            var shipper = await _context.Shippers.FindAsync(id);
+            var shipper = _context.Shippers.Find(id);
             if (shipper != null)
             {
                 _context.Shippers.Remove(shipper);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
     }

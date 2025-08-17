@@ -31,7 +31,8 @@ namespace NorthwindApp_Final
                     try
                     {
                         var menuFrm = scope.ServiceProvider.GetRequiredService<MenuFrm>();
-                        Application.Run(menuFrm);
+                        menuFrm.Show();
+                        Application.Run(); 
                     }
                     catch (InvalidOperationException ex)
                     {
@@ -59,24 +60,24 @@ namespace NorthwindApp_Final
                 ServiceLifetime.Scoped);
 
             // Repositories
-            services.AddScoped<ICategoryRepository, CategoryRepos>();
-            services.AddScoped<ICustomerRepository, CustomerRepos>();
-            services.AddScoped<IEmployeeRepository, EmployeeRepos>();
-            services.AddScoped<ISupplierRepository, SupplierRepos>();
-            services.AddScoped<IShipperRepository, ShipperRepos>();
-            services.AddScoped<IProductRepository, ProductRepos>();
-            services.AddScoped<IOrderRepository, OrderRepos>();
-            services.AddScoped<IOrderDetailsRepository, OrderDetailsRepos>();
+            services.AddTransient<ICategoryRepository, CategoryRepos>();
+            services.AddTransient<ICustomerRepository, CustomerRepos>();
+            services.AddTransient<IEmployeeRepository, EmployeeRepos>();
+            services.AddTransient<ISupplierRepository, SupplierRepos>();
+            services.AddTransient<IShipperRepository, ShipperRepos>();
+            services.AddTransient<IProductRepository, ProductRepos>();
+            services.AddTransient<IOrderRepository, OrderRepos>();
+            services.AddTransient<IOrderDetailsRepository, OrderDetailsRepos>();
 
             // Services
-            services.AddScoped<CategoryService>();
-            services.AddScoped<CustomerService>();
-            services.AddScoped<EmployeeService>();
-            services.AddScoped<SupplierService>();
-            services.AddScoped<ShipperService>();
-            services.AddScoped<ProductService>();
-            services.AddScoped<OrderService>();
-            services.AddScoped<OrderDetailsService>();
+            services.AddTransient<CategoryService>();
+            services.AddTransient<CustomerService>();
+            services.AddTransient<EmployeeService>();
+            services.AddTransient<SupplierService>();
+            services.AddTransient<ShipperService>();
+            services.AddTransient<ProductService>();
+            services.AddTransient<OrderService>();
+            services.AddTransient<OrderDetailsService>();
 
             // Validators
             services.AddValidatorsFromAssemblyContaining<CategoryValid>();
@@ -88,22 +89,22 @@ namespace NorthwindApp_Final
             services.AddValidatorsFromAssemblyContaining<OrderValid>();
 
             // Forms
-            services.AddScoped<MenuFrm>();
-            services.AddScoped<CategoryFrm>();
-            services.AddScoped<CategoryCrearFrm>();
-            services.AddScoped<CustomerFrm>();
-            services.AddScoped<CustomerCrearFrm>();
-            services.AddScoped<EmployeeFrm>();
-            services.AddScoped<EmployeeCrearFrm>();
-            services.AddScoped<SupplierFrm>();
-            services.AddScoped<SuppliercrearFrm>();
-            services.AddScoped<ShipperFrm>();
-            services.AddScoped<ShipperCrearFrm>();
-            services.AddScoped<ProductsFrm>();
-            services.AddScoped<ProductcrearFrm>();
-            services.AddScoped<OrderFrm>();
-            services.AddScoped<OrderCrearFrm>();
-            services.AddScoped<OrderDetailsFrm>();
+            services.AddTransient<MenuFrm>();
+            services.AddTransient<CategoryFrm>();
+            services.AddTransient<CategoryCrearFrm>();
+            services.AddTransient<CustomerFrm>();
+            services.AddTransient<CustomerCrearFrm>();
+            services.AddTransient<EmployeeFrm>();
+            services.AddTransient<EmployeeCrearFrm>();
+            services.AddTransient<SupplierFrm>();
+            services.AddTransient<SuppliercrearFrm>();
+            services.AddTransient<ShipperFrm>();
+            services.AddTransient<ShipperCrearFrm>();
+            services.AddTransient<ProductsFrm>();
+            services.AddTransient<ProductcrearFrm>();
+            services.AddTransient<OrderFrm>();
+            services.AddTransient<OrderCrearFrm>();
+            services.AddTransient<OrderDetailsFrm>();
         }
     }
 }

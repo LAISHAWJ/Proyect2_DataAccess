@@ -3,8 +3,6 @@ using Northwind.Application.Interfaces;
 using Northwind.Core.Models;
 using NorthwindApp.Infrastructure.Data;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Northwind.Infrastructure.Repositories
 {
@@ -17,9 +15,9 @@ namespace Northwind.Infrastructure.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<List<OrderWithDetailsViewModel>> GetOrderWithDetailsAsync()
+        public List<OrderWithDetailsViewModel> GetOrderWithDetailsAsync()
         {
-            return await _context.Orders
+            return _context.Orders
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
                 .Include(o => o.Customer)
@@ -45,12 +43,12 @@ namespace Northwind.Infrastructure.Repositories
                     UnitPrice = od.UnitPrice,
                     Quantity = od.Quantity,
                     Discount = od.Discount
-                })).ToListAsync();
+                })).ToList();
         }
 
-        public async Task<List<OrderWithDetailsViewModel>> GetOrderWithDetailsByOrderIdAsync(int orderId)
+        public List<OrderWithDetailsViewModel> GetOrderWithDetailsByOrderIdAsync(int orderId)
         {
-            return await _context.Orders
+            return _context.Orders
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
                 .Include(o => o.Customer)
@@ -77,8 +75,7 @@ namespace Northwind.Infrastructure.Repositories
                     UnitPrice = od.UnitPrice,
                     Quantity = od.Quantity,
                     Discount = od.Discount
-                })).ToListAsync();
+                })).ToList();
         }
     }
-   
 }

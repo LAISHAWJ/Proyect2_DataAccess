@@ -3,7 +3,6 @@ using Northwind.Application.Servicios;
 using Northwind.Application.Validators;
 using Northwind.Core.Models;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_Final.CrearEditRegisFrm
@@ -32,7 +31,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             TxtTel.Text = _shipperEdit.Phone ?? string.Empty;
         }
 
-        private async void BtSave_Click(object sender, EventArgs e)
+        private void BtSave_Click(object sender, EventArgs e)
         {
             var shipper = _isEditMode ? _shipperEdit : new Shipper();
 
@@ -50,9 +49,9 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             try
             {
                 if (_isEditMode)
-                    await _shipperService.UpdateAsync(shipper);
+                    _shipperService.UpdateShipper(shipper);
                 else
-                    await _shipperService.AddAsync(shipper);
+                    _shipperService.AddShipper(shipper);
 
                 MessageBox.Show("Transportista guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();

@@ -3,7 +3,6 @@ using Northwind.Application.Servicios;
 using Northwind.Application.Validators;
 using Northwind.Core.Models;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_Final.CrearEditRegisFrm
@@ -12,9 +11,9 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
     {
         private readonly CustomerService _customerService;
         private readonly CustomerValid _validator;
-
         private Customer _customerEdit;
         private bool _isEditMode = false;
+
         public CustomerCrearFrm(CustomerService customerService, CustomerValid validator)
         {
             InitializeComponent();
@@ -45,10 +44,10 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
 
         private void CustomerCrearFrm_Load(object sender, EventArgs e)
         {
-          
+            // No se requiere lógica de carga
         }
 
-        private async void BtSave_Click(object sender, EventArgs e)
+        private void BtSave_Click(object sender, EventArgs e)
         {
             var customer = _isEditMode ? _customerEdit : new Customer();
 
@@ -75,9 +74,9 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             try
             {
                 if (_isEditMode)
-                    await _customerService.UpdateAsync(customer);
+                    _customerService.UpdateCustomer(customer);
                 else
-                    await _customerService.AddAsync(customer);
+                    _customerService.AddCustomer(customer);
 
                 MessageBox.Show("Cliente guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();

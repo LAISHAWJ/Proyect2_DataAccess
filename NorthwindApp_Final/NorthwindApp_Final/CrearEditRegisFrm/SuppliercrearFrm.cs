@@ -3,7 +3,6 @@ using Northwind.Application.Servicios;
 using Northwind.Application.Validators;
 using Northwind.Core.Models;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_Final.CrearEditRegisFrm
@@ -42,7 +41,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             TxtHomePage.Text = _supplierEdit.HomePage ?? string.Empty;
         }
 
-        private async void BtSave_Click(object sender, EventArgs e)
+        private void BtSave_Click(object sender, EventArgs e)
         {
             var supplier = _isEditMode ? _supplierEdit : new Supplier();
 
@@ -69,9 +68,9 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             try
             {
                 if (_isEditMode)
-                    await _supplierService.UpdateAsync(supplier);
+                    _supplierService.UpdateSupplier(supplier);
                 else
-                    await _supplierService.AddAsync(supplier);
+                    _supplierService.AddSupplier(supplier);
 
                 MessageBox.Show("Proveedor guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();

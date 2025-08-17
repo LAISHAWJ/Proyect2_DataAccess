@@ -3,10 +3,6 @@ using Northwind.Application.Interfaces;
 using Northwind.Application.Validators;
 using Northwind.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Northwind.Application.Servicios
 {
@@ -19,35 +15,35 @@ namespace Northwind.Application.Servicios
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Shipper>> GetAllAsync()
+        public IEnumerable<Shipper> GetAllShipper()
         {
-            return await _repository.GetAllAsync();
+            return _repository.GetAllShipper();
         }
 
-        public async Task<Shipper> GetByIdAsync(int id)
+        public Shipper GetByIdShipper(int id)
         {
-            var shipper = await _repository.GetByIdAsync(id);
+            var shipper = _repository.GetByIdShipper(id);
             if (shipper == null) throw new Exception("Transportista no encontrado");
             return shipper;
         }
 
-        public async Task AddAsync(Shipper shipper)
+        public void AddShipper(Shipper shipper)
         {
             var validator = new ShipperValid();
             validator.ValidateAndThrow(shipper);
-            await _repository.AddAsync(shipper);
+            _repository.AddShipper(shipper);
         }
 
-        public async Task UpdateAsync(Shipper shipper)
+        public void UpdateShipper(Shipper shipper)
         {
             var validator = new ShipperValid();
             validator.ValidateAndThrow(shipper);
-            await _repository.UpdateAsync(shipper);
+            _repository.UpdateShipper(shipper);
         }
 
-        public async Task DeleteAsync(int id)
+        public void DeleteShipper(int id)
         {
-            await _repository.DeleteAsync(id);
+            _repository.DeleteShipper(id);
         }
     }
 }

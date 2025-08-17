@@ -5,7 +5,6 @@ using Northwind.Core.Models;
 using System;
 using System.Drawing;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_Final.CrearEditRegisFrm
@@ -157,7 +156,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             }
         }
 
-        private async void BtSave_Click(object sender, EventArgs e)
+        private void BtSave_Click(object sender, EventArgs e)
         {
             _employeeEdit.LastName = TxtLastNames.Text;
             _employeeEdit.FirstName = TxtNames.Text;
@@ -191,9 +190,9 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             try
             {
                 if (_isEditMode)
-                    await _employeeService.UpdateAsync(_employeeEdit);
+                    _employeeService.UpdateEmployee(_employeeEdit);
                 else
-                    await _employeeService.AddAsync(_employeeEdit);
+                    _employeeService.AddEmployee(_employeeEdit);
 
                 MessageBox.Show(_isEditMode ? "Empleado actualizado." : "Empleado agregado.");
                 this.Close();

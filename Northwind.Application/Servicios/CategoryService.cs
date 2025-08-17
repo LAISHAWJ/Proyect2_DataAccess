@@ -1,13 +1,8 @@
 ﻿using Northwind.Application.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentValidation;
-using System.Text;
 using Northwind.Core.Models;
 using Northwind.Application.Validators;
-using System.Threading.Tasks;
-
+using FluentValidation;
+using System.Collections.Generic;
 
 namespace Northwind.Application.Servicios
 {
@@ -20,36 +15,35 @@ namespace Northwind.Application.Servicios
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Category>> GetAllAsync()
+        public IEnumerable<Category> GetAllCategory()
         {
-            return await _repository.GetAllAsync();
+            return _repository.GetAllCategory();
         }
 
-        public async Task<Category> GetByIdAsync(int id)
+        public Category GetByIdCategory(int id)
         {
-            var category = await _repository.GetByIdAsync(id);
+            var category = _repository.GetByIdCategory(id);
             if (category == null) throw new Exception("Categoría no encontrada");
             return category;
         }
 
-        public async Task AddAsync(Category category)
-        {
-            var validator = new CategoryValid();
-            validator.ValidateAndThrow(category); 
-            await _repository.AddAsync(category);
-        }
-
-        public async Task UpdateAsync(Category category)
+        public void AddCategory(Category category)
         {
             var validator = new CategoryValid();
             validator.ValidateAndThrow(category);
-            await _repository.UpdateAsync(category);
+            _repository.AddCategory(category);
         }
 
-        public async Task DeleteAsync(int id)
+        public void UpdateCategory(Category category)
         {
-            await _repository.DeleteAsync(id);
+            var validator = new CategoryValid();
+            validator.ValidateAndThrow(category);
+            _repository.UpdateCategory(category);
+        }
+
+        public void DeleteCategory(int id)
+        {
+            _repository.DeleteCategory(id);
         }
     }
 }
-

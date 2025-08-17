@@ -2,7 +2,6 @@
 using Northwind.Application.Services;
 using NorthwindApp_Final.CrearEditRegisFrm;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_Final.PrincipalForms
@@ -19,14 +18,14 @@ namespace NorthwindApp_Final.PrincipalForms
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _orderDetailsService = orderDetailsService ?? throw new ArgumentNullException(nameof(orderDetailsService));
             _menuFrm = menuFrm ?? throw new ArgumentNullException(nameof(menuFrm));
-            this.Load += async (s, e) => await CargarOrdenesDetalleAsync(); // Carga asíncrona al iniciar
+            this.Load += new EventHandler(CargarOrdenesDetalle); // Carga sincrónica al iniciar
         }
 
-        private async Task CargarOrdenesDetalleAsync()
+        private void CargarOrdenesDetalle(object sender, EventArgs e)
         {
             try
             {
-                var orderDetails = await _orderDetailsService.GetOrderWithDetailsAsync();
+                var orderDetails = _orderDetailsService.GetOrderWithDetailsAsync();
                 if (orderDetails != null && orderDetails.Count > 0)
                 {
                     OrderDetailDgv.DataSource = orderDetails;
@@ -44,11 +43,11 @@ namespace NorthwindApp_Final.PrincipalForms
             }
         }
 
-        private async Task CargarOrderDetailsAsync(int orderId)
+        private void CargarOrderDetailsAsync(int orderId)
         {
             try
             {
-                var detalles = await _orderDetailsService.GetOrderWithDetailsByOrderIdAsync(orderId);
+                var detalles = _orderDetailsService.GetOrderWithDetailsByOrderIdAsync(orderId);
                 if (detalles != null && detalles.Count > 0)
                 {
                     OrderDetailDgv.DataSource = detalles;
@@ -96,22 +95,22 @@ namespace NorthwindApp_Final.PrincipalForms
 
         private void OrderDetailsFrm_Load(object sender, EventArgs e)
         {
-            // La carga ya se hace en el constructor con async
+            // La carga ya se hace en el evento Load
         }
 
-        private async void BtSearch_Click_1(object sender, EventArgs e)
+        private void BtSearch_Click_1(object sender, EventArgs e)
         {
             string textoFiltro = TxtFiltroOrderD.Text.Trim();
 
             if (string.IsNullOrEmpty(textoFiltro))
             {
                 // Si el TextBox está vacío, carga todos los detalles
-                await CargarOrdenesDetalleAsync();
+                CargarOrdenesDetalle(sender, e);
             }
             else if (int.TryParse(textoFiltro, out int orderId))
             {
                 // Si el texto es un número válido, carga los detalles filtrados
-                await CargarOrderDetailsAsync(orderId);
+                CargarOrderDetailsAsync(orderId);
             }
             else
             {

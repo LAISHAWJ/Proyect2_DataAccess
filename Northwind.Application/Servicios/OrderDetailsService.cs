@@ -1,8 +1,6 @@
 ﻿using Northwind.Application.Interfaces;
 using Northwind.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Northwind.Application.Services
 {
@@ -15,14 +13,14 @@ namespace Northwind.Application.Services
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task<List<OrderWithDetailsViewModel>> GetOrderWithDetailsAsync()
+        public List<OrderWithDetailsViewModel> GetOrderWithDetailsAsync()
         {
-            return await _repository.GetOrderWithDetailsAsync();
+            return _repository.GetOrderWithDetailsAsync();
         }
 
-        public async Task<List<OrderWithDetailsViewModel>> GetOrderWithDetailsByOrderIdAsync(int orderId)
+        public List<OrderWithDetailsViewModel> GetOrderWithDetailsByOrderIdAsync(int orderId)
         {
-            return await _repository.GetOrderWithDetailsByOrderIdAsync(orderId);
+            return _repository.GetOrderWithDetailsByOrderIdAsync(orderId);
         }
     }
 }

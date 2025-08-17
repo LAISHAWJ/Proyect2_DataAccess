@@ -1,18 +1,14 @@
-﻿using System;
+﻿using Northwind.Core.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Northwind.Core.Models;
-using System.Threading.Tasks;
 
 namespace Northwind.Application.Interfaces
 {
     public interface ICategoryRepository
     {
-        Task<IEnumerable<Category>> GetAllAsync();
-        Task<Category> GetByIdAsync(int id);
-        Task AddAsync(Category category);
-        Task UpdateAsync(Category category);
-        Task DeleteAsync(int id);
+        IEnumerable<Category> GetAllCategory();
+        Category GetByIdCategory(int id);
+        void AddCategory(Category category);
+        void UpdateCategory(Category category);
+        void DeleteCategory(int id);
     }
 }

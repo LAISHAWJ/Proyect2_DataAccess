@@ -2,7 +2,6 @@
 using Northwind.Core.Models;
 using System;
 using System.ComponentModel;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_Final.CrearEditRegisFrm
@@ -28,7 +27,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             _orderId = orderId;
             if (_orderDetailToEdit == null && !IsDisposed)
             {
-                _ = CargarProductosAsync();
+                CargarProductosAsync();
             }
         }
 
@@ -42,16 +41,16 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             }
             else if (_orderId != 0 && !IsDisposed && _orderDetailToEdit == null)
             {
-                _ = CargarProductosAsync();
+                CargarProductosAsync();
             }
         }
 
-        private async Task CargarProductosAsync()
+        private void CargarProductosAsync()
         {
             if (IsDisposed) return;
             try
             {
-                var productos = await _orderService.GetProductsAsync();
+                var productos = _orderService.GetProductsAsync();
                 var productList = productos.Select(p => new ProductSelectionOrder
                 {
                     ProductID = p.ProductId,
@@ -106,7 +105,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             TxtDescuento.Text = (_orderDetailToEdit.Discount * 100).ToString("F2");
         }
 
-        private async void BtCrear_Click(object sender, EventArgs e)
+        private void BtCrear_Click(object sender, EventArgs e)
         {
             try
             {
@@ -144,13 +143,13 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
                         Quantity = (short)cantidad,
                         Discount = (float)(descuento / 100)
                     };
-                    await _orderService.AddOrderDetailAsync(CreatedOrderDetail); // Nuevo método
+                    _orderService.AddOrderDetailAsync(CreatedOrderDetail);
                 }
                 else
                 {
                     if (_orderDetailToEdit.ProductId != productId)
                     {
-                        await _orderService.DeleteOrderDetailAsync(_orderId, _orderDetailToEdit.ProductId);
+                        _orderService.DeleteOrderDetailAsync(_orderId, _orderDetailToEdit.ProductId);
                         CreatedOrderDetail = new OrderDetail
                         {
                             OrderId = _orderId,
@@ -159,7 +158,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
                             Quantity = (short)cantidad,
                             Discount = (float)(descuento / 100)
                         };
-                        await _orderService.AddOrderDetailAsync(CreatedOrderDetail); // Nuevo método
+                        _orderService.AddOrderDetailAsync(CreatedOrderDetail);
                     }
                     else
                     {
@@ -167,7 +166,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
                         _orderDetailToEdit.Quantity = (short)cantidad;
                         _orderDetailToEdit.Discount = (float)(descuento / 100);
                         CreatedOrderDetail = _orderDetailToEdit;
-                        await _orderService.UpdateOrderDetailAsync(CreatedOrderDetail); // Nuevo método
+                        _orderService.UpdateOrderDetailAsync(CreatedOrderDetail);
                     }
                 }
 
@@ -187,5 +186,4 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             this.Close();
         }
     }
-
 }

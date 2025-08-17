@@ -3,8 +3,6 @@ using Northwind.Application.Interfaces;
 using Northwind.Core.Models;
 using NorthwindApp.Infrastructure.Data;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Northwind.Infrastructure.Repositories
 {
@@ -19,43 +17,43 @@ namespace Northwind.Infrastructure.Repositories
         }
 
         // Obtener todos
-        public async Task<IEnumerable<Supplier>> GetAllAsync()
+        public IEnumerable<Supplier> GetAllSupplier()
         {
-            return await _context.Suppliers.ToListAsync();
+            return _context.Suppliers.ToList();
         }
 
         // Obtener por ID
-        public async Task<Supplier?> GetByIdAsync(int id)
+        public Supplier GetByIdSupplier(int id)
         {
-            return await _context.Suppliers.FindAsync(id);
+            return _context.Suppliers.Find(id);
         }
 
         // Agregar
-        public async Task AddAsync(Supplier supplier)
+        public void AddSupplier(Supplier supplier)
         {
             if (supplier == null)
                 throw new ArgumentNullException(nameof(supplier));
             _context.Suppliers.Add(supplier);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         // Actualizar
-        public async Task UpdateAsync(Supplier supplier)
+        public void UpdateSupplier(Supplier supplier)
         {
             if (supplier == null)
                 throw new ArgumentNullException(nameof(supplier));
             _context.Entry(supplier).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         // Eliminar
-        public async Task DeleteAsync(int id)
+        public void DeleteSupplier(int id)
         {
-            var supplier = await _context.Suppliers.FindAsync(id);
+            var supplier = _context.Suppliers.Find(id);
             if (supplier != null)
             {
                 _context.Suppliers.Remove(supplier);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
     }

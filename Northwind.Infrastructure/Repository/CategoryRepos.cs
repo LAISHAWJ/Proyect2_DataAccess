@@ -3,7 +3,6 @@ using Northwind.Application.Interfaces;
 using Northwind.Core.Models;
 using NorthwindApp.Infrastructure.Data;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Northwind.Infrastructure.Repositories
 {
@@ -16,35 +15,35 @@ namespace Northwind.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Category>> GetAllAsync()
+        public IEnumerable<Category> GetAllCategory()
         {
-            return await _context.Categories.ToListAsync();
+            return _context.Categories.ToList();
         }
 
-        public async Task<Category> GetByIdAsync(int id)
+        public Category GetByIdCategory(int id)
         {
-            return await _context.Categories.FindAsync(id);
+            return _context.Categories.Find(id);
         }
 
-        public async Task AddAsync(Category category)
+        public void AddCategory(Category category)
         {
             _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task UpdateAsync(Category category)
+        public void UpdateCategory(Category category)
         {
             _context.Categories.Update(category);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task DeleteAsync(int id)
+        public void DeleteCategory(int id)
         {
-            var category = await GetByIdAsync(id);
+            var category = GetByIdCategory(id);
             if (category != null)
             {
                 _context.Categories.Remove(category);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
     }

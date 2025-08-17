@@ -1,8 +1,6 @@
 ﻿using Northwind.Application.Interfaces;
 using Northwind.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Northwind.Application.Services
 {
@@ -15,83 +13,83 @@ namespace Northwind.Application.Services
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        public async Task<IEnumerable<Order>> GetAllAsync()
+        public IEnumerable<Order> GetAllOrder()
         {
-            return await _repository.GetAllAsync();
+            return _repository.GetAllOrder();
         }
 
-        public async Task<Order?> GetByIdAsync(int id)
+        public Order GetByIdOrder(int id)
         {
-            return await _repository.GetByIdAsync(id);
+            return _repository.GetByIdOrder(id);
         }
 
-        public async Task AddAsync(Order order)
+        public void AddOrder(Order order)
         {
             if (order == null) throw new ArgumentNullException(nameof(order));
-            await _repository.AddAsync(order);
+            _repository.AddOrder(order);
         }
 
-        public async Task UpdateAsync(Order order)
+        public void UpdateOrder(Order order)
         {
             if (order == null) throw new ArgumentNullException(nameof(order));
-            await _repository.UpdateAsync(order);
+            _repository.UpdateOrder(order);
         }
 
-        public async Task DeleteAsync(int id)
+        public void DeleteOrder(int id)
         {
-            var order = await _repository.GetByIdAsync(id);
+            var order = _repository.GetByIdOrder(id);
             if (order == null) throw new Exception("Orden no encontrada.");
-            await _repository.DeleteAsync(id);
+            _repository.DeleteOrder(id);
         }
 
-        public async Task DeleteOrderDetailAsync(int orderId, int productId)
+        public void DeleteOrderDetailAsync(int orderId, int productId)
         {
-            var order = await _repository.GetByIdAsync(orderId);
+            var order = _repository.GetByIdOrder(orderId);
             if (order != null)
             {
                 var detailToDelete = order.OrderDetails.FirstOrDefault(od => od.ProductId == productId);
                 if (detailToDelete != null)
                 {
-                    await _repository.DeleteOrderDetail(orderId, productId);
+                    _repository.DeleteOrderDetail(orderId, productId);
                 }
             }
         }
 
-        public async Task<IEnumerable<OrderDetail>> GetOrderDetailsForSelectionAsync()
+        public IEnumerable<OrderDetail> GetOrderDetailsForSelectionAsync()
         {
-            return await _repository.GetOrderDetailsForSelectionAsync();
+            return _repository.GetOrderDetailsForSelectionAsync();
         }
 
-        public async Task<IEnumerable<Customer>> GetCustomersAsync()
+        public IEnumerable<Customer> GetCustomersAsync()
         {
-            return await _repository.GetCustomersAsync();
+            return _repository.GetCustomersAsync();
         }
 
-        public async Task<IEnumerable<Employee>> GetEmployeesAsync()
+        public IEnumerable<Employee> GetEmployeesAsync()
         {
-            return await _repository.GetEmployeesAsync();
+            return _repository.GetEmployeesAsync();
         }
 
-        public async Task<IEnumerable<Shipper>> GetShippersAsync()
+        public IEnumerable<Shipper> GetShippersAsync()
         {
-            return await _repository.GetShippersAsync();
+            return _repository.GetShippersAsync();
         }
 
-        public async Task<IEnumerable<Product>> GetProductsAsync()
+        public IEnumerable<Product> GetProductsAsync()
         {
-            return await _repository.GetProductsAsync();
+            return _repository.GetProductsAsync();
         }
 
-        public async Task AddOrderDetailAsync(OrderDetail orderDetail)
+        public void AddOrderDetailAsync(OrderDetail orderDetail)
         {
             if (orderDetail == null) throw new ArgumentNullException(nameof(orderDetail));
-            await _repository.AddOrderDetailAsync(orderDetail);
+            _repository.AddOrderDetailAsync(orderDetail);
         }
 
-        public async Task UpdateOrderDetailAsync(OrderDetail orderDetail)
+        public void UpdateOrderDetailAsync(OrderDetail orderDetail)
         {
             if (orderDetail == null) throw new ArgumentNullException(nameof(orderDetail));
-            await _repository.UpdateOrderDetailAsync(orderDetail);
+            _repository.UpdateOrderDetailAsync(orderDetail);
         }
     }
 }

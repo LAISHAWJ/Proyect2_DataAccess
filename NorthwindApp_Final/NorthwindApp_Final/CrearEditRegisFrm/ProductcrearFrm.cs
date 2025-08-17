@@ -3,7 +3,6 @@ using Northwind.Application.Services;
 using Northwind.Application.Validators;
 using Northwind.Core.Models;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_Final.CrearEditRegisFrm
@@ -22,15 +21,15 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             _validator = validator;
             _productEdit = new Product();
 
-            CargarCategoriasAsync().ConfigureAwait(false);
-            CargarSuplidoresAsync().ConfigureAwait(false);
+            CargarCategoriasAsync();
+            CargarSuplidoresAsync();
         }
 
-        private async Task CargarCategoriasAsync()
+        private void CargarCategoriasAsync()
         {
             try
             {
-                var categorias = await _productService.GetAllCategoriesAsync();
+                var categorias = _productService.GetAllCategoriesAsync();
                 CategCmbx.DisplayMember = "CategoryName";
                 CategCmbx.ValueMember = "CategoryId";
                 CategCmbx.DataSource = categorias;
@@ -42,11 +41,11 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             }
         }
 
-        private async Task CargarSuplidoresAsync()
+        private void CargarSuplidoresAsync()
         {
             try
             {
-                var suplidores = await _productService.GetAllSuppliersAsync();
+                var suplidores = _productService.GetAllSuppliersAsync();
                 SuppCmbx.DisplayMember = "CompanyName";
                 SuppCmbx.ValueMember = "SupplierId";
                 SuppCmbx.DataSource = suplidores;
@@ -74,7 +73,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             DiscontCbx.Checked = _productEdit.Discontinued;
         }
 
-        private async void BtSave_Click(object sender, EventArgs e)
+        private void BtSave_Click(object sender, EventArgs e)
         {
             if (CategCmbx.SelectedValue == null || !(CategCmbx.SelectedValue is int))
             {
@@ -113,9 +112,9 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             try
             {
                 if (_isEditMode)
-                    await _productService.UpdateAsync(product);
+                    _productService.UpdateProduct(product);
                 else
-                    await _productService.AddAsync(product);
+                    _productService.AddProduct(product);
 
                 MessageBox.Show("Producto guardado correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();

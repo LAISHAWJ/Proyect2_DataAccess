@@ -6,7 +6,6 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_Final.CrearEditRegisFrm
@@ -116,7 +115,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             }
         }
 
-        private async void BtSave_Click(object sender, EventArgs e)
+        private void BtSave_Click(object sender, EventArgs e)
         {
             _categoryEdit.CategoryName = TxtNameCat.Text;
             _categoryEdit.Description = TxtDescripCat.Text;
@@ -139,12 +138,12 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             {
                 if (_isEditMode)
                 {
-                    await _categoryService.UpdateAsync(_categoryEdit);
+                    _categoryService.UpdateCategory(_categoryEdit);
                     MessageBox.Show("Categoría actualizada.");
                 }
                 else
                 {
-                    await _categoryService.AddAsync(_categoryEdit);
+                    _categoryService.AddCategory(_categoryEdit);
                     MessageBox.Show("Categoría agregada.");
                 }
                 this.Close();

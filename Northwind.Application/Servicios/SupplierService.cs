@@ -3,10 +3,6 @@ using Northwind.Application.Interfaces;
 using Northwind.Application.Validators;
 using Northwind.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Northwind.Application.Servicios
 {
@@ -19,35 +15,35 @@ namespace Northwind.Application.Servicios
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Supplier>> GetAllAsync()
+        public IEnumerable<Supplier> GetAllSupplier()
         {
-            return await _repository.GetAllAsync();
+            return _repository.GetAllSupplier();
         }
 
-        public async Task<Supplier> GetByIdAsync(int id)
+        public Supplier GetByIdSupplier(int id)
         {
-            var supplier = await _repository.GetByIdAsync(id);
+            var supplier = _repository.GetByIdSupplier(id);
             if (supplier == null) throw new Exception("Suplidor no encontrado");
             return supplier;
         }
 
-        public async Task AddAsync(Supplier supplier)
+        public void AddSupplier(Supplier supplier)
         {
             var validator = new SupplierValid();
             validator.ValidateAndThrow(supplier);
-            await _repository.AddAsync(supplier);
+            _repository.AddSupplier(supplier);
         }
 
-        public async Task UpdateAsync(Supplier supplier)
+        public void UpdateSupplier(Supplier supplier)
         {
             var validator = new SupplierValid();
             validator.ValidateAndThrow(supplier);
-            await _repository.UpdateAsync(supplier);
+            _repository.UpdateSupplier(supplier);
         }
 
-        public async Task DeleteAsync(int id)
+        public void DeleteSupplier(int id)
         {
-            await _repository.DeleteAsync(id);
+            _repository.DeleteSupplier(id);
         }
     }
 }

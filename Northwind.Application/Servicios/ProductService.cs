@@ -3,8 +3,6 @@ using Northwind.Application.Interfaces;
 using Northwind.Application.Validators;
 using Northwind.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Northwind.Application.Services
 {
@@ -17,40 +15,40 @@ namespace Northwind.Application.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public IEnumerable<Product> GetAllProduct()
         {
-            return await _repository.GetAllAsync();
+            return _repository.GetAllProduct();
         }
 
-        public async Task<Product?> GetByIdAsync(int id)
+        public Product GetByIdProduct(int id)
         {
-            return await _repository.GetByIdAsync(id);
+            return _repository.GetByIdProduct(id);
         }
 
-        public async Task AddAsync(Product product)
-        {
-            if (product == null) throw new ArgumentNullException(nameof(product));
-            var validator = new ProductValid(); 
-            validator.ValidateAndThrow(product);
-            await _repository.AddAsync(product);
-        }
-
-        public async Task UpdateAsync(Product product)
+        public void AddProduct(Product product)
         {
             if (product == null) throw new ArgumentNullException(nameof(product));
             var validator = new ProductValid();
             validator.ValidateAndThrow(product);
-            await _repository.UpdateAsync(product);
+            _repository.AddProduct(product);
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        public void UpdateProduct(Product product)
         {
-            return await _repository.GetAllCategoriesAsync();
+            if (product == null) throw new ArgumentNullException(nameof(product));
+            var validator = new ProductValid();
+            validator.ValidateAndThrow(product);
+            _repository.UpdateProduct(product);
         }
 
-        public async Task<IEnumerable<Supplier>> GetAllSuppliersAsync()
+        public IEnumerable<Category> GetAllCategoriesAsync()
         {
-            return await _repository.GetAllSuppliersAsync();
+            return _repository.GetAllCategoriesAsync();
+        }
+
+        public IEnumerable<Supplier> GetAllSuppliersAsync()
+        {
+            return _repository.GetAllSuppliersAsync();
         }
     }
 }

@@ -4,7 +4,6 @@ using Northwind.Core.Models;
 using NorthwindApp_Final.CrearEditRegisFrm;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_Final.PrincipalForms
@@ -23,15 +22,15 @@ namespace NorthwindApp_Final.PrincipalForms
             _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
             _menuFrm = menuFrm ?? throw new ArgumentNullException(nameof(menuFrm));
             _ordenesEnSesion = new List<Order>();
-            this.Load += async (s, e) => await CargarOrdenesEnSesionAsync(); // Carga asíncrona al iniciar
+            this.Load += new EventHandler(CargarOrdenesEnSesion); // Carga sincrónica al iniciar
         }
 
         private void OrderFrm_Load(object sender, EventArgs e)
         {
-            CargarCombosAsync().ConfigureAwait(false); // Configuración asíncrona de combos
+            CargarCombosAsync(); // Configuración sincrónica de combos
         }
 
-        private async Task CargarOrdenesEnSesionAsync()
+        private void CargarOrdenesEnSesion(object sender, EventArgs e)
         {
             try
             {
@@ -56,7 +55,7 @@ namespace NorthwindApp_Final.PrincipalForms
                 OrderDgv.DataSource = detalles;
                 OrderDgv.Refresh();
 
-                await CalcularTotalesAsync();
+                CalcularTotalesAsync();
             }
             catch (Exception ex)
             {
@@ -64,7 +63,7 @@ namespace NorthwindApp_Final.PrincipalForms
             }
         }
 
-        private async Task CalcularTotalesAsync()
+        private void CalcularTotalesAsync()
         {
             try
             {
@@ -99,26 +98,26 @@ namespace NorthwindApp_Final.PrincipalForms
             }
         }
 
-        private async Task CargarCombosAsync()
+        private void CargarCombosAsync()
         {
             try
             {
-                var clientes = await _orderService.GetCustomersAsync();
+                var clientes = _orderService.GetCustomersAsync();
                 ClienteCbx.DataSource = clientes;
                 ClienteCbx.DisplayMember = "CompanyName";
                 ClienteCbx.ValueMember = "CustomerId";
 
-                var empleados = await _orderService.GetEmployeesAsync();
+                var empleados = _orderService.GetEmployeesAsync();
                 EmpleadoCbx.DataSource = empleados;
                 EmpleadoCbx.DisplayMember = "LastName";
                 EmpleadoCbx.ValueMember = "EmployeeId";
 
-                var transportistas = await _orderService.GetShippersAsync();
+                var transportistas = _orderService.GetShippersAsync();
                 ShipViaCbx.DataSource = transportistas;
                 ShipViaCbx.DisplayMember = "CompanyName";
                 ShipViaCbx.ValueMember = "ShipperId";
 
-                var destinatarios = (await _orderService.GetAllAsync())
+                var destinatarios = _orderService.GetAllOrder()
                     .Select(o => o.ShipName)
                     .Where(s => !string.IsNullOrEmpty(s))
                     .Distinct()
@@ -131,7 +130,7 @@ namespace NorthwindApp_Final.PrincipalForms
             }
         }
 
-        private async Task<Order> CrearNuevaOrdenAsync()
+        private Order CrearNuevaOrdenAsync()
         {
             var nuevaOrden = new Order
             {
@@ -151,7 +150,7 @@ namespace NorthwindApp_Final.PrincipalForms
                 OrderDetails = new List<OrderDetail>()
             };
 
-            await _orderService.AddAsync(nuevaOrden);
+            _orderService.AddOrder(nuevaOrden);
             return nuevaOrden;
         }
 
@@ -161,7 +160,7 @@ namespace NorthwindApp_Final.PrincipalForms
             this.Close();
         }
 
-        private async void BtCrearOrderDetail_Click(object sender, EventArgs e)
+        private void BtCrearOrderDetail_Click(object sender, EventArgs e)
         {
             try
             {
@@ -174,7 +173,7 @@ namespace NorthwindApp_Final.PrincipalForms
 
                 if (_ordenesEnSesion.Count == 0)
                 {
-                    ordenActual = await CrearNuevaOrdenAsync();
+                    ordenActual = CrearNuevaOrdenAsync();
                     _ordenesEnSesion.Add(ordenActual);
                 }
                 else
@@ -186,10 +185,10 @@ namespace NorthwindApp_Final.PrincipalForms
                 {
                     if (crearOrderFrm != null)
                     {
-                        crearOrderFrm.SetOrderId(ordenActual.OrderId); // Método añadido
+                        crearOrderFrm.SetOrderId(ordenActual.OrderId);
                         if (crearOrderFrm.ShowDialog() == DialogResult.OK)
                         {
-                            var ordenRecargada = await _orderService.GetByIdAsync(ordenActual.OrderId);
+                            var ordenRecargada = _orderService.GetByIdOrder(ordenActual.OrderId);
                             if (ordenRecargada != null)
                             {
                                 int index = _ordenesEnSesion.FindIndex(o => o.OrderId == ordenRecargada.OrderId);
@@ -202,8 +201,8 @@ namespace NorthwindApp_Final.PrincipalForms
                                     _ordenesEnSesion.Add(ordenRecargada);
                                 }
                             }
-                            await CargarOrdenesEnSesionAsync();
-                            await CalcularTotalesAsync();
+                            CargarOrdenesEnSesion(sender, e);
+                            CalcularTotalesAsync();
                         }
                     }
                 }
@@ -214,7 +213,7 @@ namespace NorthwindApp_Final.PrincipalForms
             }
         }
 
-        private async void BtSave_Click(object sender, EventArgs e)
+        private void BtSave_Click(object sender, EventArgs e)
         {
             try
             {
@@ -235,7 +234,7 @@ namespace NorthwindApp_Final.PrincipalForms
                     ShipAddress = TxtDirecOrder.Text,
                 };
 
-                var validador = new Northwind.Application.Validators.OrderValid(); // Ajustado namespace
+                var validador = new Northwind.Application.Validators.OrderValid();
                 var resultado = validador.Validate(ordenAValidar);
 
                 if (!resultado.IsValid)
@@ -285,9 +284,9 @@ namespace NorthwindApp_Final.PrincipalForms
                 ordenActual.ShipPostalCode = TxtCodePostalOrder.Text;
                 ordenActual.ShipCountry = TxtShipCountry.Text;
 
-                await _orderService.UpdateAsync(ordenActual);
+                _orderService.UpdateOrder(ordenActual);
                 MessageBox.Show("Orden guardada exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                await CargarOrdenesEnSesionAsync();
+                CargarOrdenesEnSesion(sender, e);
                 LimpiarFormulario();
                 _ordenesEnSesion = new List<Order>();
             }
@@ -297,7 +296,7 @@ namespace NorthwindApp_Final.PrincipalForms
             }
         }
 
-        private async void BtDeleteOrder_Click(object sender, EventArgs e)
+        private void BtDeleteOrder_Click(object sender, EventArgs e)
         {
             try
             {
@@ -315,7 +314,7 @@ namespace NorthwindApp_Final.PrincipalForms
                 foreach (DataGridViewRow row in OrderDgv.SelectedRows)
                 {
                     var orderId = (int)row.Cells["OrderId"].Value;
-                    await _orderService.DeleteAsync(orderId);
+                    _orderService.DeleteOrder(orderId);
 
                     var ordenSesion = _ordenesEnSesion.FirstOrDefault(o => o.OrderId == orderId);
                     if (ordenSesion != null)
@@ -324,7 +323,7 @@ namespace NorthwindApp_Final.PrincipalForms
                     }
                 }
 
-                await CargarOrdenesEnSesionAsync();
+                CargarOrdenesEnSesion(sender, e);
                 LimpiarFormulario();
 
                 MessageBox.Show("Orden(es) eliminada(s) correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -335,7 +334,7 @@ namespace NorthwindApp_Final.PrincipalForms
             }
         }
 
-        private async void BtEditOrderDetail_Click(object sender, EventArgs e)
+        private void BtEditOrderDetail_Click(object sender, EventArgs e)
         {
             try
             {
@@ -374,11 +373,11 @@ namespace NorthwindApp_Final.PrincipalForms
                         {
                             if (crearOrderFrm != null)
                             {
-                                crearOrderFrm.SetOrderId(ordenActual.OrderId); // Método añadido
-                                crearOrderFrm.SetOrderDetail(orderDetail); // Método añadido
+                                crearOrderFrm.SetOrderId(ordenActual.OrderId);
+                                crearOrderFrm.SetOrderDetail(orderDetail);
                                 if (crearOrderFrm.ShowDialog() == DialogResult.OK)
                                 {
-                                    var ordenRecargada = await _orderService.GetByIdAsync(ordenActual.OrderId);
+                                    var ordenRecargada = _orderService.GetByIdOrder(ordenActual.OrderId);
                                     if (ordenRecargada != null)
                                     {
                                         int index = _ordenesEnSesion.FindIndex(o => o.OrderId == ordenRecargada.OrderId);
@@ -391,8 +390,8 @@ namespace NorthwindApp_Final.PrincipalForms
                                             _ordenesEnSesion.Add(ordenRecargada);
                                         }
                                     }
-                                    await CargarOrdenesEnSesionAsync();
-                                    await CalcularTotalesAsync();
+                                    CargarOrdenesEnSesion(sender, e);
+                                    CalcularTotalesAsync();
                                 }
                             }
                         }
@@ -414,8 +413,8 @@ namespace NorthwindApp_Final.PrincipalForms
                 ordenActual.ShipPostalCode = TxtCodePostalOrder.Text;
                 ordenActual.ShipCountry = TxtShipCountry.Text;
 
-                await CargarOrdenesEnSesionAsync();
-                await CalcularTotalesAsync();
+                CargarOrdenesEnSesion(sender, e);
+                CalcularTotalesAsync();
             }
             catch (Exception ex)
             {

@@ -3,7 +3,6 @@ using Northwind.Application.Servicios;
 using Northwind.Core.Models;
 using NorthwindApp_Final.CrearEditRegisFrm;
 using System;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_Final.PrincipalForms
@@ -20,14 +19,14 @@ namespace NorthwindApp_Final.PrincipalForms
             _supplierService = supplierService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            this.Load += async (s, e) => await CargarSuppliersAsync(); // Carga asíncrona al iniciar
+            this.Load += new EventHandler(CargarSuppliers); // Carga sincrónica al iniciar
         }
 
-        private async Task CargarSuppliersAsync()
+        private void CargarSuppliers(object sender, EventArgs e)
         {
             try
             {
-                var suppliers = await _supplierService.GetAllAsync();
+                var suppliers = _supplierService.GetAllSupplier();
                 if (suppliers != null && suppliers.Any())
                 {
                     SuppDgv.DataSource = suppliers;
@@ -47,7 +46,7 @@ namespace NorthwindApp_Final.PrincipalForms
 
         private void SupplierFrm_Load(object sender, EventArgs e)
         {
-            // La carga ya se hace en el constructor con async
+            // La carga ya se hace en el evento Load
         }
 
         private void BtAdd_Click(object sender, EventArgs e)
@@ -55,12 +54,12 @@ namespace NorthwindApp_Final.PrincipalForms
             var form = _serviceProvider.GetService<SuppliercrearFrm>();
             if (form != null)
             {
-                form.FormClosed += async (s, args) => await CargarSuppliersAsync(); // Recargar lista al cerrar
+                form.FormClosed += (s, args) => CargarSuppliers(s, args); // Recargar lista al cerrar
                 form.ShowDialog();
             }
         }
 
-        private async void BtUpdate_Click(object sender, EventArgs e)
+        private void BtUpdate_Click(object sender, EventArgs e)
         {
             if (SuppDgv.SelectedRows.Count == 0)
             {
@@ -73,12 +72,12 @@ namespace NorthwindApp_Final.PrincipalForms
             if (form != null)
             {
                 form.SetEditMode(supplier);
-                form.FormClosed += async (s, args) => await CargarSuppliersAsync();
+                form.FormClosed += (s, args) => CargarSuppliers(s, args);
                 form.ShowDialog();
             }
         }
 
-        private async void BtDelete_Click(object sender, EventArgs e)
+        private void BtDelete_Click(object sender, EventArgs e)
         {
             if (SuppDgv.SelectedRows.Count == 0)
             {
@@ -91,8 +90,8 @@ namespace NorthwindApp_Final.PrincipalForms
             var confirmar = MessageBox.Show($"¿Deseas eliminar '{supplier.CompanyName}'?", "Confirmar", MessageBoxButtons.YesNo);
             if (confirmar == DialogResult.Yes)
             {
-                await _supplierService.DeleteAsync(supplier.SupplierId);
-                await CargarSuppliersAsync();
+                _supplierService.DeleteSupplier(supplier.SupplierId);
+                CargarSuppliers(sender, e);
             }
         }
 

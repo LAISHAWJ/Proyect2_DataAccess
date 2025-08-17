@@ -3,7 +3,6 @@ using Northwind.Application.Services;
 using NorthwindApp_Final.CrearEditRegisFrm;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NorthwindApp_Final.PrincipalForms
@@ -20,19 +19,19 @@ namespace NorthwindApp_Final.PrincipalForms
             _productService = productService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            this.Load += async (s, e) => await CargarProductosAsync(); // Carga asíncrona al iniciar
+            this.Load += new EventHandler(CargarProductos); // Carga sincrónica al iniciar
         }
 
         private void ProductsFrm_Load(object sender, EventArgs e)
         {
-            ConfigurarComboFiltrosAsync().ConfigureAwait(false); // Configuración asíncrona de filtros
+            ConfigurarComboFiltrosAsync(); // Configuración sincrónica de filtros
         }
 
-        private async Task CargarProductosAsync()
+        private void CargarProductos(object sender, EventArgs e)
         {
             try
             {
-                var productos = await _productService.GetAllAsync();
+                var productos = _productService.GetAllProduct();
 
                 string estado = StatusCbx.SelectedItem?.ToString();
                 string categoriaSeleccionada = CmbxCat.SelectedItem?.ToString();
@@ -80,7 +79,7 @@ namespace NorthwindApp_Final.PrincipalForms
             }
         }
 
-        private async Task ConfigurarComboFiltrosAsync()
+        private void ConfigurarComboFiltrosAsync()
         {
             try
             {
@@ -92,7 +91,7 @@ namespace NorthwindApp_Final.PrincipalForms
                 StatusCbx.SelectedIndex = 1; // Por defecto: "Activos"
 
                 // Categorías
-                var categorias = await _productService.GetAllCategoriesAsync();
+                var categorias = _productService.GetAllCategoriesAsync();
                 CmbxCat.Items.Clear();
                 CmbxCat.Items.Add("Todas");
                 foreach (var cat in categorias)
@@ -100,7 +99,7 @@ namespace NorthwindApp_Final.PrincipalForms
                 CmbxCat.SelectedIndex = 0;
 
                 // Suplidores
-                var suplidores = await _productService.GetAllSuppliersAsync();
+                var suplidores = _productService.GetAllSuppliersAsync();
                 CmbxSup.Items.Clear();
                 CmbxSup.Items.Add("Todos");
                 foreach (var sup in suplidores)
@@ -118,12 +117,12 @@ namespace NorthwindApp_Final.PrincipalForms
             var form = _serviceProvider.GetService<ProductcrearFrm>();
             if (form != null)
             {
-                form.FormClosed += async (s, args) => await CargarProductosAsync();
+                form.FormClosed += (s, args) => CargarProductos(s, args);
                 form.ShowDialog();
             }
         }
 
-        private async void BtUpdate_Click(object sender, EventArgs e)
+        private void BtUpdate_Click(object sender, EventArgs e)
         {
             if (ProductDgv.SelectedRows.Count == 0)
             {
@@ -133,7 +132,7 @@ namespace NorthwindApp_Final.PrincipalForms
 
             var productoSeleccionado = ProductDgv.SelectedRows[0].DataBoundItem;
             var productId = (int)productoSeleccionado.GetType().GetProperty("ProductId").GetValue(productoSeleccionado);
-            var producto = (await _productService.GetAllAsync()).FirstOrDefault(p => p.ProductId == productId);
+            var producto = _productService.GetAllProduct().FirstOrDefault(p => p.ProductId == productId);
 
             if (producto != null)
             {
@@ -141,13 +140,13 @@ namespace NorthwindApp_Final.PrincipalForms
                 if (form != null)
                 {
                     form.SetEditMode(producto);
-                    form.FormClosed += async (s, args) => await CargarProductosAsync();
+                    form.FormClosed += (s, args) => CargarProductos(s, args);
                     form.ShowDialog();
                 }
             }
         }
 
-        private async void BtDelete_Click(object sender, EventArgs e)
+        private void BtDelete_Click(object sender, EventArgs e)
         {
             if (ProductDgv.SelectedRows.Count == 0)
             {
@@ -157,7 +156,7 @@ namespace NorthwindApp_Final.PrincipalForms
 
             var productoSeleccionado = ProductDgv.SelectedRows[0].DataBoundItem;
             var productId = (int)productoSeleccionado.GetType().GetProperty("ProductId").GetValue(productoSeleccionado);
-            var producto = (await _productService.GetAllAsync()).FirstOrDefault(p => p.ProductId == productId);
+            var producto = _productService.GetAllProduct().FirstOrDefault(p => p.ProductId == productId);
 
             if (producto != null)
             {
@@ -168,8 +167,8 @@ namespace NorthwindApp_Final.PrincipalForms
 
                     try
                     {
-                        await _productService.UpdateAsync(producto);
-                        await CargarProductosAsync();
+                        _productService.UpdateProduct(producto);
+                        CargarProductos(sender, e);
                         MessageBox.Show("Producto marcado como descontinuado.");
                     }
                     catch (Exception ex)
@@ -186,9 +185,9 @@ namespace NorthwindApp_Final.PrincipalForms
             this.Close();
         }
 
-        private async void BtSearch_Click(object sender, EventArgs e)
+        private void BtSearch_Click(object sender, EventArgs e)
         {
-            await CargarProductosAsync();
+            CargarProductos(sender, e);
         }
     }
 }

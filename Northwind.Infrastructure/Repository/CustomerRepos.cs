@@ -3,8 +3,6 @@ using Northwind.Application.Interfaces;
 using Northwind.Core.Models;
 using NorthwindApp.Infrastructure.Data;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Northwind.Infrastructure.Repositories
 {
@@ -12,47 +10,44 @@ namespace Northwind.Infrastructure.Repositories
     {
         private readonly NorthwindContext _context;
 
-        // Constructor
         public CustomerRepos(NorthwindContext context)
         {
             _context = context;
         }
 
-        // Obtener todos
-        public async Task<IEnumerable<Customer>> GetAllAsync()
+        public IEnumerable<Customer> GetAllCustomer()
         {
-            return await _context.Customers.ToListAsync();
+            return _context.Customers.ToList();
         }
 
-        public async Task<Customer> GetByIdAsync(string id)
+        public Customer GetByIdCustomer(string id)
         {
-            return await _context.Customers.FindAsync(id);
+            return _context.Customers.Find(id);
         }
 
- 
-        public async Task AddAsync(Customer customer)
+        public void AddCustomer(Customer customer)
         {
             if (customer == null)
                 throw new ArgumentNullException(nameof(customer));
             _context.Customers.Add(customer);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task UpdateAsync(Customer customer)
+        public void UpdateCustomer(Customer customer)
         {
             if (customer == null)
                 throw new ArgumentNullException(nameof(customer));
             _context.Entry(customer).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task DeleteAsync(string id)
+        public void DeleteCustomer(string id)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = _context.Customers.Find(id);
             if (customer != null)
             {
                 _context.Customers.Remove(customer);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
         }
     }

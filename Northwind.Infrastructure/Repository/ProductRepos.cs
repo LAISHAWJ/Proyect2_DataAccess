@@ -3,8 +3,6 @@ using Northwind.Application.Interfaces;
 using Northwind.Core.Models;
 using NorthwindApp.Infrastructure.Data;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Northwind.Infrastructure.Repositories
 {
@@ -19,48 +17,48 @@ namespace Northwind.Infrastructure.Repositories
         }
 
         // Obtener todos los productos
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        public IEnumerable<Product> GetAllProduct()
         {
-            return await _context.Products
+            return _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.Supplier)
-                .ToListAsync();
+                .ToList();
         }
 
         // Obtener producto por ID
-        public async Task<Product?> GetByIdAsync(int id)
+        public Product GetByIdProduct(int id)
         {
-            return await _context.Products.FindAsync(id);
+            return _context.Products.Find(id);
         }
 
         // Agregar producto
-        public async Task AddAsync(Product product)
+        public void AddProduct(Product product)
         {
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
             _context.Products.Add(product);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         // Actualizar producto
-        public async Task UpdateAsync(Product product)
+        public void UpdateProduct(Product product)
         {
             if (product == null)
                 throw new ArgumentNullException(nameof(product));
             _context.Entry(product).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         // Obtener todas las categorías
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        public IEnumerable<Category> GetAllCategoriesAsync()
         {
-            return await _context.Categories.OrderBy(c => c.CategoryName).ToListAsync();
+            return _context.Categories.OrderBy(c => c.CategoryName).ToList();
         }
 
         // Obtener todos los proveedores
-        public async Task<IEnumerable<Supplier>> GetAllSuppliersAsync()
+        public IEnumerable<Supplier> GetAllSuppliersAsync()
         {
-            return await _context.Suppliers.OrderBy(s => s.CompanyName).ToListAsync();
+            return _context.Suppliers.OrderBy(s => s.CompanyName).ToList();
         }
     }
 }

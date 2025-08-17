@@ -3,10 +3,6 @@ using Northwind.Application.Interfaces;
 using Northwind.Application.Validators;
 using Northwind.Core.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Northwind.Application.Servicios
 {
@@ -19,35 +15,35 @@ namespace Northwind.Application.Servicios
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Employee>> GetAllAsync()
+        public IEnumerable<Employee> GetAllEmployee()
         {
-            return await _repository.GetAllAsync();
+            return _repository.GetAllEmployee();
         }
 
-        public async Task<Employee> GetByIdAsync(int id)
+        public Employee GetByIdEmployee(int id)
         {
-            var employee = await _repository.GetByIdAsync(id);
+            var employee = _repository.GetByIdEmployee(id);
             if (employee == null) throw new Exception("Empleado no encontrado");
             return employee;
         }
 
-        public async Task AddAsync(Employee employee)
+        public void AddEmployee(Employee employee)
         {
             var validator = new EmployeeValid();
             validator.ValidateAndThrow(employee);
-            await _repository.AddAsync(employee);
+            _repository.AddEmployee(employee);
         }
 
-        public async Task UpdateAsync(Employee employee)
+        public void UpdateEmployee(Employee employee)
         {
             var validator = new EmployeeValid();
             validator.ValidateAndThrow(employee);
-            await _repository.UpdateAsync(employee);
+            _repository.UpdateEmployee(employee);
         }
 
-        public async Task DeleteAsync(int id)
+        public void DeleteEmployee(int id)
         {
-            await _repository.DeleteAsync(id);
+            _repository.DeleteEmployee(id);
         }
     }
 }
