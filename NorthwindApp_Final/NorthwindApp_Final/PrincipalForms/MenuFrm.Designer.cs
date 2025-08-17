@@ -187,7 +187,7 @@
             BtEmployee.IconColor = Color.Black;
             BtEmployee.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtEmployee.Name = "BtEmployee";
-            BtEmployee.Size = new Size(224, 32);
+            BtEmployee.Size = new Size(223, 32);
             BtEmployee.Text = "Empleados";
             BtEmployee.Click += BtEmployee_Click;
             // 
@@ -197,7 +197,7 @@
             BtCustomer.IconColor = Color.Black;
             BtCustomer.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtCustomer.Name = "BtCustomer";
-            BtCustomer.Size = new Size(224, 32);
+            BtCustomer.Size = new Size(223, 32);
             BtCustomer.Text = "Clientes";
             BtCustomer.Click += BtCustomer_Click;
             // 
@@ -207,7 +207,7 @@
             BtShipper.IconColor = Color.Black;
             BtShipper.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtShipper.Name = "BtShipper";
-            BtShipper.Size = new Size(224, 32);
+            BtShipper.Size = new Size(223, 32);
             BtShipper.Text = "Transportistas";
             BtShipper.Click += BtShipper_Click;
             // 
@@ -229,8 +229,8 @@
             // 
             // MenuFrm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(120F, 120F);
+            AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
             ClientSize = new Size(968, 610);
             Controls.Add(panel2);

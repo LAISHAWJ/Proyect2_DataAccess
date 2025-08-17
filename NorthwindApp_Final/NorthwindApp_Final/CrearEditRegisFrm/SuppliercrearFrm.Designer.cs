@@ -55,6 +55,7 @@
             BtCancel = new Button();
             BtSave = new Button();
             panel1.SuspendLayout();
+            SuspendLayout();
             // 
             // panel1
             // 

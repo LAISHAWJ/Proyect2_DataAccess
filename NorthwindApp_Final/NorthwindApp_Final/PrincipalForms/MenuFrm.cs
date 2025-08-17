@@ -26,7 +26,7 @@ namespace NorthwindApp_Final.PrincipalForms
         private void BtExit_Click(object sender, EventArgs e)
         {
             DialogResult Opcionsalir = MessageBox.Show(
-                "¿Desea salir del Sistema de Inventario?",
+                "¿Desea salir de Northwind App?",
                 "SALIR",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question);

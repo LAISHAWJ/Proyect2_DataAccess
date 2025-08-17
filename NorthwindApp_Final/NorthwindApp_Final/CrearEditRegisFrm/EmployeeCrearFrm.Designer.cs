@@ -480,9 +480,10 @@
             // 
             // EmployeeCrearFrm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1097, 866);
+            AutoScaleDimensions = new SizeF(120F, 120F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoSize = true;
+            ClientSize = new Size(1105, 866);
             Controls.Add(BtCancel);
             Controls.Add(BtSave);
             Controls.Add(groupBox4);

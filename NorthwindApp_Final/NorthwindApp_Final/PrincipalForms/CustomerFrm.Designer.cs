@@ -207,8 +207,9 @@
             // 
             // CustomerFrm
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleDimensions = new SizeF(120F, 120F);
+            AutoScaleMode = AutoScaleMode.Dpi;
+            AutoSize = true;
             ClientSize = new Size(1002, 664);
             Controls.Add(panel1);
             Name = "CustomerFrm";
