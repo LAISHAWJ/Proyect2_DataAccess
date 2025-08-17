@@ -47,8 +47,8 @@ namespace Northwind.Application.Validators
 
 
             RuleFor(e => e.Title)
-                .NotEmpty().WithMessage("El título es obligatorio.")
-                .MaximumLength(50).WithMessage("El título no debe exceder los 50 caracteres.");
+                .NotEmpty().WithMessage("El puesto es obligatorio.")
+                .MaximumLength(50).WithMessage("El puesto no debe exceder los 50 caracteres.");
 
             
             RuleFor(e => e.HireDate)
