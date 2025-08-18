@@ -171,7 +171,7 @@
             BtEntidadesPlus.DropDownItems.AddRange(new ToolStripItem[] { BtEmployee, BtCustomer, BtShipper });
             BtEntidadesPlus.Font = new Font("Yu Gothic UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             BtEntidadesPlus.ForeColor = SystemColors.ButtonHighlight;
-            BtEntidadesPlus.IconChar = FontAwesome.Sharp.IconChar.FileCirclePlus;
+            BtEntidadesPlus.IconChar = FontAwesome.Sharp.IconChar.EllipsisH;
             BtEntidadesPlus.IconColor = SystemColors.ButtonHighlight;
             BtEntidadesPlus.IconFont = FontAwesome.Sharp.IconFont.Solid;
             BtEntidadesPlus.IconSize = 60;
@@ -180,6 +180,7 @@
             BtEntidadesPlus.Size = new Size(90, 92);
             BtEntidadesPlus.Text = "OTROS";
             BtEntidadesPlus.TextImageRelation = TextImageRelation.ImageAboveText;
+            BtEntidadesPlus.Click += BtEntidadesPlus_Click;
             // 
             // BtEmployee
             // 
@@ -187,7 +188,7 @@
             BtEmployee.IconColor = Color.Black;
             BtEmployee.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtEmployee.Name = "BtEmployee";
-            BtEmployee.Size = new Size(223, 32);
+            BtEmployee.Size = new Size(224, 32);
             BtEmployee.Text = "Empleados";
             BtEmployee.Click += BtEmployee_Click;
             // 
@@ -197,7 +198,7 @@
             BtCustomer.IconColor = Color.Black;
             BtCustomer.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtCustomer.Name = "BtCustomer";
-            BtCustomer.Size = new Size(223, 32);
+            BtCustomer.Size = new Size(224, 32);
             BtCustomer.Text = "Clientes";
             BtCustomer.Click += BtCustomer_Click;
             // 
@@ -207,7 +208,7 @@
             BtShipper.IconColor = Color.Black;
             BtShipper.IconFont = FontAwesome.Sharp.IconFont.Auto;
             BtShipper.Name = "BtShipper";
-            BtShipper.Size = new Size(223, 32);
+            BtShipper.Size = new Size(224, 32);
             BtShipper.Text = "Transportistas";
             BtShipper.Click += BtShipper_Click;
             // 
@@ -231,7 +232,6 @@
             // 
             AutoScaleDimensions = new SizeF(120F, 120F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            AutoSize = true;
             ClientSize = new Size(968, 610);
             Controls.Add(panel2);
             Controls.Add(menuStrip1);

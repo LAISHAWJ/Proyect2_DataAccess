@@ -18,7 +18,8 @@ namespace NorthwindApp_Final
         [STAThread]
         static void Main()
         {
-            Application.SetHighDpiMode(HighDpiMode.DpiUnaware); // ignora escalado
+            //Application.SetHighDpiMode(HighDpiMode.DpiUnaware); // ignora escalado
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
 
             var services = new ServiceCollection();
             ConfigureServices(services);

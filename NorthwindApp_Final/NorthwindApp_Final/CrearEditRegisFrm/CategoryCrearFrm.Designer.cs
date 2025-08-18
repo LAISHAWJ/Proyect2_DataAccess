@@ -163,7 +163,6 @@
             // 
             AutoScaleDimensions = new SizeF(120F, 120F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            AutoSize = true;
             ClientSize = new Size(582, 712);
             Controls.Add(BtCancel);
             Controls.Add(BtSave);

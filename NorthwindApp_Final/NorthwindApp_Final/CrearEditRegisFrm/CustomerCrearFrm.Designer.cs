@@ -305,7 +305,6 @@
             // 
             AutoScaleDimensions = new SizeF(120F, 120F);
             AutoScaleMode = AutoScaleMode.Dpi;
-            AutoSize = true;
             ClientSize = new Size(623, 805);
             Controls.Add(TxtCustomerId);
             Controls.Add(label12);
