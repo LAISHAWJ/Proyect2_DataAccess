@@ -14,7 +14,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
         private readonly EmployeeService _employeeService;
         private readonly EmployeeValid _validator;
         private Employee _employeeEdit;
-        private bool _isEditMode = false; 
+        private bool _isEditMode = false;
 
         public EmployeeCrearFrm(EmployeeService employeeService, EmployeeValid validator)
         {
@@ -61,7 +61,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             }
         }
 
-        private Image ConvertirBytesAImagen(byte[] bytes)
+        private Image? ConvertirBytesAImagen(byte[] bytes)
         {
             try
             {
@@ -206,6 +206,11 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
         private void BtCancel_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

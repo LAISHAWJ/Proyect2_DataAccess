@@ -226,6 +226,7 @@
             label3.Size = new Size(96, 28);
             label3.TabIndex = 32;
             label3.Text = "Apellidos";
+            label3.Click += label3_Click;
             // 
             // TxtNames
             // 
@@ -514,9 +515,6 @@
         private DateTimePicker TxtDateTimHire;
         private Label label7;
         private GroupBox groupBox1;
-        private DateTimePicker dateTimePicker1;
-        private DateTimePicker dateTimePicker2;
-        private Label label17;
         private TextBox TxtLastNames;
         private Label label3;
         private TextBox TxtNames;

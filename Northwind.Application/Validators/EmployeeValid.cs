@@ -50,14 +50,10 @@ namespace Northwind.Application.Validators
                 .NotEmpty().WithMessage("El puesto es obligatorio.")
                 .MaximumLength(50).WithMessage("El puesto no debe exceder los 50 caracteres.");
 
-            
             RuleFor(e => e.HireDate)
-                .NotNull().WithMessage("La fecha de contratación es obligatoria.")
-                .LessThanOrEqualTo(DateTime.Today).WithMessage("La fecha de contratación no puede ser futura.");
+            .Must(fecha => !fecha.HasValue || fecha.Value.Date <= DateTime.Today)
+            .WithMessage("La fecha de contratación no puede ser futura.");
 
         }
-
-
     }
-    
 }

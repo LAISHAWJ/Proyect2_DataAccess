@@ -314,7 +314,6 @@
         private Label label8;
         private TextBox TxtReorderLevel;
         private Label label9;
-        private Label label10;
         private CheckBox DiscontCbx;
         private Button BtCancel;
         private Button BtSave;
