@@ -529,6 +529,7 @@
             MainMenuStrip = menuStrip1;
             Name = "OrderFrm";
             ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Load += OrderFrm_Load;
             panel1.ResumeLayout(false);

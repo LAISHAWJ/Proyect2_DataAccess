@@ -163,6 +163,7 @@
             Controls.Add(panel1);
             Name = "EmployeeFrm";
             ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Load += EmployeeFrm_Load;
             panel1.ResumeLayout(false);

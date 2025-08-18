@@ -167,6 +167,7 @@
             Controls.Add(panel1);
             Name = "CategoryFrm";
             ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Load += CategoryFrm_Load;
             panel1.ResumeLayout(false);

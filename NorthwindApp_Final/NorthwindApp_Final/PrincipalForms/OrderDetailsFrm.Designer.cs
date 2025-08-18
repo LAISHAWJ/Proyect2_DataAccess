@@ -151,6 +151,7 @@
             FormBorderStyle = FormBorderStyle.Fixed3D;
             Name = "OrderDetailsFrm";
             ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Load += OrderDetailsFrm_Load;
             panel1.ResumeLayout(false);

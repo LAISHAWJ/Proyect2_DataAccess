@@ -493,6 +493,7 @@
             Controls.Add(panel1);
             Name = "EmployeeCrearFrm";
             ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();

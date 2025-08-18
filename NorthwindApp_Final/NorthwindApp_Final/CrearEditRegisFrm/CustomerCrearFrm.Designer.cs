@@ -333,6 +333,7 @@
             Controls.Add(panel1);
             Name = "CustomerCrearFrm";
             ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Load += CustomerCrearFrm_Load;
             panel1.ResumeLayout(false);

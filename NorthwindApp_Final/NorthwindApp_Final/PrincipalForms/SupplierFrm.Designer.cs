@@ -163,6 +163,7 @@
             Controls.Add(panel1);
             Name = "SupplierFrm";
             ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Load += SupplierFrm_Load;
             panel1.ResumeLayout(false);

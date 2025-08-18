@@ -95,16 +95,16 @@ namespace NorthwindApp_Final.PrincipalForms
 
         private void MenuFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult Opcionsalir = MessageBox.Show(
-               "¿Desea salir de Northwind App?",
-               "SALIR",
-               MessageBoxButtons.YesNo,
-               MessageBoxIcon.Question);
-
-            if (Opcionsalir == DialogResult.Yes)
+            var result = MessageBox.Show("¿Seguro que quieres salir?", "Confirmar cierre", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.No)
             {
-                Application.Exit();
+                e.Cancel = true;
             }
+        }
+
+        private void MenuFrm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -217,10 +217,11 @@
             ClientSize = new Size(968, 610);
             Controls.Add(panel2);
             Controls.Add(menuStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MenuFrm";
-            ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             FormClosing += MenuFrm_FormClosing;
+            Load += MenuFrm_Load;
             panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             menuStrip1.ResumeLayout(false);

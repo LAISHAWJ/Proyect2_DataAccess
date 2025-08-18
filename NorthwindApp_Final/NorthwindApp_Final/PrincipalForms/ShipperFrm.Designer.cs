@@ -163,6 +163,7 @@
             Controls.Add(panel1);
             Name = "ShipperFrm";
             ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Load += ShipperFrm_Load;
             panel1.ResumeLayout(false);

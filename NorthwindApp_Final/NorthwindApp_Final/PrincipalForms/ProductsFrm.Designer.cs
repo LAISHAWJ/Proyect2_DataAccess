@@ -258,6 +258,7 @@
             Controls.Add(panel1);
             Name = "ProductsFrm";
             ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Load += ProductsFrm_Load;
             panel1.ResumeLayout(false);

@@ -213,6 +213,7 @@
             Controls.Add(panel1);
             Name = "CustomerFrm";
             ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterScreen;
             Load += CustomerFrm_Load;
             panel1.ResumeLayout(false);
