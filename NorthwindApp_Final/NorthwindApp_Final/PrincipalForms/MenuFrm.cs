@@ -101,10 +101,5 @@ namespace NorthwindApp_Final.PrincipalForms
                 e.Cancel = true;
             }
         }
-
-        private void MenuFrm_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 }
