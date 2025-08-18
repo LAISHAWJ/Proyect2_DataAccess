@@ -23,20 +23,6 @@ namespace NorthwindApp_Final.PrincipalForms
             }
         }
 
-        private void BtExit_Click(object sender, EventArgs e)
-        {
-            DialogResult Opcionsalir = MessageBox.Show(
-                "¿Desea salir de Northwind App?",
-                "SALIR",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question);
-
-            if (Opcionsalir == DialogResult.Yes)
-            {
-                Application.Exit();
-            }
-        }
-
         private void BtProducts_Click(object sender, EventArgs e)
         {
             var productFrm = _services.GetService<ProductsFrm>();
@@ -107,9 +93,18 @@ namespace NorthwindApp_Final.PrincipalForms
             }
         }
 
-        private void BtEntidadesPlus_Click(object sender, EventArgs e)
+        private void MenuFrm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            DialogResult Opcionsalir = MessageBox.Show(
+               "¿Desea salir de Northwind App?",
+               "SALIR",
+               MessageBoxButtons.YesNo,
+               MessageBoxIcon.Question);
 
+            if (Opcionsalir == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
         }
     }
 }
