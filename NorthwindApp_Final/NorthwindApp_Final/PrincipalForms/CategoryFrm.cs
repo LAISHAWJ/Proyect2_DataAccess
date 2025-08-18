@@ -19,7 +19,7 @@ namespace NorthwindApp_Final.PrincipalForms
             _categoryService = categoryService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            this.Load += new EventHandler(CargarCategorias); // Carga sincrónica al iniciar
+            this.Load += new EventHandler(CargarCategorias);
         }
 
         private void CargarCategorias(object sender, EventArgs e)
@@ -38,7 +38,7 @@ namespace NorthwindApp_Final.PrincipalForms
 
         private void CategoryFrm_Load(object sender, EventArgs e)
         {
-            // La carga ya se hace en el evento Load
+            
         }
 
         private void BtUpdate_Click(object sender, EventArgs e)

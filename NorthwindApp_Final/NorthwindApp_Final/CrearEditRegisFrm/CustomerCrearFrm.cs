@@ -44,7 +44,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
 
         private void CustomerCrearFrm_Load(object sender, EventArgs e)
         {
-            // No se requiere lógica de carga
+           
         }
 
         private void BtSave_Click(object sender, EventArgs e)

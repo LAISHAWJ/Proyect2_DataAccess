@@ -483,7 +483,7 @@
             AutoScaleDimensions = new SizeF(120F, 120F);
             AutoScaleMode = AutoScaleMode.Dpi;
             AutoSize = true;
-            ClientSize = new Size(1105, 866);
+            ClientSize = new Size(1116, 866);
             Controls.Add(BtCancel);
             Controls.Add(BtSave);
             Controls.Add(groupBox4);

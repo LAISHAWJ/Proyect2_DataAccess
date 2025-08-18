@@ -19,7 +19,7 @@ namespace NorthwindApp_Final.PrincipalForms
             _employeeService = employeeService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            this.Load += new EventHandler(CargarEmployee); // Carga sincrónica al iniciar
+            this.Load += new EventHandler(CargarEmployee);
         }
 
         private void CargarEmployee(object sender, EventArgs e)
@@ -30,7 +30,7 @@ namespace NorthwindApp_Final.PrincipalForms
                 if (employees != null && employees.Any())
                 {
                     DtGVwEmployee.DataSource = employees.ToList();
-                    // Ocultar las propiedades de navegación
+                    
                     DtGVwEmployee.Columns[nameof(Employee.InverseReportsToNavigation)].Visible = false;
                     DtGVwEmployee.Columns[nameof(Employee.Orders)].Visible = false;
                     DtGVwEmployee.Columns[nameof(Employee.ReportsToNavigation)].Visible = false;
@@ -57,7 +57,7 @@ namespace NorthwindApp_Final.PrincipalForms
 
         private void EmployeeFrm_Load(object sender, EventArgs e)
         {
-            // La carga ya se hace en el evento Load
+            
         }
 
         private void BtAdd_Click(object sender, EventArgs e)

@@ -15,7 +15,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
         private readonly CategoryService _categoryService;
         private readonly CategoryValid _validator;
         private Category _categoryEdit;
-        private bool _isEditMode = false; // Indica el modo edición
+        private bool _isEditMode = false; 
 
         public CategoryCrearFrm(CategoryService categoryService, CategoryValid validator)
         {
@@ -25,7 +25,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             _categoryEdit = new Category();
         }
 
-        // Método para Activar modo edición
+        
         public void SetEditMode(Category category)
         {
             _isEditMode = true;

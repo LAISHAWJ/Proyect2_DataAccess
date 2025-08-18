@@ -14,7 +14,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
         private readonly EmployeeService _employeeService;
         private readonly EmployeeValid _validator;
         private Employee _employeeEdit;
-        private bool _isEditMode = false; // Indica el modo edición
+        private bool _isEditMode = false; 
 
         public EmployeeCrearFrm(EmployeeService employeeService, EmployeeValid validator)
         {

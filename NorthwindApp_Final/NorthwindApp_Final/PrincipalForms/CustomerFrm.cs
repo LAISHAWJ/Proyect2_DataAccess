@@ -19,7 +19,7 @@ namespace NorthwindApp_Final.PrincipalForms
             _customerService = customerService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            this.Load += new EventHandler(CargarCustomer); // Carga sincrónica al iniciar
+            this.Load += new EventHandler(CargarCustomer);
         }
 
         private void CargarCustomer(object sender, EventArgs e)
@@ -47,7 +47,7 @@ namespace NorthwindApp_Final.PrincipalForms
 
         private void CustomerFrm_Load(object sender, EventArgs e)
         {
-            // La carga ya se hace en el evento Load
+            
         }
 
         private void BtClose_Click(object sender, EventArgs e)

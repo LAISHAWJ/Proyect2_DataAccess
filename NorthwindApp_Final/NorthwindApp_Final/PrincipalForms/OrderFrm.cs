@@ -22,12 +22,12 @@ namespace NorthwindApp_Final.PrincipalForms
             _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
             _menuFrm = menuFrm ?? throw new ArgumentNullException(nameof(menuFrm));
             _ordenesEnSesion = new List<Order>();
-            this.Load += new EventHandler(CargarOrdenesEnSesion); // Carga sincrónica al iniciar
+            this.Load += new EventHandler(CargarOrdenesEnSesion); 
         }
 
         private void OrderFrm_Load(object sender, EventArgs e)
         {
-            CargarCombosAsync(); // Configuración sincrónica de combos
+            CargarCombosAsync(); 
         }
 
         private void CargarOrdenesEnSesion(object sender, EventArgs e)
@@ -344,9 +344,9 @@ namespace NorthwindApp_Final.PrincipalForms
                     return;
                 }
 
-                var ordenActual = _ordenesEnSesion[0]; // Assuming only one order in session
+                var ordenActual = _ordenesEnSesion[0]; //Unica orden en sesión
 
-                // Populate form fields with the current order's data
+                
                 ClienteCbx.SelectedValue = ordenActual.CustomerId;
                 EmpleadoCbx.SelectedValue = ordenActual.EmployeeId;
                 DtOrderDate.Value = ordenActual.OrderDate ?? DateTime.Now;
@@ -360,7 +360,7 @@ namespace NorthwindApp_Final.PrincipalForms
                 TxtCodePostalOrder.Text = ordenActual.ShipPostalCode;
                 TxtShipCountry.Text = ordenActual.ShipCountry;
 
-                // Allow editing of OrderDetails via OrderCrearFrm
+               
                 if (OrderDgv.SelectedRows.Count > 0)
                 {
                     var selectedRow = OrderDgv.SelectedRows[0];
@@ -398,7 +398,7 @@ namespace NorthwindApp_Final.PrincipalForms
                     }
                 }
 
-                // Update order metadata in session
+                // Actualizar los campos de la orden actual
                 ordenActual.CustomerId = ClienteCbx.SelectedValue?.ToString();
                 ordenActual.EmployeeId = EmpleadoCbx.SelectedValue != null ? (int?)EmpleadoCbx.SelectedValue : null;
                 ordenActual.OrderDate = DtOrderDate.Value;

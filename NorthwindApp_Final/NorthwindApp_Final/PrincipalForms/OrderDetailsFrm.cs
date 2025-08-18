@@ -18,7 +18,7 @@ namespace NorthwindApp_Final.PrincipalForms
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
             _orderDetailsService = orderDetailsService ?? throw new ArgumentNullException(nameof(orderDetailsService));
             _menuFrm = menuFrm ?? throw new ArgumentNullException(nameof(menuFrm));
-            this.Load += new EventHandler(CargarOrdenesDetalle); // Carga sincrónica al iniciar
+            this.Load += new EventHandler(CargarOrdenesDetalle); 
         }
 
         private void CargarOrdenesDetalle(object sender, EventArgs e)
@@ -95,7 +95,7 @@ namespace NorthwindApp_Final.PrincipalForms
 
         private void OrderDetailsFrm_Load(object sender, EventArgs e)
         {
-            // La carga ya se hace en el evento Load
+            
         }
 
         private void BtSearch_Click_1(object sender, EventArgs e)

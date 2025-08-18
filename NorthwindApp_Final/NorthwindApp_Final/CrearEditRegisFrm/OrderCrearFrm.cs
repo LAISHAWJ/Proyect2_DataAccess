@@ -19,7 +19,7 @@ namespace NorthwindApp_Final.CrearEditRegisFrm
             InitializeComponent();
             if (serviceProvider == null) throw new ArgumentNullException(nameof(serviceProvider));
             _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
-            // Inicialización diferida de _orderId y _orderDetailToEdit
+            
         }
 
         public void SetOrderId(int orderId)

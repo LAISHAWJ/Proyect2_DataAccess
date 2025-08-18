@@ -19,12 +19,12 @@ namespace NorthwindApp_Final.PrincipalForms
             _productService = productService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            this.Load += new EventHandler(CargarProductos); // Carga sincrónica al iniciar
+            this.Load += new EventHandler(CargarProductos); 
         }
 
         private void ProductsFrm_Load(object sender, EventArgs e)
         {
-            ConfigurarComboFiltrosAsync(); // Configuración sincrónica de filtros
+            ConfigurarComboFiltrosAsync(); 
         }
 
         private void CargarProductos(object sender, EventArgs e)
@@ -83,14 +83,14 @@ namespace NorthwindApp_Final.PrincipalForms
         {
             try
             {
-                // Status
+                
                 StatusCbx.Items.Clear();
                 StatusCbx.Items.Add("Todos");
                 StatusCbx.Items.Add("Activos");
                 StatusCbx.Items.Add("Descontinuados");
-                StatusCbx.SelectedIndex = 1; // Por defecto: "Activos"
+                StatusCbx.SelectedIndex = 1; 
 
-                // Categorías
+                
                 var categorias = _productService.GetAllCategoriesAsync();
                 CmbxCat.Items.Clear();
                 CmbxCat.Items.Add("Todas");
@@ -98,7 +98,7 @@ namespace NorthwindApp_Final.PrincipalForms
                     CmbxCat.Items.Add(cat.CategoryName);
                 CmbxCat.SelectedIndex = 0;
 
-                // Suplidores
+              
                 var suplidores = _productService.GetAllSuppliersAsync();
                 CmbxSup.Items.Clear();
                 CmbxSup.Items.Add("Todos");

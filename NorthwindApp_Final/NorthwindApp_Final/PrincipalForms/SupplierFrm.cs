@@ -19,7 +19,7 @@ namespace NorthwindApp_Final.PrincipalForms
             _supplierService = supplierService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            this.Load += new EventHandler(CargarSuppliers); // Carga sincrónica al iniciar
+            this.Load += new EventHandler(CargarSuppliers); 
         }
 
         private void CargarSuppliers(object sender, EventArgs e)
@@ -46,7 +46,7 @@ namespace NorthwindApp_Final.PrincipalForms
 
         private void SupplierFrm_Load(object sender, EventArgs e)
         {
-            // La carga ya se hace en el evento Load
+            
         }
 
         private void BtAdd_Click(object sender, EventArgs e)
@@ -54,7 +54,7 @@ namespace NorthwindApp_Final.PrincipalForms
             var form = _serviceProvider.GetService<SuppliercrearFrm>();
             if (form != null)
             {
-                form.FormClosed += (s, args) => CargarSuppliers(s, args); // Recargar lista al cerrar
+                form.FormClosed += (s, args) => CargarSuppliers(s, args);
                 form.ShowDialog();
             }
         }

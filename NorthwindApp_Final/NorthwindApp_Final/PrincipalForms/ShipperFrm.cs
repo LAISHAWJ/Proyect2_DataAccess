@@ -19,7 +19,7 @@ namespace NorthwindApp_Final.PrincipalForms
             _shipperService = shipperService;
             _serviceProvider = serviceProvider;
             _menuFrm = menuFrm;
-            this.Load += new EventHandler(CargarShippers); // Carga sincrónica al iniciar
+            this.Load += new EventHandler(CargarShippers); 
         }
 
         private void CargarShippers(object sender, EventArgs e)
@@ -30,7 +30,7 @@ namespace NorthwindApp_Final.PrincipalForms
                 if (shippers != null && shippers.Any())
                 {
                     DtGVwShipper.DataSource = shippers;
-                    DtGVwShipper.Columns[nameof(Shipper.Orders)].Visible = false; // Corregido a Shipper.Orders
+                    DtGVwShipper.Columns[nameof(Shipper.Orders)].Visible = false; 
                 }
                 else
                 {
@@ -46,7 +46,7 @@ namespace NorthwindApp_Final.PrincipalForms
 
         private void ShipperFrm_Load(object sender, EventArgs e)
         {
-            // La carga ya se hace en el evento Load
+            
         }
 
         private void BtClose_Click(object sender, EventArgs e)
@@ -60,7 +60,7 @@ namespace NorthwindApp_Final.PrincipalForms
             var form = _serviceProvider.GetService<ShipperCrearFrm>();
             if (form != null)
             {
-                form.FormClosed += (s, args) => CargarShippers(s, args); // Recargar lista al cerrar
+                form.FormClosed += (s, args) => CargarShippers(s, args); 
                 form.ShowDialog();
             }
         }

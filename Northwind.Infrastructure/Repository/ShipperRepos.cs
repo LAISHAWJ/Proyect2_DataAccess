@@ -10,25 +10,25 @@ namespace Northwind.Infrastructure.Repositories
     {
         private readonly NorthwindContext _context;
 
-        // Constructor
+        
         public ShipperRepos(NorthwindContext context)
         {
             _context = context;
         }
 
-        // Obtener todos
+        
         public IEnumerable<Shipper> GetAllShipper()
         {
             return _context.Shippers.ToList();
         }
 
-        // Obtener por ID
+        
         public Shipper GetByIdShipper(int id)
         {
             return _context.Shippers.Find(id);
         }
 
-        // Agregar
+        
         public void AddShipper(Shipper shipper)
         {
             if (shipper == null)
@@ -37,7 +37,7 @@ namespace Northwind.Infrastructure.Repositories
             _context.SaveChanges();
         }
 
-        // Actualizar
+        
         public void UpdateShipper(Shipper shipper)
         {
             if (shipper == null)
@@ -46,7 +46,7 @@ namespace Northwind.Infrastructure.Repositories
             _context.SaveChanges();
         }
 
-        // Eliminar
+        
         public void DeleteShipper(int id)
         {
             var shipper = _context.Shippers.Find(id);
